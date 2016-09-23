@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'haquna.Haquna'
+
+sourceCompatibility = 1.5
+version = '0.1_'
+
+jar {
+	def hgrev =  new ByteArrayOutputStream()
+    project.exec {
+        commandLine 'hg', 'id', '-n'
+        standardOutput = hgrev
+    }
+    version = version + hgrev.toString().replaceAll('[^0-9]','')
+    manifest {
+        attributes "Implementation-Title": 'HaQuNa Matata environment',
+        		   "Implementation-Version": version,
+                   "Implementation-Date": new java.util.Date().toString()                       
+    }    
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile group: 'jline', name: 'jline', version: '2.14.+'
+	compile project(':heartdroid')
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
