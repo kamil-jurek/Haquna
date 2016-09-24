@@ -1,7 +1,9 @@
-package haquna;
+package haquna.command.get;
 
 import java.util.LinkedList;
 
+import haquna.Haquna;
+import haquna.command.Command;
 import heart.xtt.Table;
 import heart.xtt.XTTModel;
 
@@ -13,7 +15,7 @@ public class GetTableByNameCmd implements Command {
 	private String varName;
 	private String modelName;
 	private String tableName;
-	//T = M.getTableByName()
+
 	public GetTableByNameCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
@@ -25,25 +27,23 @@ public class GetTableByNameCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(modelName) ||
-		   !Haquna.isVarUsed(varName)) {
+		if(!Haquna.isVarUsed(varName)) {
+			if(Haquna.modelMap.containsKey(modelName)) {
+				XTTModel model = Haquna.modelMap.get(modelName);				
+				LinkedList<Table> tables = model.getTables();
+				
+				for(Table table : tables){
+					if(table.getName().equals(tableName)){
+						Haquna.tableMap.put(varName, table);
+						return;
+					}	     
+				}
 			
-			System.out.println(varName);
-			System.out.println(modelName);
-			System.out.println(tableName);
-			XTTModel model = Haquna.modelMap.get(modelName);
-		
-			LinkedList<Table> tables = model.getTables();
-			for(Table table : tables){
-				if(table.getName().equals(tableName)){
-					Haquna.tableMap.put(varName, table);
-					System.out.println("Got table: " + varName);
-					return;
-				}	     
-			}
-			
+			} else {
+				System.out.println("No " + modelName + " model in memory");
+			}			
 		} else {
-			System.out.println("Variable Name already in use");
+			System.out.println("Variable name: " + varName + " already in use");
 		}
 	}		
 	

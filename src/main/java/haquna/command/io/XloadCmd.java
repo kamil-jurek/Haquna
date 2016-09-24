@@ -1,5 +1,7 @@
-package haquna;
+package haquna.command.io;
 
+import haquna.Haquna;
+import haquna.command.Command;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceFile;
 import heart.xtt.XTTModel;
@@ -19,7 +21,7 @@ public class XloadCmd implements Command {
 		this.varName = commandParts[0];		
 		this.modelPath = commandParts[1].substring(2, commandParts[1].length()-2);
 		
-		if(!this.modelPath.contains(System.getProperty("user.dir"))) {
+		if(!this.modelPath.contains("/home/")) {
 			this.modelPath = System.getProperty("user.dir") + "/" + this.modelPath;
 		}
 	}
@@ -34,15 +36,15 @@ public class XloadCmd implements Command {
 		    parser.parse(hmr);
 		    model = parser.getModel();
 			
-			if(!Haquna.modelMap.containsKey(varName)) {
+			if(!Haquna.isVarUsed(varName)) {
 				Haquna.modelMap.put(varName, model);					
 			} else {
-				System.out.println("Variable name already in use");
+				System.out.println("Variable name:" + varName + " already in use");
 			}
 
 		} catch(Exception e) {
 			System.out.println("Error parsing the hmr file");
-			e.printStackTrace();		    			    	
+			//e.printStackTrace();		    			    	
 		}	
 	}		
 	

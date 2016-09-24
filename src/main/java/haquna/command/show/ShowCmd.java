@@ -1,5 +1,7 @@
-package haquna;
+package haquna.command.show;
 
+import haquna.Haquna;
+import haquna.command.Command;
 import heart.xtt.Table;
 
 public class ShowCmd implements Command {
@@ -20,9 +22,12 @@ public class ShowCmd implements Command {
 			System.out.println(varName);
 			if(Haquna.tableMap.containsKey(varName)) {
 				Table table = Haquna.tableMap.get(varName);
-			
+				
+				System.out.println("=============================");
 				System.out.println("Table id:"+table.getId());
 				System.out.println("Table name:"+table.getName());
+				System.out.println("=============================");
+				System.out.println();
 		     					
 			} else {
 				System.out.println("No such table in memory");

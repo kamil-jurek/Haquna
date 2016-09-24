@@ -1,4 +1,4 @@
-package haquna;
+package haquna.command;
 
 public interface Command {
 	

@@ -1,4 +1,13 @@
-package haquna;
+package haquna.command;
+
+import haquna.command.get.GetTableByIdCmd;
+import haquna.command.get.GetTableByNameCmd;
+import haquna.command.io.XloadCmd;
+import haquna.command.show.ShowAttributesListCmd;
+import haquna.command.show.ShowCmd;
+import haquna.command.show.ShowTablesListCmd;
+import haquna.command.show.ShowTypesListCmd;
+import haquna.command.show.ShowVarsCmd;
 
 public class CommandFactory {
 	
@@ -42,12 +51,27 @@ public class CommandFactory {
 			return getTableByNameCmd;
 		}
 		
+		//T = M.getTableById('tabId')
+		else if(GetTableByIdCmd.matches(commandStr)) {
+			Command getTableByIdCmd = new GetTableByIdCmd(commandStr);
+			getTableByIdCmd.execute();
+									
+			return getTableByIdCmd;
+		}
+		
 		//T.show()
 		else if(ShowCmd.matches(commandStr)) {
 			Command showCmd = new ShowCmd(commandStr);
 			showCmd.execute();
 									
 			return showCmd;
+		}
+		
+		else if(ShowVarsCmd.matches(commandStr)) {
+			Command showVarsCmd = new ShowVarsCmd(commandStr);
+			showVarsCmd.execute();
+									
+			return showVarsCmd;
 		}
 		
 		else {
