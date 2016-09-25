@@ -4,29 +4,29 @@ import java.util.LinkedList;
 
 import haquna.Haquna;
 import haquna.command.Command;
-import heart.xtt.Table;
+import heart.xtt.Attribute;
 import heart.xtt.XTTModel;
 
-public class GetTableByIdCmd implements Command {		
+public class GetAttribiuteByIdCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTableById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getAttribiuteById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String modelName;
-	private String tableId;
+	private String attribiuteId;
 	
-	public GetTableByIdCmd() {
+	public GetAttribiuteByIdCmd() {
 		
 	}
 	
-	public GetTableByIdCmd(String _commandStr) {
+	public GetAttribiuteByIdCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[=|.|']");		
 		this.varName = commandParts[0];		
 		this.modelName = commandParts[1];
-		this.tableId = commandParts[3];
+		this.attribiuteId = commandParts[3];
 	}
 	
 	@Override
@@ -34,15 +34,15 @@ public class GetTableByIdCmd implements Command {
 		if(!Haquna.isVarUsed(varName)) {
 			if(Haquna.modelMap.containsKey(modelName)) {
 				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Table> tables = model.getTables();
+				LinkedList<Attribute> attribiutes = model.getAttributes();
 				
-				for(Table table : tables){
-					if(table.getId().equals(tableId)){
-						Haquna.tableMap.put(varName, table);
+				for(Attribute att : attribiutes){
+					if(att.getId().equals(attribiuteId)){
+						Haquna.attribiuteMap.put(varName, att);
 						return;
 					}	     
 				}
-				System.out.println("No table with '" + tableId + "' id in '" + modelName + "' model");
+				System.out.println("No attribiute with '" + attribiuteId + "' id in '" + modelName + "' model");
 			
 			} else {
 				System.out.println("No " + modelName + " model in memory");
@@ -57,6 +57,6 @@ public class GetTableByIdCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new GetTableByIdCmd(cmdStr);
+		return new GetAttribiuteByIdCmd(cmdStr);
 	}
 }

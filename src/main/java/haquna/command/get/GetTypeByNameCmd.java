@@ -4,29 +4,29 @@ import java.util.LinkedList;
 
 import haquna.Haquna;
 import haquna.command.Command;
-import heart.xtt.Table;
+import heart.xtt.Type;
 import heart.xtt.XTTModel;
 
-public class GetTableByIdCmd implements Command {		
+public class GetTypeByNameCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTableById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTypeByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String modelName;
-	private String tableId;
+	private String typeName;
 	
-	public GetTableByIdCmd() {
+	public GetTypeByNameCmd() {
 		
 	}
 	
-	public GetTableByIdCmd(String _commandStr) {
+	public GetTypeByNameCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[=|.|']");		
 		this.varName = commandParts[0];		
 		this.modelName = commandParts[1];
-		this.tableId = commandParts[3];
+		this.typeName = commandParts[3];
 	}
 	
 	@Override
@@ -34,15 +34,15 @@ public class GetTableByIdCmd implements Command {
 		if(!Haquna.isVarUsed(varName)) {
 			if(Haquna.modelMap.containsKey(modelName)) {
 				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Table> tables = model.getTables();
+				LinkedList<Type> types = model.getTypes();
 				
-				for(Table table : tables){
-					if(table.getId().equals(tableId)){
-						Haquna.tableMap.put(varName, table);
+				for(Type type : types){
+					if(type.getName().equals(typeName)){
+						Haquna.typeMap.put(varName, type);
 						return;
 					}	     
 				}
-				System.out.println("No table with '" + tableId + "' id in '" + modelName + "' model");
+				System.out.println("No type with '" + typeName + "' name in '" + modelName + "' model");
 			
 			} else {
 				System.out.println("No " + modelName + " model in memory");
@@ -57,6 +57,6 @@ public class GetTableByIdCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new GetTableByIdCmd(cmdStr);
+		return new GetTypeByNameCmd(cmdStr);
 	}
 }

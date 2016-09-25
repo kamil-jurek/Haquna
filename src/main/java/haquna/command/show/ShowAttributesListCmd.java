@@ -14,6 +14,10 @@ public class ShowAttributesListCmd implements Command {
 	private String commandStr;
 	private String varName;
 	
+	public ShowAttributesListCmd() {
+		
+	}
+	
 	public ShowAttributesListCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
@@ -29,13 +33,13 @@ public class ShowAttributesListCmd implements Command {
 			LinkedList<Attribute> atts = model.getAttributes();
 			for(Attribute att: atts){
 			    System.out.println("=============================");
-			    System.out.println("Att Id: " + att.getId());
-			    System.out.println("Att name: " + att.getName());
+			    System.out.println("Att Id:       " + att.getId());
+			    System.out.println("Att name:     " + att.getName());
 			    System.out.println("Att typeName: " + att.getTypeId());
-			    System.out.println("Att abbrev: " + att.getAbbreviation());
-			    System.out.println("Att comm: " + att.getComm());
-			    System.out.println("Att desc: " + att.getDescription());
-			    System.out.println("Att class: " + att.getXTTClass());
+			    System.out.println("Att abbrev:   " + att.getAbbreviation());
+			    System.out.println("Att comm:     " + att.getComm());
+			    System.out.println("Att desc:     " + att.getDescription());
+			    System.out.println("Att class:    " + att.getXTTClass());
 			    System.out.println("=============================");
 			    System.out.println();
 			}			
@@ -44,10 +48,14 @@ public class ShowAttributesListCmd implements Command {
 		}
 	}
 	
-	public static boolean matches(String commandStr) {
+	public boolean matches(String commandStr) {
 		return commandStr.matches(pattern);
 	}
-
+	
+	public Command getNewCommand(String cmdStr) {
+		return new ShowAttributesListCmd(cmdStr);
+	}
+	
 	public String getCommandStr() {
 		return commandStr;
 	}

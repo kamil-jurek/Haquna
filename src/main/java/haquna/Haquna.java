@@ -1,6 +1,5 @@
 package haquna;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.DirectoryStream;
@@ -13,7 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 import haquna.command.CommandFactory;
+import heart.xtt.Attribute;
+import heart.xtt.Rule;
 import heart.xtt.Table;
+import heart.xtt.Type;
 import heart.xtt.XTTModel;
 import jline.console.ConsoleReader;
 import jline.console.completer.AggregateCompleter;
@@ -21,12 +23,15 @@ import jline.console.completer.ArgumentCompleter;
 import jline.console.completer.CandidateListCompletionHandler;
 import jline.console.completer.Completer;
 import jline.console.completer.FileNameCompleter;
-import jline.console.completer.NullCompleter;
 import jline.console.completer.StringsCompleter;
 
 public class Haquna {
 	public static Map<String, XTTModel> modelMap = new HashMap<String, XTTModel>();
 	public static Map<String, Table> tableMap = new HashMap<String, Table>();
+	public static Map<String, Attribute> attribiuteMap = new HashMap<String, Attribute>();
+	public static Map<String, Type> typeMap = new HashMap<String, Type>();
+	public static Map<String, Rule> ruleMap = new HashMap<String, Rule>();
+	
 	public static List<Completer> completers = new LinkedList<Completer>();
 	
 	public static void main(String[] args) throws IOException {
@@ -155,6 +160,28 @@ public class Haquna {
             //------------------
 */            
             
+            //////////////////
+            /*StringsCompleter loadCommand = new StringsCompleter("load ", "create ");
+            ArgumentCompleter fileOption = new ArgumentCompleter(
+                    new StringsCompleter("--file"),
+                    new FileNameCompleter()
+            ); fileOption.setStrict(false);
+            ArgumentCompleter formatOption = new ArgumentCompleter(
+                    new StringsCompleter("--format"),
+                    new StringsCompleter("xml", "csv", "json")
+            ); formatOption.setStrict(false);
+
+            AggregateCompleter optionsCompleter = new AggregateCompleter(fileOption, formatOption);
+            //AggregateCompleter t = new AggregateCompleter(loadCommand, optionsCompleter);
+            ArgumentCompleter topCompleter = new ArgumentCompleter(loadCommand, optionsCompleter);
+
+            //ConsoleReader reader = new ConsoleReader();
+            CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
+            handler.setPrintSpaceAfterFullCompletion(false);         
+            reader.setCompletionHandler(handler);
+            reader.addCompleter(topCompleter);
+            ////////////////////
+*/            
             String line;
             PrintWriter out = new PrintWriter(reader.getOutput());
             	
@@ -196,7 +223,10 @@ public class Haquna {
 	
 	public static boolean isVarUsed(String varName) {
 		if(modelMap.containsKey(varName) ||
-		   tableMap.containsKey(varName)) {
+		   tableMap.containsKey(varName) ||
+		   attribiuteMap.containsKey(varName) || 
+		   typeMap.containsKey(varName) ||
+		   ruleMap.containsKey(varName)) {
 			
 			return true;
 		
@@ -218,13 +248,23 @@ public class Haquna {
                 "showTablesList()",
                 "showAttributesList()",
                 "showTypesList()",
+                "showRulesList()",
                 "show()",
                 "getTableByName('",
                 "getTableById('",
+                "getAttribiuteById(",
+                "getAttribiuteByName(",
+                "getTypeById('",
+                "getTypeByName('",
+                "getRuleById('",
+                "getRuleByName('",               
                 "showVars()"
    		));
         completers.add(new StringsCompleter(modelMap.keySet()));
         completers.add(new StringsCompleter(tableMap.keySet()));
+        completers.add(new StringsCompleter(attribiuteMap.keySet()));
+        completers.add(new StringsCompleter(typeMap.keySet()));
+        completers.add(new StringsCompleter(ruleMap.keySet()));
         
         AggregateCompleter aggComp = new AggregateCompleter(completers);
         ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);

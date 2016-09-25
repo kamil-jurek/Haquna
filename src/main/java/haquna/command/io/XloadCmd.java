@@ -14,7 +14,11 @@ public class XloadCmd implements Command {
 	private String varName;
 	private String modelPath;
 	
-	public XloadCmd(String _commandStr) {
+	public XloadCmd() {
+		
+	}
+	
+ 	public XloadCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("=xload");		
@@ -48,8 +52,12 @@ public class XloadCmd implements Command {
 		}	
 	}		
 	
-	public static boolean matches(String commandStr) {
+	public boolean matches(String commandStr) {
 		return commandStr.matches(pattern);
+	}
+	
+	public Command getNewCommand(String cmdStr) {
+		return new XloadCmd(cmdStr);
 	}
 	
 	public String getCommandStr() {

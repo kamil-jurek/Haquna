@@ -1,18 +1,59 @@
 package haquna.command;
 
+import java.util.LinkedList;
+
+import haquna.command.get.GetAttribiuteByIdCmd;
+import haquna.command.get.GetAttribiuteByNameCmd;
+import haquna.command.get.GetRuleByIdCmd;
+import haquna.command.get.GetRuleByNameCmd;
 import haquna.command.get.GetTableByIdCmd;
 import haquna.command.get.GetTableByNameCmd;
+import haquna.command.get.GetTypeByIdCmd;
+import haquna.command.get.GetTypeByNameCmd;
+import haquna.command.get.GetTypeCmd;
 import haquna.command.io.XloadCmd;
 import haquna.command.show.ShowAttributesListCmd;
 import haquna.command.show.ShowCmd;
+import haquna.command.show.ShowRulesListCmd;
 import haquna.command.show.ShowTablesListCmd;
 import haquna.command.show.ShowTypesListCmd;
 import haquna.command.show.ShowVarsCmd;
 
 public class CommandFactory {
 	
+	public static LinkedList<Command> commandTypes = new LinkedList<Command>() {
+		{
+			add(new XloadCmd());
+			add(new ShowVarsCmd());
+			add(new ShowTablesListCmd());
+			add(new ShowTypesListCmd());
+			add(new ShowAttributesListCmd());
+			add(new ShowRulesListCmd());
+			add(new ShowCmd());
+			add(new GetAttribiuteByIdCmd());
+			add(new GetAttribiuteByNameCmd());
+			add(new GetTableByIdCmd());
+			add(new GetTableByNameCmd());
+			add(new GetTypeByIdCmd());
+			add(new GetTypeByNameCmd());
+			add(new GetTypeCmd());
+			add(new GetRuleByIdCmd());
+			add(new GetRuleByNameCmd());
+		}
+	};
+	
 	public Command createCommand(String commandStr) {
-		//M = xload('/home/kamil/MyHeartDroid/MyHeart/src/res/threat-monitor.hmr')
+		for(Command cmdType : commandTypes) {
+			if(cmdType.matches(commandStr)) {
+				Command cmd = cmdType.getNewCommand(commandStr);
+				cmd.execute();
+				
+				return cmd;
+			}
+		}
+		return null;
+		
+		/*//M = xload('/home/kamil/MyHeartDroid/MyHeart/src/res/threat-monitor.hmr')
 		if(XloadCmd.matches(commandStr)) {
 			Command xloadCmd = new XloadCmd(commandStr);
 			xloadCmd.execute();
@@ -59,6 +100,14 @@ public class CommandFactory {
 			return getTableByIdCmd;
 		}
 		
+		//A = M.getAttribiuteById('tabId')
+		else if(GetAttribiuteByIdCmd.matches(commandStr)) {
+			Command getAttribiuteByIdCmd = new GetTableByIdCmd(commandStr);
+			getTableByIdCmd.execute();
+											
+			return getTableByIdCmd;
+		}
+		
 		//T.show()
 		else if(ShowCmd.matches(commandStr)) {
 			Command showCmd = new ShowCmd(commandStr);
@@ -77,6 +126,6 @@ public class CommandFactory {
 		else {
 			return null;
 		}
-		
+		*/
 	}
 }

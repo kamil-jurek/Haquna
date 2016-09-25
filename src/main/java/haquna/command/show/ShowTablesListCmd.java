@@ -14,6 +14,10 @@ public class ShowTablesListCmd implements Command {
 	private String commandStr;
 	private String varName;
 	
+	public ShowTablesListCmd() {
+		
+	}
+	
 	public ShowTablesListCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
@@ -28,7 +32,7 @@ public class ShowTablesListCmd implements Command {
 			LinkedList<Table> tables = model.getTables();
 			for(Table ta : tables){
 				System.out.println("=============================");
-				System.out.println("Table id: " + ta.getId());
+				System.out.println("Table id:   " + ta.getId());
 				System.out.println("Table name: " + ta.getName());
 				System.out.println("=============================");
 				System.out.println();
@@ -38,10 +42,14 @@ public class ShowTablesListCmd implements Command {
 		}		
 	}
 	
-	public static boolean matches(String commandStr) {
+	public boolean matches(String commandStr) {
 		return commandStr.matches(pattern);
 	}
 
+	public Command getNewCommand(String cmdStr) {
+		return new ShowTablesListCmd(cmdStr);
+	}	
+	
 	public String getCommandStr() {
 		return commandStr;
 	}

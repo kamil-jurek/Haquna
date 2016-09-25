@@ -15,7 +15,11 @@ public class GetTableByNameCmd implements Command {
 	private String varName;
 	private String modelName;
 	private String tableName;
-
+	
+	public GetTableByNameCmd() {
+		
+	}
+	
 	public GetTableByNameCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
@@ -38,6 +42,7 @@ public class GetTableByNameCmd implements Command {
 						return;
 					}	     
 				}
+				System.out.println("No table with '" + tableName + "' name in '" + modelName + "' model");
 			
 			} else {
 				System.out.println("No " + modelName + " model in memory");
@@ -47,7 +52,11 @@ public class GetTableByNameCmd implements Command {
 		}
 	}		
 	
-	public static boolean matches(String commandStr) {
+	public boolean matches(String commandStr) {
 		return commandStr.matches(pattern);
+	}
+	
+	public Command getNewCommand(String cmdStr) {
+		return new GetTableByNameCmd(cmdStr);
 	}
 }
