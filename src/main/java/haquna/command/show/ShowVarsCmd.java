@@ -36,6 +36,11 @@ public class ShowVarsCmd implements Command {
 		for(String var : Haquna.ruleMap.keySet()) {
 			System.out.println("\t" + var + " = " + Haquna.ruleMap.get(var).getName());
 		}
+		
+		System.out.println("=== CALLBACKS ===");
+		for(String var : Haquna.callbackMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.callbackMap.get(var));
+		}
 	}
 	
 	public boolean matches(String commandStr) {

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import haquna.command.get.GetAttribiuteByIdCmd;
 import haquna.command.get.GetAttribiuteByNameCmd;
+import haquna.command.get.GetCallbackCmd;
 import haquna.command.get.GetRuleByIdCmd;
 import haquna.command.get.GetRuleByNameCmd;
 import haquna.command.get.GetTableByIdCmd;
@@ -39,6 +40,7 @@ public class CommandFactory {
 			add(new GetTypeCmd());
 			add(new GetRuleByIdCmd());
 			add(new GetRuleByNameCmd());
+			add(new GetCallbackCmd());
 		}
 	};
 	

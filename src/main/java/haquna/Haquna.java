@@ -31,6 +31,7 @@ public class Haquna {
 	public static Map<String, Attribute> attribiuteMap = new HashMap<String, Attribute>();
 	public static Map<String, Type> typeMap = new HashMap<String, Type>();
 	public static Map<String, Rule> ruleMap = new HashMap<String, Rule>();
+	public static Map<String, String> callbackMap = new HashMap<String, String>();
 	
 	public static List<Completer> completers = new LinkedList<Completer>();
 	
@@ -226,7 +227,8 @@ public class Haquna {
 		   tableMap.containsKey(varName) ||
 		   attribiuteMap.containsKey(varName) || 
 		   typeMap.containsKey(varName) ||
-		   ruleMap.containsKey(varName)) {
+		   ruleMap.containsKey(varName) ||
+		   callbackMap.containsKey(varName)) {
 			
 			return true;
 		
@@ -257,7 +259,9 @@ public class Haquna {
                 "getTypeById('",
                 "getTypeByName('",
                 "getRuleById('",
-                "getRuleByName('",               
+                "getRuleByName('",
+                "getType()",
+                "getCallback()",
                 "showVars()"
    		));
         completers.add(new StringsCompleter(modelMap.keySet()));
@@ -265,6 +269,7 @@ public class Haquna {
         completers.add(new StringsCompleter(attribiuteMap.keySet()));
         completers.add(new StringsCompleter(typeMap.keySet()));
         completers.add(new StringsCompleter(ruleMap.keySet()));
+        completers.add(new StringsCompleter(callbackMap.keySet()));
         
         AggregateCompleter aggComp = new AggregateCompleter(completers);
         ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);

@@ -36,7 +36,7 @@ public class GetAttribiuteByIdCmd implements Command {
 				XTTModel model = Haquna.modelMap.get(modelName);				
 				LinkedList<Attribute> attribiutes = model.getAttributes();
 				
-				for(Attribute att : attribiutes){
+				for(Attribute att : attribiutes) {
 					if(att.getId().equals(attribiuteId)){
 						Haquna.attribiuteMap.put(varName, att);
 						return;

@@ -86,7 +86,15 @@ public class ShowCmd implements Command {
 			}
 			System.out.println();
 			System.out.println("================================");  
-		     				   		    
+		
+		} else if(Haquna.callbackMap.containsKey(varName)){
+			String callback = Haquna.callbackMap.get(varName);
+			System.out.println("=============================");
+		    System.out.println("Callback: " + callback);
+		    System.out.println("=============================");
+		    System.out.println();
+			
+			
 		} else if(Haquna.modelMap.containsKey(varName)){
 			XTTModel model = Haquna.modelMap.get(varName);
 			
