@@ -4,29 +4,29 @@ import java.util.LinkedList;
 
 import haquna.Haquna;
 import haquna.command.Command;
-import heart.xtt.Type;
+import heart.xtt.Attribute;
 import heart.xtt.XTTModel;
 
-public class GetTypeByNameCmd implements Command {		
+public class GetAttributeByNameCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTypeByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getAttributeByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String modelName;
-	private String typeName;
+	private String attributeName;
 	
-	public GetTypeByNameCmd() {
+	public GetAttributeByNameCmd() {
 		
 	}
 	
-	public GetTypeByNameCmd(String _commandStr) {
+	public GetAttributeByNameCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[=|.|']");		
 		this.varName = commandParts[0];		
 		this.modelName = commandParts[1];
-		this.typeName = commandParts[3];
+		this.attributeName = commandParts[3];
 	}
 	
 	@Override
@@ -34,16 +34,16 @@ public class GetTypeByNameCmd implements Command {
 		if(!Haquna.isVarUsed(varName)) {
 			if(Haquna.modelMap.containsKey(modelName)) {
 				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Type> types = model.getTypes();
+				LinkedList<Attribute> attributes = model.getAttributes();
 				
-				for(Type type : types){
-					if(type.getName().equals(typeName)){
-						Haquna.typeMap.put(varName, type);
+				for(Attribute att : attributes){					
+					if(att.getName().equals(attributeName)){
+						Haquna.attribiuteMap.put(varName, att);
 						return;
 					}	     
 				}
-				System.out.println("No type with '" + typeName + "' name in '" + modelName + "' model");
-			
+				System.out.println("No attribute with '" + attributeName + "' name in '" + modelName + "' model");
+							
 			} else {
 				System.out.println("No " + modelName + " model in memory");
 			}			
@@ -57,7 +57,7 @@ public class GetTypeByNameCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new GetTypeByNameCmd(cmdStr);
+		return new GetAttributeByNameCmd(cmdStr);
 	}
 
 	public String getCommandStr() {
@@ -84,12 +84,12 @@ public class GetTypeByNameCmd implements Command {
 		this.modelName = modelName;
 	}
 
-	public String getTypeName() {
-		return typeName;
+	public String getAttribiuteName() {
+		return attributeName;
 	}
 
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setAttribiuteName(String attribiuteName) {
+		this.attributeName = attribiuteName;
 	}
 	
 	

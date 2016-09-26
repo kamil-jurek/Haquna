@@ -43,11 +43,11 @@ public class XloadCmd implements Command {
 			if(!Haquna.isVarUsed(varName)) {
 				Haquna.modelMap.put(varName, model);					
 			} else {
-				System.out.println("Variable name:" + varName + " already in use");
+				System.out.println("Variable name: " + varName + " already in use");
 			}
 
 		} catch(Exception e) {
-			System.out.println("Error parsing the hmr file");
+			System.out.println("File '" + modelPath + "' was found");
 			//e.printStackTrace();		    			    	
 		}	
 	}		

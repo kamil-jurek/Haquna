@@ -99,8 +99,6 @@ public class ShowCmd implements Command {
 			XTTModel model = Haquna.modelMap.get(varName);
 			
 			System.out.println("=============================");
-			System.out.println(model.SOURCE_HMR);
-			System.out.println("=============================");
 			System.out.println(model.getSource());
 		    System.out.println("=============================");
 		    System.out.println();    

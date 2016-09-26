@@ -7,26 +7,26 @@ import haquna.command.Command;
 import heart.xtt.Attribute;
 import heart.xtt.XTTModel;
 
-public class GetAttribiuteByNameCmd implements Command {		
+public class GetAttributeByIdCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getAttribiuteByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getAttributeById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String modelName;
-	private String attribiuteName;
+	private String attribiuteId;
 	
-	public GetAttribiuteByNameCmd() {
+	public GetAttributeByIdCmd() {
 		
 	}
 	
-	public GetAttribiuteByNameCmd(String _commandStr) {
+	public GetAttributeByIdCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[=|.|']");		
 		this.varName = commandParts[0];		
 		this.modelName = commandParts[1];
-		this.attribiuteName = commandParts[3];
+		this.attribiuteId = commandParts[3];
 	}
 	
 	@Override
@@ -36,14 +36,14 @@ public class GetAttribiuteByNameCmd implements Command {
 				XTTModel model = Haquna.modelMap.get(modelName);				
 				LinkedList<Attribute> attribiutes = model.getAttributes();
 				
-				for(Attribute att : attribiutes){					
-					if(att.getName().equals(attribiuteName)){
+				for(Attribute att : attribiutes) {
+					if(att.getId().equals(attribiuteId)){
 						Haquna.attribiuteMap.put(varName, att);
 						return;
 					}	     
 				}
-				System.out.println("No attribiute with '" + attribiuteName + "' name in '" + modelName + "' model");
-							
+				System.out.println("No attribute with '" + attribiuteId + "' id in '" + modelName + "' model");
+			
 			} else {
 				System.out.println("No " + modelName + " model in memory");
 			}			
@@ -57,6 +57,6 @@ public class GetAttribiuteByNameCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new GetAttribiuteByNameCmd(cmdStr);
+		return new GetAttributeByIdCmd(cmdStr);
 	}
 }

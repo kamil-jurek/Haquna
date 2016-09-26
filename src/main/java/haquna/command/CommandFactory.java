@@ -2,8 +2,8 @@ package haquna.command;
 
 import java.util.LinkedList;
 
-import haquna.command.get.GetAttribiuteByIdCmd;
-import haquna.command.get.GetAttribiuteByNameCmd;
+import haquna.command.get.GetAttributeByIdCmd;
+import haquna.command.get.GetAttributeByNameCmd;
 import haquna.command.get.GetCallbackCmd;
 import haquna.command.get.GetRuleByIdCmd;
 import haquna.command.get.GetRuleByNameCmd;
@@ -31,8 +31,8 @@ public class CommandFactory {
 			add(new ShowAttributesListCmd());
 			add(new ShowRulesListCmd());
 			add(new ShowCmd());
-			add(new GetAttribiuteByIdCmd());
-			add(new GetAttribiuteByNameCmd());
+			add(new GetAttributeByIdCmd());
+			add(new GetAttributeByNameCmd());
 			add(new GetTableByIdCmd());
 			add(new GetTableByNameCmd());
 			add(new GetTypeByIdCmd());
