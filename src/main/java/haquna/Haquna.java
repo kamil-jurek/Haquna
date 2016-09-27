@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import haquna.command.CommandFactory;
+import heart.WorkingMemory;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
 import heart.xtt.Table;
@@ -32,6 +33,7 @@ public class Haquna {
 	public static Map<String, Type> typeMap = new HashMap<String, Type>();
 	public static Map<String, Rule> ruleMap = new HashMap<String, Rule>();
 	public static Map<String, String> callbackMap = new HashMap<String, String>();
+	public static Map<String, WorkingMemory> wmMap = new HashMap<String, WorkingMemory>();
 	
 	public static List<Completer> completers = new LinkedList<Completer>();
 	
@@ -228,7 +230,8 @@ public class Haquna {
 		   attribiuteMap.containsKey(varName) || 
 		   typeMap.containsKey(varName) ||
 		   ruleMap.containsKey(varName) ||
-		   callbackMap.containsKey(varName)) {
+		   callbackMap.containsKey(varName) ||
+		   wmMap.containsKey(varName)) {
 			
 			return true;
 		
@@ -262,7 +265,11 @@ public class Haquna {
                 "getRuleByName('",
                 "getType()",
                 "getCallback()",
-                "showVars()"
+                "showVars()",
+                "run(",
+                "showCurrentState()",
+                "showValueOf('"
+                
    		));
         completers.add(new StringsCompleter(modelMap.keySet()));
         completers.add(new StringsCompleter(tableMap.keySet()));
@@ -270,6 +277,7 @@ public class Haquna {
         completers.add(new StringsCompleter(typeMap.keySet()));
         completers.add(new StringsCompleter(ruleMap.keySet()));
         completers.add(new StringsCompleter(callbackMap.keySet()));
+        completers.add(new StringsCompleter(wmMap.keySet()));
         
         AggregateCompleter aggComp = new AggregateCompleter(completers);
         ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);

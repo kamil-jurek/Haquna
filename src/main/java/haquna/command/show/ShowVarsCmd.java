@@ -41,6 +41,11 @@ public class ShowVarsCmd implements Command {
 		for(String var : Haquna.callbackMap.keySet()) {
 			System.out.println("\t" + var + " = " + Haquna.callbackMap.get(var));
 		}
+		
+		System.out.println("=== WORKING MEMORY ===");
+		for(String var : Haquna.wmMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.wmMap.get(var));
+		}
 	}
 	
 	public boolean matches(String commandStr) {
