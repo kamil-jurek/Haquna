@@ -2,6 +2,7 @@ package haquna.command;
 
 import java.util.LinkedList;
 
+import haquna.NewWorkingMemoryCmd;
 import haquna.RunCmd;
 import haquna.command.get.GetAttributeByIdCmd;
 import haquna.command.get.GetAttributeByNameCmd;
@@ -14,6 +15,7 @@ import haquna.command.get.GetTypeByIdCmd;
 import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
 import haquna.command.io.XloadCmd;
+import haquna.command.set.SetValueOfCmd;
 import haquna.command.show.ShowAttributesListCmd;
 import haquna.command.show.ShowCmd;
 import haquna.command.show.ShowCurrentStateCmd;
@@ -47,6 +49,8 @@ public class CommandFactory {
 			add(new RunCmd());
 			add(new ShowCurrentStateCmd());
 			add(new ShowValueOfCmd());
+			add(new NewWorkingMemoryCmd());
+			add(new SetValueOfCmd());
 		}
 	};
 	

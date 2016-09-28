@@ -6,25 +6,30 @@ import heart.Configuration;
 import heart.HeaRT;
 import heart.State;
 import heart.StateElement;
+import heart.WorkingMemory;
 import heart.alsvfd.SimpleNumeric;
 import heart.alsvfd.SimpleSymbolic;
 import heart.exceptions.AttributeNotRegisteredException;
 import heart.exceptions.BuilderException;
 import heart.exceptions.NotInTheDomainException;
+import heart.inference.GoalDrivenInference;
+import heart.inference.InferenceAlgorithm;
 import heart.uncertainty.ConflictSetFireAll;
 import heart.uncertainty.ConflictSetFirstWin;
 import heart.xtt.XTTModel;
 
 public class RunCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)run[(][A-Z](.*)[,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
-	
-	private String varName;
+	public static final String pattern = "^[A-Z].*=(\\s*)run[(][A-Z](.*)[,](\\s*)[\\[](.*)[\\]][,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
+		
 	private String commandStr;
+	private String varName;
 	private String modelName;
+	private String[] tableNames;
 	private String mode;
 	private String token;
 	private String conflictStrategy;
+	private WorkingMemory wm;
 	
 	public RunCmd() {
 		
@@ -32,11 +37,24 @@ public class RunCmd implements Command {
 	
 	public RunCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
-		
-		String[] commandParts = this.commandStr.split("[(|)=|,]");		
+
+		String[] commandParts = this.commandStr.split("[(|)=|,|']");		
 		this.varName = commandParts[0];
 		this.modelName = commandParts[2];
-		this.mode = commandParts[4];
+		
+		int tabCount = commandParts.length - 7;
+		
+		if(tabCount > 0) {
+			this.tableNames = new String[tabCount];
+			for(int i = 0; i < tabCount; i++) {
+				int index = i + 4;
+				this.tableNames[i] = commandParts[index];
+			}
+		}	
+		
+		this.mode = commandParts[commandParts.length-1];
+		
+		this.wm = new WorkingMemory();
 	}
 	
 	@Override
@@ -68,11 +86,11 @@ public class RunCmd implements Command {
 			    XTTstate.addStateElement(hourE);
 			    XTTstate.addStateElement(dayE);
 			    XTTstate.addStateElement(locationE);
-			    XTTstate.addStateElement(activityE);
+			    //XTTstate.addStateElement(activityE);
 			    
 			    Configuration.Builder confBuilder = new Configuration.Builder();
-			    
-			    switch(token) {
+			 
+			    /*switch(token) {
 			    case "true": {			    	
 			    	confBuilder.setTokenPassingEnabled(true);
 			    	break;
@@ -99,12 +117,12 @@ public class RunCmd implements Command {
 			    	confBuilder.setCsr(new ConflictSetFireAll());
 			    	break;
 			    }
-			    }
+			    }*/
 			    
 			    try {
 			    	switch(mode) {
 			    	case "foi": {
-			    		 HeaRT.fixedOrderInference(model, new String[]{"DayTime", "Today", "Actions", "Threats"},
+			    		 HeaRT.fixedOrderInference(model, tableNames,
 					              new Configuration.Builder().setCsr(new ConflictSetFireAll())
 					                      .setInitialState(XTTstate)
 					                      .build());
@@ -121,7 +139,7 @@ public class RunCmd implements Command {
 			    	}
 			    	 
 			    	case "ddi": {
-			    		 HeaRT.dataDrivenInference(model, new String[]{"DayTime", "Today"},
+			    		 HeaRT.dataDrivenInference(model, tableNames,
 					                new Configuration.Builder().setCsr(new ConflictSetFireAll())
 					                        .setInitialState(XTTstate)
 					                        .build());
@@ -138,13 +156,15 @@ public class RunCmd implements Command {
 			    	}
 			    	
 			    	case "gdi": {
-			    		HeaRT.goalDrivenInference(model, new String[]{"Threats"},
+			    		/*HeaRT.goalDrivenInference(model, tableNames,
 				                new Configuration.Builder().setCsr(new ConflictSetFireAll())
 				                        .setInitialState(XTTstate)
-				                        .build());
+				                        .build());*/
+			    		Configuration cs = confBuilder.build();
+			    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.AttributeParameters(tableNames));
 
 				        System.out.println("Printing current state (after inference GDI)");
-				        State current = HeaRT.getWm().getCurrentState(model);
+				        State current = wm.getCurrentState(model);
 				        for(StateElement se : current){
 				            System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
 				        }
@@ -155,7 +175,7 @@ public class RunCmd implements Command {
 			    	}
 			    }
 			       
-			    Haquna.wmMap.put(varName, HeaRT.getWm());
+			    Haquna.wmMap.put(varName, wm);
 			     
 			    } catch(UnsupportedOperationException e){
 			    	e.printStackTrace();
