@@ -31,7 +31,7 @@ public class ShowCurrentStateCmd implements Command {
 			
 			System.out.println("=================================");
 			for(StateElement se : current){
-		    	System.out.println("Attribute " + se.getAttributeName()+"\t = " + se.getValue());
+		    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
 		    }
 			System.out.println("=================================");
 			

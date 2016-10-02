@@ -3,6 +3,7 @@ package haquna.command.set;
 import haquna.Haquna;
 import haquna.command.Command;
 import heart.WorkingMemory;
+import heart.alsvfd.Null;
 import heart.alsvfd.SimpleNumeric;
 import heart.alsvfd.SimpleSymbolic;
 import heart.alsvfd.Value;
@@ -11,7 +12,7 @@ import heart.exceptions.NotInTheDomainException;
 
 public class SetValueOfCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]setValueOf[(]['](.*)['](\\s*),(\\s*)(.*)[)](\\s*)";
+	public static final String pattern = "^[A-Z](.*)[.]setValueOf[(]['](.*)['](\\s*)[,](\\s*)['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -25,36 +26,42 @@ public class SetValueOfCmd implements Command {
 	public SetValueOfCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
-		String[] commandParts = this.commandStr.split("[.|'|,|\\(|\\)]");	
+		String[] commandParts = this.commandStr.split("['|.]");				
 		this.wmName = commandParts[0];
-		this.attributeName = commandParts[3];
-		this.attributeValue = commandParts[4];
+		this.attributeName = commandParts[2];
+		this.attributeValue = commandParts[4];	
 	}
 	
 	public void execute() {
 		if(Haquna.wmMap.containsKey(wmName)) {
 			WorkingMemory wm = Haquna.wmMap.get(wmName);
 			Value attVal;
-			if(attributeValue.matches("-?\\d+(\\.\\d+)?")) {
+			
+			if(attributeValue == null) {
+				attVal = new Null();
+			
+			} else if(attributeValue.matches("-?\\d+(\\.\\d+)?")) {
 				double d = Double.parseDouble(attributeValue);
 				attVal = new SimpleNumeric(d);
 				
 			} else if(attributeValue.contains("/")){
 				String[] splited = attributeValue.split("[/]");
 				attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));
+			
 			} else {
 				attVal = new SimpleSymbolic(attributeValue);				
-			}
 			
-			System.out.println("'" + attributeName + "'  '" + attributeValue + "'");		
+			}
+							
 			try {
 				wm.setAttributeValue(attributeName, attVal);
+			
 			} catch (AttributeNotRegisteredException | NotInTheDomainException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			System.out.println("==============SET=================");
-			System.out.println(attributeName + " = " + wm.getAttribute(attributeName));
+			System.out.println(attributeName + " = " + wm.getAttributeValue(attributeName));
 			System.out.println("=================================");
 			
 		} else {

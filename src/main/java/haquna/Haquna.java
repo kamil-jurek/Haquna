@@ -27,6 +27,8 @@ import jline.console.completer.FileNameCompleter;
 import jline.console.completer.StringsCompleter;
 
 public class Haquna {
+	public static final String varName = "[A-Z]([A-Z|a-z|0-9|_])*";
+	
 	public static Map<String, XTTModel> modelMap = new HashMap<String, XTTModel>();
 	public static Map<String, Table> tableMap = new HashMap<String, Table>();
 	public static Map<String, Attribute> attribiuteMap = new HashMap<String, Attribute>();
@@ -128,7 +130,10 @@ public class Haquna {
                 "showValueOf('",
                 "new",
                 "WorkingMemory(",
-                "setValueOf()"
+                "setValueOf('",
+                "determineValues(",
+                "add("
+                
                 
                 
    		));

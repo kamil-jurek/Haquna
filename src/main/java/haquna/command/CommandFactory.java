@@ -3,7 +3,7 @@ package haquna.command;
 import java.util.LinkedList;
 
 import haquna.NewWorkingMemoryCmd;
-import haquna.RunCmd;
+import haquna.command.add.AddCmd;
 import haquna.command.get.GetAttributeByIdCmd;
 import haquna.command.get.GetAttributeByNameCmd;
 import haquna.command.get.GetCallbackCmd;
@@ -15,6 +15,8 @@ import haquna.command.get.GetTypeByIdCmd;
 import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
 import haquna.command.io.XloadCmd;
+import haquna.command.run.DetermineValuesCmd;
+import haquna.command.run.RunCmd;
 import haquna.command.set.SetValueOfCmd;
 import haquna.command.show.ShowAttributesListCmd;
 import haquna.command.show.ShowCmd;
@@ -27,6 +29,7 @@ import haquna.command.show.ShowVarsCmd;
 
 public class CommandFactory {
 	
+	@SuppressWarnings("serial")
 	public static LinkedList<Command> commandTypes = new LinkedList<Command>() {
 		{
 			add(new XloadCmd());
@@ -51,6 +54,8 @@ public class CommandFactory {
 			add(new ShowValueOfCmd());
 			add(new NewWorkingMemoryCmd());
 			add(new SetValueOfCmd());
+			add(new DetermineValuesCmd());
+			add(new AddCmd());
 		}
 	};
 	

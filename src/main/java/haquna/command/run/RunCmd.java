@@ -1,4 +1,4 @@
-package haquna;
+package haquna.command.run;
 
 import haquna.Haquna;
 import haquna.command.Command;
@@ -15,12 +15,11 @@ import heart.exceptions.NotInTheDomainException;
 import heart.inference.GoalDrivenInference;
 import heart.inference.InferenceAlgorithm;
 import heart.uncertainty.ConflictSetFireAll;
-import heart.uncertainty.ConflictSetFirstWin;
 import heart.xtt.XTTModel;
 
 public class RunCmd implements Command {		
-	
-	public static final String pattern = "^[A-Z].*=(\\s*)run[(][A-Z](.*)[,](\\s*)[\\[](.*)[\\]][,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
+	//WorkingMemory = run(Model, Wm, ['tabName1','tabName2'], mode=gdi)
+	public static final String pattern = "^[A-Z].*=(\\s*)run[(][A-Z](.*)[,](\\s*)[A-Z](.*)[,](\\s*)[\\[](.*)[\\]][,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
 		
 	private String commandStr;
 	private String varName;
@@ -29,7 +28,7 @@ public class RunCmd implements Command {
 	private String mode;
 	private String token;
 	private String conflictStrategy;
-	private WorkingMemory wm;
+	private String wmName;
 	
 	public RunCmd() {
 		
@@ -41,28 +40,31 @@ public class RunCmd implements Command {
 		String[] commandParts = this.commandStr.split("[(|)=|,|']");		
 		this.varName = commandParts[0];
 		this.modelName = commandParts[2];
+		this.wmName = commandParts[3];
 		
-		int tabCount = commandParts.length - 7;
+		int tabCount = commandParts.length - 8;
 		
 		if(tabCount > 0) {
 			this.tableNames = new String[tabCount];
 			for(int i = 0; i < tabCount; i++) {
-				int index = i + 4;
+				int index = i + 5;
 				this.tableNames[i] = commandParts[index];
+				System.out.println(tableNames[i]);
 			}
 		}	
 		
 		this.mode = commandParts[commandParts.length-1];
 		
-		this.wm = new WorkingMemory();
+		
 	}
 	
 	@Override
 	public void execute() {			
 		if(!Haquna.isVarUsed(varName)) {
 			if(Haquna.modelMap.containsKey(modelName)) {
+			  if(Haquna.wmMap.containsKey(wmName)) {
 				XTTModel model = Haquna.modelMap.get(modelName);				
-				
+				WorkingMemory wm = Haquna.wmMap.get(wmName);
 				// Creating StateElements objects, one for each attribute
 				StateElement hourE = new StateElement();
 			    StateElement dayE = new StateElement();
@@ -119,6 +121,18 @@ public class RunCmd implements Command {
 			    }
 			    }*/
 			    
+			    
+			    //////// WM concept in progress ///////
+			    WorkingMemory newWm = new WorkingMemory();
+			    try {
+					newWm.setCurrentState(wm.getCurrentState(), model, true);
+					confBuilder.setInitialState(wm.getCurrentState());
+				} catch (NotInTheDomainException | AttributeNotRegisteredException e1) {					
+					e1.printStackTrace();
+				}			   
+			    
+			    //////////////////////////////////////
+			    
 			    try {
 			    	switch(mode) {
 			    	case "foi": {
@@ -156,15 +170,12 @@ public class RunCmd implements Command {
 			    	}
 			    	
 			    	case "gdi": {
-			    		/*HeaRT.goalDrivenInference(model, tableNames,
-				                new Configuration.Builder().setCsr(new ConflictSetFireAll())
-				                        .setInitialState(XTTstate)
-				                        .build());*/
 			    		Configuration cs = confBuilder.build();
-			    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.AttributeParameters(tableNames));
+			    		new GoalDrivenInference(newWm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+			    		//new GoalDrivenInference(wm,model,cs).start(new InferenceAlgorithm.TableParameters(tablesNames));
 
-				        System.out.println("Printing current state (after inference GDI)");
-				        State current = wm.getCurrentState(model);
+			    		System.out.println("Printing current state (after inference GDI)");
+				        State current = newWm.getCurrentState(model);
 				        for(StateElement se : current){
 				            System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
 				        }
@@ -175,7 +186,7 @@ public class RunCmd implements Command {
 			    	}
 			    }
 			       
-			    Haquna.wmMap.put(varName, wm);
+			    Haquna.wmMap.put(varName, newWm);
 			     
 			    } catch(UnsupportedOperationException e){
 			    	e.printStackTrace();
@@ -187,6 +198,9 @@ public class RunCmd implements Command {
 					e.printStackTrace();
 				}
 			
+			  } else {
+				  System.out.println("No " + wmName + " WorkingMemory object in memory");
+			  }
 			} else {
 				System.out.println("No " + modelName + " model in memory");
 			}
