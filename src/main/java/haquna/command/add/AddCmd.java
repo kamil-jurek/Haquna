@@ -167,7 +167,7 @@ public class AddCmd implements Command {
 			e.printStackTrace();
 		}*/
         
-        Haquna.modelMap.put(newModelName, newModel);
+        //Haquna.modelMap.put(newModelName, newModel);
 	}
 	
 	private void addRule() {
@@ -207,7 +207,7 @@ public class AddCmd implements Command {
 			e.printStackTrace();
 		}*/
         
-        Haquna.modelMap.put(newModelName, newModel);
+        //Haquna.modelMap.put(newModelName, newModel);
 	}
 	
 	public String getCommandStr() {

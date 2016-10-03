@@ -26,8 +26,6 @@ public class RunCmd implements Command {
 	private String modelName;
 	private String[] tableNames;
 	private String mode;
-	private String token;
-	private String conflictStrategy;
 	private String wmName;
 	
 	public RunCmd() {
@@ -54,8 +52,7 @@ public class RunCmd implements Command {
 		}	
 		
 		this.mode = commandParts[commandParts.length-1];
-		
-		
+				
 	}
 	
 	@Override

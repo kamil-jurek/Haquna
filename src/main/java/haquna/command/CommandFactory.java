@@ -16,6 +16,7 @@ import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
 import haquna.command.io.XloadCmd;
 import haquna.command.run.DetermineValuesCmd;
+import haquna.command.run.RunAlterCmd;
 import haquna.command.run.RunCmd;
 import haquna.command.set.SetValueOfCmd;
 import haquna.command.show.ShowAttributesListCmd;
@@ -56,6 +57,7 @@ public class CommandFactory {
 			add(new SetValueOfCmd());
 			add(new DetermineValuesCmd());
 			add(new AddCmd());
+			add(new RunAlterCmd());
 		}
 	};
 	
