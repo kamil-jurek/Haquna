@@ -3,24 +3,16 @@ package haquna.command.run;
 import haquna.Haquna;
 import haquna.command.Command;
 import heart.Configuration;
-import heart.HeaRT;
 import heart.State;
 import heart.StateElement;
 import heart.WorkingMemory;
-import heart.alsvfd.SimpleNumeric;
-import heart.alsvfd.SimpleSymbolic;
-import heart.exceptions.AttributeNotRegisteredException;
 import heart.exceptions.BuilderException;
-import heart.exceptions.NotInTheDomainException;
 import heart.inference.DataDrivenInference;
 import heart.inference.FixedOrderInference;
 import heart.inference.GoalDrivenInference;
 import heart.inference.InferenceAlgorithm;
 import heart.uncertainty.ConflictSetFireAll;
 import heart.uncertainty.ConflictSetFirstWin;
-import heart.uncertainty.ProbabilityEvaluator;
-import heart.uncertainty.UncertainTrue;
-import heart.uncertainty.UncertainTrueEvaluator;
 import heart.xtt.XTTModel;
 
 public class RunAlterCmd implements Command {		

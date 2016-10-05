@@ -1,4 +1,4 @@
-package haquna;
+package haquna.command.wm;
 
 import haquna.Haquna;
 import haquna.command.Command;

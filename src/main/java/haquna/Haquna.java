@@ -132,7 +132,9 @@ public class Haquna {
                 "WorkingMemory(",
                 "setValueOf('",
                 "determineValues(",
-                "add("
+                "add(",
+                "Type(",
+                "new"
                 
                 
                 
@@ -147,8 +149,7 @@ public class Haquna {
         
         AggregateCompleter aggComp = new AggregateCompleter(completers);
         ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
-        
-        
+                
         argComp.setStrict(false);
         CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
         handler.setPrintSpaceAfterFullCompletion(false);

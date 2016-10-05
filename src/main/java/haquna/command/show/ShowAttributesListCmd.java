@@ -9,7 +9,7 @@ import heart.xtt.XTTModel;
 
 public class ShowAttributesListCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showAttributesList[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]showAttributesList[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -30,19 +30,17 @@ public class ShowAttributesListCmd implements Command {
 		if(Haquna.modelMap.containsKey(varName)) {
 			XTTModel model = Haquna.modelMap.get(varName);
 			
-			LinkedList<Attribute> atts = model.getAttributes();
-			for(Attribute att: atts){
-			    System.out.println("=============================");
-			    System.out.println("Att Id:       " + att.getId());
-			    System.out.println("Att name:     " + att.getName());
-			    System.out.println("Att typeName: " + att.getTypeId());
-			    System.out.println("Att abbrev:   " + att.getAbbreviation());
-			    System.out.println("Att comm:     " + att.getComm());
-			    System.out.println("Att desc:     " + att.getDescription());
-			    System.out.println("Att class:    " + att.getXTTClass());
-			    System.out.println("=============================");
-			    System.out.println();
-			}			
+			LinkedList<Attribute> attributes = model.getAttributes();
+			System.out.print("[");
+			for(Attribute attr: attributes){			  
+			    System.out.print(attr.getName());
+			    
+			    if(attr != attributes.getLast()) {
+			    	System.out.print(", ");
+			    }
+			}
+			System.out.println("]");
+			
 		} else {
 			System.out.println("No " + varName + " model in memory");
 		}

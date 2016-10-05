@@ -1,16 +1,15 @@
 package haquna.command.show;
 
+import java.util.LinkedList;
+
 import haquna.Haquna;
 import haquna.command.Command;
-import heart.alsvfd.Formulae;
-import heart.alsvfd.expressions.ExpressionInterface;
-import heart.xtt.Decision;
 import heart.xtt.Rule;
 import heart.xtt.Table;
 
 public class ShowRulesListCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showRulesList[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]showRulesList[(][)](\\s*)";
 	
 	private String commandStr;
 	private String tableName;
@@ -29,28 +28,19 @@ public class ShowRulesListCmd implements Command {
 	public void execute() {
 		if(Haquna.tableMap.containsKey(tableName)) {
 			Table table = Haquna.tableMap.get(tableName);
+			LinkedList<Rule> rules = table.getRules();
 			
-			System.out.println("RULES FOR TABLE " + table.getName());		
-			System.out.println("================================");				  
-			for(Rule rule : table.getRules()){
-				System.out.println("Rule name: " + rule.getName());
-				System.out.println("Rule id:   " + rule.getId());
-				System.out.print("\tIF ");
-				for(Formulae f : rule.getConditions()){
-					System.out.print(f.getLHS()+" "+f.getOp()+" "+f.getRHS()+", ");
+			System.out.print("[");					  
+			for(Rule rule : rules){
+				System.out.print(rule.getName());
+				
+				if(rule != rules.getLast()) {
+					System.out.print(", ");
 				}
-				  
-				System.out.print("\n\tTHEN ");
-				  
-				for(Decision d: rule.getDecisions()){
-					System.out.print(d.getAttribute().getName()+" is set to ");					  
-					ExpressionInterface e = d.getDecision();
-					System.out.print(e);
-				}
-				System.out.println();
-				System.out.println("================================");
 				  
 			}
+			System.out.println("]");
+			
 		} else {
 			System.out.println("No " + tableName + " table in memory");
 		}		

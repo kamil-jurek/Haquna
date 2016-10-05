@@ -1,6 +1,9 @@
 package haquna.command.add;
 
+import java.text.Normalizer.Form;
 import java.util.LinkedList;
+
+import javax.swing.text.html.HTMLEditorKit.Parser;
 
 import haquna.Haquna;
 import haquna.command.Command;
@@ -8,7 +11,13 @@ import heart.alsvfd.Formulae;
 import heart.alsvfd.SetValue;
 import heart.alsvfd.SimpleSymbolic;
 import heart.alsvfd.Value;
+import heart.alsvfd.expressions.AttributeExpressionBuilderInterface;
+import heart.alsvfd.expressions.ExpressionBuilderInterface;
 import heart.exceptions.ModelBuildingException;
+import heart.exceptions.ParsingSyntaxException;
+import heart.parser.hmr.HMRParser;
+import heart.parser.hmr.runtime.SourceFile;
+import heart.parser.hmr.runtime.SourceString;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
 import heart.xtt.Table;
@@ -51,6 +60,9 @@ public class AddCmd implements Command {
 				} else if(Haquna.ruleMap.containsKey(toAddName)) {
 					addRule();
 				
+				} else if(Haquna.tableMap.containsKey(toAddName)) {
+					addTable();
+												
 				} else {
 					System.out.println("No " + toAddName + " variable in memory");
 				}
@@ -73,7 +85,27 @@ public class AddCmd implements Command {
 
 	private void addType() {
 		XTTModel model = Haquna.modelMap.get(modelName);	
-		Type type = Haquna.typeMap.get(toAddName);
+		Type type = null; // = Haquna.typeMap.get(toAddName);
+		
+		/////////////////////////////////////
+		 XTTModel mod = null;
+         SourceString hmr_code = new SourceString("xtype [name: weather_type, "
+         		+ " base: symbolic,"
+         		+ " desc: 'Wheater type',"
+         		+ " domain: [sunny,rainy,cloudy]"
+         		+ "].");
+         HMRParser parser = new HMRParser();
+
+         //Parsing the file with the model
+         try {
+			parser.parse(hmr_code);
+			type = parser.getModel().getTypes().getFirst();
+		} catch (ParsingSyntaxException | ModelBuildingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+		/////////////////////////////////////
 		
         Type.Builder newType = new Type.Builder();
         newType.setBase(type.getBase());	         
@@ -132,29 +164,24 @@ public class AddCmd implements Command {
 	private void addTable() {
 		XTTModel model = Haquna.modelMap.get(modelName);	
 		Table tab = Haquna.tableMap.get(toAddName);
-		
-		
-        /*Table.Builder newTab = new Table.Builder();
-        tab.getConclusion();
+				
+        Table.Builder newTab = new Table.Builder();
         
-        tab.getId();
-        
-        tab.getPrecondition();
-        tab.getRules();
-        
-        newTab.setName(tab.getName());
         newTab.setDescription(tab.getDescription());
-       // newTab.set
+        newTab.setName(tab.getName());
+        //newTab.set
+        LinkedList<String> condAtts = new LinkedList<String>();
+        for(Attribute a : tab.getPrecondition()) {
+        	condAtts.add(a.getName());
+        }
+        newTab.setConditionalAttributesNames(condAtts);
         
-        newAttr.setAbbreviation(attr.getAbbreviation());
-        newAttr.setCallback(attr.getCallback());
-        newAttr.setComm(attr.getComm());
-        newAttr.setDescription(attr.getDescription());
-        newAttr.setId(attr.getId());
-        newAttr.setName(attr.getName());
-        newAttr.setTypeName(attr.getType().getName());
-        newAttr.setXTTClass(attr.getXTTClass());
-                     		          
+        LinkedList<String>decAtts = new LinkedList<String>();
+        for(Attribute a : tab.getPrecondition()) {
+        	decAtts.add(a.getName());
+        }
+        newTab.setDecisiveAttributesNames(decAtts);
+         
         XTTModel.Builder builder = model.getBuilder();
         
         XTTModel newModel = null;
@@ -165,25 +192,40 @@ public class AddCmd implements Command {
         } catch (ModelBuildingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
         
-        //Haquna.modelMap.put(newModelName, newModel);
+        Haquna.modelMap.put(newModelName, newModel);
 	}
 	
 	private void addRule() {
 		XTTModel model = Haquna.modelMap.get(modelName);	
 		Rule rule = Haquna.ruleMap.get(toAddName);
 		
-        /*Rule.Builder newRule = new Rule.Builder();
+        Rule.Builder newRule = new Rule.Builder();
         newRule.setActions(rule.getActions());
         newRule.setCertaintyFactor(rule.getCertaintyFactor());
-        LinkedList<Formulae> conds = rule.getConditions();
-        Formulae.Builder b = new Formulae.Builder();
-        Formulae f = conds.getFirst();
+       
+        LinkedList<Formulae.Builder> conds = new LinkedList<Formulae.Builder>();
+        LinkedList<Formulae> formulaes= rule.getConditions();
+        for(Formulae f : formulaes) {
+        	 Formulae.Builder b = new Formulae.Builder();            
+             b.setOp(f.getOp());
+             b.setTBP(f.getTimeBasedParameter());
+             //f.getRHS().
+             //AttributeExpressionBuilderInterface aebi;
+             //b.set
+            // b.setLHS(f.getLHS());
+             //b.setRHS(f.getRHS());
+             
+             
+             conds.add(b);
+        }
+       
+        
         
         
         newRule.setIncompleteConditions(conds);
-        newRule.setIncompleteDecisions(decs);
+        //newRule.setIncompleteDecisions(decs);
        // newRule.setLinks(rule.getRuleLinks());
         
         rule.getConditions();
@@ -205,7 +247,7 @@ public class AddCmd implements Command {
         } catch (ModelBuildingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
         
         //Haquna.modelMap.put(newModelName, newModel);
 	}

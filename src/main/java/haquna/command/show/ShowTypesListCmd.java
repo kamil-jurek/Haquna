@@ -9,7 +9,7 @@ import heart.xtt.XTTModel;
 
 public class ShowTypesListCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showTypesList[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]" + "(\\s*)" + "showTypesList[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -30,17 +30,16 @@ public class ShowTypesListCmd implements Command {
 			XTTModel model = Haquna.modelMap.get(varName);
 			
 			LinkedList<Type> types = model.getTypes();
-			for(Type t : types){
-				System.out.println("=======================================");
-			    System.out.println("Type id:     "+t.getId());
-			    System.out.println("Type name:   "+t.getName());
-			    System.out.println("Type base:   "+t.getBase());
-			    System.out.println("Type length: "+t.getLength());
-			    System.out.println("Type scale:  "+t.getPrecision());
-			    System.out.println("desc:        "+t.getDescription());		 
-			    System.out.println("=======================================");
-			    System.out.println();
-			}		     					
+			System.out.print("[");
+			for(Type t : types){				
+			    System.out.print(t.getName());
+			    
+			    if(t != types.getLast()) {
+			    	System.out.print(", ");
+			    }			    
+			}
+			System.out.println("]");
+			
 		} else {
 			System.out.println("No " + varName + " model in memory");
 		}		

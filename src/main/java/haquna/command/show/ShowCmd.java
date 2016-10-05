@@ -56,7 +56,7 @@ public class ShowCmd implements Command {
 		} else if(Haquna.typeMap.containsKey(varName)){
 			Type type = Haquna.typeMap.get(varName);
 			
-			System.out.println("=============================");
+			/*System.out.println("=============================");
 		    System.out.println("Type id:     " + type.getId());
 		    System.out.println("Type name:   " + type.getName());
 		    System.out.println("Type base:   " + type.getBase());
@@ -64,7 +64,8 @@ public class ShowCmd implements Command {
 		    System.out.println("Type scale:  " + type.getPrecision());
 		    System.out.println("desc:        " + type.getDescription());		 
 		    System.out.println("=============================");
-		    System.out.println();   
+		    System.out.println();   */
+		    System.out.println(type.toHMR());
 		
 		} else if(Haquna.ruleMap.containsKey(varName)){
 			Rule rule = Haquna.ruleMap.get(varName);
