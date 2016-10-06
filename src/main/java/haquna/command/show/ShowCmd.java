@@ -32,17 +32,18 @@ public class ShowCmd implements Command {
 	public void execute() {
 		if(Haquna.tableMap.containsKey(varName)) {
 			Table table = Haquna.tableMap.get(varName);
-				
-			System.out.println("=============================");
+			
+			System.out.println(table.toHMR());
+			/*System.out.println("=============================");
 			System.out.println("Table id:   " + table.getId());
 			System.out.println("Table name: " + table.getName());
 			System.out.println("=============================");
-			System.out.println();
+			System.out.println();*/
 		     					
 		} else if(Haquna.attribiuteMap.containsKey(varName)){
-			Attribute att = Haquna.attribiuteMap.get(varName);
-			
-			System.out.println("=============================");
+			Attribute attr = Haquna.attribiuteMap.get(varName);
+			System.out.println(attr.toHMR());
+			/*System.out.println("=============================");
 		    System.out.println("Att Id:       " + att.getId());
 		    System.out.println("Att name:     " + att.getName());
 		    System.out.println("Att typeName: " + att.getTypeId());
@@ -51,10 +52,11 @@ public class ShowCmd implements Command {
 		    System.out.println("Att desc:     " + att.getDescription());
 		    System.out.println("Att class:    " + att.getXTTClass());
 		    System.out.println("=============================");
-		    System.out.println();
+		    System.out.println();*/
 		
 		} else if(Haquna.typeMap.containsKey(varName)){
 			Type type = Haquna.typeMap.get(varName);
+			System.out.println(type.toHMR());
 			
 			/*System.out.println("=============================");
 		    System.out.println("Type id:     " + type.getId());
@@ -65,12 +67,11 @@ public class ShowCmd implements Command {
 		    System.out.println("desc:        " + type.getDescription());		 
 		    System.out.println("=============================");
 		    System.out.println();   */
-		    System.out.println(type.toHMR());
-		
+		    		
 		} else if(Haquna.ruleMap.containsKey(varName)){
 			Rule rule = Haquna.ruleMap.get(varName);
-			
-			System.out.println("================================");
+			System.out.println(rule.toHMR());
+			/*System.out.println("================================");
 			System.out.println("Rule name: " + rule.getName());
 			System.out.println("Rule id:   " + rule.getId());
 			System.out.print("\tIF ");
@@ -86,7 +87,7 @@ public class ShowCmd implements Command {
 				System.out.print(e);
 			}
 			System.out.println();
-			System.out.println("================================");  
+			System.out.println("================================"); */ 
 		
 		} else if(Haquna.callbackMap.containsKey(varName)){
 			String callback = Haquna.callbackMap.get(varName);

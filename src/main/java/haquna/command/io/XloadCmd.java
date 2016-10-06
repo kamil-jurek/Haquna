@@ -48,7 +48,7 @@ public class XloadCmd implements Command {
 
 		} catch(Exception e) {
 			System.out.println("File '" + modelPath + "' was found");
-			//e.printStackTrace();		    			    	
+			e.printStackTrace();		    			    	
 		}	
 	}		
 	
