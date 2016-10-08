@@ -3,8 +3,9 @@ package haquna.command;
 import java.util.LinkedList;
 
 import haquna.command.add.AddCmd;
-import haquna.command.add.AddTypeCodeCmd;
+import haquna.command.add.RemoveCmd;
 import haquna.command.add.RemoveTypeCmd;
+import haquna.command.create.NewAttributeCmd;
 import haquna.command.create.NewTypeCmd;
 import haquna.command.get.GetAttributeByIdCmd;
 import haquna.command.get.GetAttributeByNameCmd;
@@ -37,37 +38,56 @@ public class CommandFactory {
 	
 	@SuppressWarnings("serial")
 	public static LinkedList<Command> commandTypes = new LinkedList<Command>() {
-		{
+		{	
+			// IO methods
 			add(new XloadCmd());
-			add(new ShowVarsCmd());
+			add(new XsaveCmd());
+			
+			// Common methods
+			add(new ShowCmd());
+			add(new AddCmd());
+			add(new RemoveCmd());
+						
+			// Model methods
 			add(new ShowTablesListCmd());
 			add(new ShowTypesListCmd());
 			add(new ShowAttributesListCmd());
-			add(new ShowRulesListCmd());
-			add(new ShowCmd());
 			add(new GetAttributeByIdCmd());
 			add(new GetAttributeByNameCmd());
 			add(new GetTableByIdCmd());
 			add(new GetTableByNameCmd());
 			add(new GetTypeByIdCmd());
 			add(new GetTypeByNameCmd());
-			add(new GetTypeCmd());
+						
+			// Table methods
+			add(new ShowRulesListCmd());
 			add(new GetRuleByIdCmd());
 			add(new GetRuleByNameCmd());
+			
+			// Attribute methods
+			add(new GetTypeCmd());			
 			add(new GetCallbackCmd());
+			
+			// Running inference methods
 			add(new RunCmd());
-			add(new ShowCurrentStateCmd());
-			add(new ShowValueOfCmd());
-			add(new NewWorkingMemoryCmd());
-			add(new SetValueOfCmd());
-			add(new DetermineValuesCmd());
-			add(new AddCmd());
 			add(new RunAlterCmd());
-			add(new RemoveTypeCmd());
+			add(new DetermineValuesCmd());
+						
+			// Working memory methods
+			add(new NewWorkingMemoryCmd());
+			add(new ShowValueOfCmd());
+			add(new SetValueOfCmd());
+			add(new ShowCurrentStateCmd());
 			add(new ShowHistoryValueOfCmd());
-			add(new AddTypeCodeCmd());
-			add(new NewTypeCmd());
-			add(new XsaveCmd());
+			
+			
+			add(new NewTypeCmd());	
+			add(new NewAttributeCmd());
+
+			
+			// utils
+			add(new ShowVarsCmd());
+			
 		}
 	};
 	

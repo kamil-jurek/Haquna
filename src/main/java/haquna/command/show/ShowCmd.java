@@ -1,11 +1,9 @@
 package haquna.command.show;
 
 import haquna.Haquna;
+import haquna.XttModelUtils;
 import haquna.command.Command;
-import heart.alsvfd.Formulae;
-import heart.alsvfd.expressions.ExpressionInterface;
 import heart.xtt.Attribute;
-import heart.xtt.Decision;
 import heart.xtt.Rule;
 import heart.xtt.Table;
 import heart.xtt.Type;
@@ -99,11 +97,12 @@ public class ShowCmd implements Command {
 			
 		} else if(Haquna.modelMap.containsKey(varName)){
 			XTTModel model = Haquna.modelMap.get(varName);
+			System.out.println(XttModelUtils.getHMR(model));
 			
-			System.out.println("=============================");
+		/*	System.out.println("=============================");
 			System.out.println(model.getSource());
 		    System.out.println("=============================");
-		    System.out.println();    
+		    System.out.println();    */
 		    
 		} else {
 			System.out.println("No such table in memory");

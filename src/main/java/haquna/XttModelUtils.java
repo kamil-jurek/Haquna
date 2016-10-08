@@ -48,34 +48,10 @@ public class XttModelUtils {
 			writer.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 			
 			writer.println();
-			writer.println(":-ensure_loaded('heart.pl')");
+			writer.println(":-ensure_loaded('heart.pl').");
 			writer.println();
 			
-			writer.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TYPES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%");
-			writer.println();
-			for(Type type : model.getTypes()) {
-				writer.println(type.toHMR());
-			}
-			
-			writer.println("%%%%%%%%%%%%%%%%%%%%%%%%% ATTRIBUTES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%");
-			writer.println();
-			for(Attribute attr : model.getAttributes()) {
-				writer.println(attr.toHMR());
-			}
-			
-			writer.println("%%%%%%%%%%%%%%%%%%%%%%%% TABLE SCHEMAS DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%");
-			writer.println();
-			for(Table table : model.getTables()) {
-				writer.println(table.toHMR());
-			}
-			
-			writer.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%% RULES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-			writer.println();
-			for(Table table : model.getTables()) {
-				for(Rule rule : table.getRules()) {
-					writer.println(rule.toHMR());
-				}
-			}
+			writer.print(XttModelUtils.getHMR(model));
 			
 			writer.close();
 			
@@ -86,5 +62,37 @@ public class XttModelUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getHMR(XTTModel model) {
+		String HMRCode = "";
+		
+		HMRCode += ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TYPES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+		HMRCode += ("\n");
+		for(Type type : model.getTypes()) {
+			HMRCode += (type.toHMR() + "\n");
+		}
+		
+		HMRCode += ("%%%%%%%%%%%%%%%%%%%%%%%%% ATTRIBUTES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+		HMRCode += ("\n");
+		for(Attribute attr : model.getAttributes()) {
+			HMRCode += (attr.toHMR() + "\n");
+		}
+		
+		HMRCode += ("%%%%%%%%%%%%%%%%%%%%%%%% TABLE SCHEMAS DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%\n");
+		HMRCode += ("\n");
+		for(Table table : model.getTables()) {
+			HMRCode += (table.toHMR() + "\n");
+		}
+		
+		HMRCode += ("%%%%%%%%%%%%%%%%%%%%%%%%%%%% RULES DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+		HMRCode += ("\n");
+		for(Table table : model.getTables()) {
+			for(Rule rule : table.getRules()) {
+				HMRCode += (rule.toHMR() + "\n");
+			}
+		}
+		
+		return HMRCode;
 	}
 }

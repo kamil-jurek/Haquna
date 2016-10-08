@@ -6,21 +6,21 @@ import heart.exceptions.ModelBuildingException;
 import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceString;
-import heart.xtt.Type;
+import heart.xtt.Attribute;
 
-public class NewTypeCmd implements Command {		
+public class NewAttributeCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Attribute[(](.*)[)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String hmrCode;
 	
-	public NewTypeCmd() {
+	public NewAttributeCmd() {
 		
 	}
 	
-	public NewTypeCmd(String _commandStr) {
+	public NewAttributeCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
@@ -31,21 +31,21 @@ public class NewTypeCmd implements Command {
 	@Override
 	public void execute() {				
 		if(!Haquna.isVarUsed(varName)) {	
-			Type type = null;
+			Attribute attr = null;
 			
 	        SourceString hmr_code = new SourceString(hmrCode);
 	        HMRParser parser = new HMRParser();
 
 	        try {
 				parser.parse(hmr_code);
-				type = parser.getModel().getTypes().getFirst();
+				attr = parser.getModel().getAttributes().getFirst();
 			
 	        } catch (ParsingSyntaxException | ModelBuildingException e1) {
 				e1.printStackTrace();
 				return;
 			}
 	        
-	        Haquna.typeMap.put(varName, type);
+	        Haquna.attribiuteMap.put(varName, attr);
 	        
 		} else {
 			System.out.println("Variable name: " + varName + " already in use");
@@ -57,7 +57,7 @@ public class NewTypeCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new NewTypeCmd(cmdStr);
+		return new NewAttributeCmd(cmdStr);
 	}
 
 	public String getCommandStr() {

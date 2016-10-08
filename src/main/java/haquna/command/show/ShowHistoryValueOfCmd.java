@@ -1,15 +1,20 @@
 package haquna.command.show;
 
+import java.util.LinkedList;
+
 import haquna.Haquna;
 import haquna.command.Command;
+import heart.RelativeTimePeriod;
 import heart.RelativeTimestamp;
 import heart.RelativeTimestamp.TimeType;
+import heart.State;
+import heart.StateElement;
 import heart.WorkingMemory;
 import heart.alsvfd.Value;
 
 public class ShowHistoryValueOfCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showValueOf[(]['](.*)['][,]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)[.](\\s*)showValueOf[(]['](.+)['][,]['](.+)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -33,6 +38,36 @@ public class ShowHistoryValueOfCmd implements Command {
 		if(Haquna.wmMap.containsKey(wmName)) {
 			WorkingMemory wm = Haquna.wmMap.get(wmName);
 			
+			
+			for(State s : wm.getHistoryLog()) {
+				System.out.println("====" + s.getName() + "======");
+				for(StateElement se : s.getStateElements()){
+			    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
+			    }
+				System.out.println("=================================\n" + new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (wm.getCurrentTimestamp()*1000)));
+			}
+			
+			Long time;
+			Long timeSec;
+			try {
+				timeSec = Long.parseLong(relativeTime);
+				time = timeSec * 1000000; 
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				return;
+			}
+			
+			LinkedList<Value> states = wm.findHistoricalValues(wm.getHistoryLog(), 
+					  new RelativeTimePeriod(wm.getCurrentTimestamp()-time, 
+											wm.getCurrentTimestamp(), 1000, TimeType.MILISCOUNT), attributeName);
+			
+
+			for(Value v : states) {
+				String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (v.getTimestamp()));
+				System.out.println(v + ", " + date);
+			}
+			System.out.println();
 			RelativeTimestamp rt = new RelativeTimestamp(Long.parseLong(relativeTime), TimeType.MILISCOUNT);
 			Value attVal = wm.findHistoricalValue(wm.getHistoryLog(), attributeName, rt);
 			System.out.println("=================================");

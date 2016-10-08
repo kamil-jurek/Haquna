@@ -55,6 +55,7 @@ public class SetValueOfCmd implements Command {
 							
 			try {
 				wm.setAttributeValue(attributeName, attVal);
+				wm.recordLog();
 			
 			} catch (AttributeNotRegisteredException | NotInTheDomainException e) {
 				e.printStackTrace();
