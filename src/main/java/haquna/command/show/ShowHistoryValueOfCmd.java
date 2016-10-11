@@ -39,41 +39,34 @@ public class ShowHistoryValueOfCmd implements Command {
 			WorkingMemory wm = Haquna.wmMap.get(wmName);
 			
 			
-			for(State s : wm.getHistoryLog()) {
+			/*for(State s : wm.getHistoryLog()) {
 				System.out.println("====" + s.getName() + "======");
 				for(StateElement se : s.getStateElements()){
 			    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
 			    }
-				System.out.println("=================================\n" + new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (wm.getCurrentTimestamp()*1000)));
-			}
+				System.out.println("=================================\n" + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (wm.getCurrentTimestamp())));
+			}*/
 			
 			Long time;
 			Long timeSec;
 			try {
 				timeSec = Long.parseLong(relativeTime);
-				time = timeSec * 1000000; 
+				time = timeSec * 1000; 
+				///10000000000000
 				
 			} catch(Exception e) {
 				e.printStackTrace();
 				return;
 			}
 			
-			LinkedList<Value> states = wm.findHistoricalValues(wm.getHistoryLog(), 
-					  new RelativeTimePeriod(wm.getCurrentTimestamp()-time, 
-											wm.getCurrentTimestamp(), 1000, TimeType.MILISCOUNT), attributeName);
+			State s = wm.findHistoricalState(wm.getHistoryLog(), new RelativeTimestamp(-time, TimeType.MILISCOUNT));
+			String ds = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (s.getTimestamp()));
+			System.out.println(attributeName + " at "+ ds +" was: " + s.getValueOfAttribute(attributeName));
 			
-
-			for(Value v : states) {
-				String date = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (v.getTimestamp()));
-				System.out.println(v + ", " + date);
-			}
-			System.out.println();
-			RelativeTimestamp rt = new RelativeTimestamp(Long.parseLong(relativeTime), TimeType.MILISCOUNT);
-			Value attVal = wm.findHistoricalValue(wm.getHistoryLog(), attributeName, rt);
-			System.out.println("=================================");
-			System.out.println(attributeName + " (" + rt +") = " + attVal);
-			System.out.println("=================================");
-			
+			System.out.println(time);
+			RelativeTimePeriod rtp1 = new RelativeTimePeriod(-time, wm.getCurrentTimestamp(), 1000, TimeType.MILISCOUNT);
+			LinkedList<Value> values1 = wm.findHistoricalValues(wm.getHistoryLog(), rtp1, attributeName);
+						
 		} else {
 			System.out.println("No " + wmName + " WorkingMemory in memory");
 		}		

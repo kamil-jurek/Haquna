@@ -13,26 +13,27 @@ import heart.inference.GoalDrivenInference;
 import heart.inference.InferenceAlgorithm;
 import heart.uncertainty.ConflictSetFireAll;
 import heart.uncertainty.ConflictSetFirstWin;
+import heart.uncertainty.ProbabilityEvaluator;
 import heart.xtt.XTTModel;
 
 public class RunAlterCmd implements Command {		
 	// run(Model, Wm, mode=gdi, ['tab1', 'tab2'])
-	public static final String pattern = "^run[(]" + "(\\s*)" + Haquna.varName + "(\\s*)[,](\\s*)" + 	// Model
-																Haquna.varName + "(\\s*)[,](\\s*)" + 	// WorkingMemory
-																"mode=(gdi|ddi|foi)" + "(\\s*)[,](\\s*)" +
-																"[\\[]"+ "(.*)" + "[\\]]" + "(\\s*)" +
-																"(.*)[)](\\s*)";		// mode
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + "run[(]" + "(\\s*)" +
+											   Haquna.varName + "(\\s*)" + 	// Model
+																"(.*)[)](\\s*)";
 		
 	private String commandStr;
+	private String varName;
 	private String modelName;
-	private String wmName;
-	private String mode;
+	private String wmName = null;	
 	private String[] tableNames;
 	
-	private String token = "none";
-	private String uncertanity = "none";
-	private String conflictStrategy = "none";
-
+	private String mode = "ddi";
+	private String token = "false";
+	private String uncertanity = "false";
+	private String conflictStrategy = "first";
+	
+	private String[] commandParts;
 	
 	public RunAlterCmd() {
 		
@@ -41,42 +42,69 @@ public class RunAlterCmd implements Command {
 	public RunAlterCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 				
-		String[] commandParts = this.commandStr.split("[(|)=|,|']");		
-		this.modelName = commandParts[1];
-		this.wmName = commandParts[2];				
-		this.mode = commandParts[4];
+		commandParts = this.commandStr.split("[(|)=|,|']");	
+		this.varName = commandParts[0];
+		this.modelName = commandParts[2];
+		//this.wmName = commandParts[2];				
+		//this.mode = commandParts[4];
 		
-		setupTableNames(commandParts);
-		setupNotMandatoryArgs(commandParts);
+		try {
+			//setupTableNames(commandParts);				
+			//setupNotMandatoryArgs(commandParts);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+		}
 						
 	}
 	
 	@Override
-	public void execute() {					
-		if(Haquna.modelMap.containsKey(modelName)) {
-			if(Haquna.wmMap.containsKey(wmName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);				
-				WorkingMemory wm = Haquna.wmMap.get(wmName);
-							    
-			    Configuration.Builder confBuilder = new Configuration.Builder();			 
+	public void execute() {		
+		try {
+			setupNotMandatoryArgs(commandParts);
+			setupTableNames(commandParts);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if(!Haquna.isVarUsed(varName)) {
+		  if(Haquna.modelMap.containsKey(modelName)) {
+			XTTModel model = Haquna.modelMap.get(modelName);
+			Configuration.Builder confBuilder = new Configuration.Builder();
+			WorkingMemory wm;
+			
+			if(wmName == null) {
+				wm = new WorkingMemory();
+				wm.registerAllAttributes(model);
+			
+			} else {
+				wm = Haquna.wmMap.get(wmName);
 				confBuilder.setInitialState(wm.getCurrentState());
+			}
+			
+						 
+			
 				
-				confBuilder.setCsr(new ConflictSetFirstWin());
-			    
-				switch(token) {
-					case "true": {
-						confBuilder.setTokenPassingEnabled(true);
-						break;
-					}
-					case "false": {
-						confBuilder.setTokenPassingEnabled(false);
-						break;
-					}
-				}
+				//confBuilder.setCsr(new ConflictSetFirstWin());
+			
 				
-				switch(uncertanity) {
+			switch(token) {
 				case "true": {
-					//confBuilder.setUte(new ProbabilityEvaluator());
+					confBuilder.setTokenPassingEnabled(true);
+					break;
+				}
+				case "false": {
+					confBuilder.setTokenPassingEnabled(false);
+					break;
+				}
+			}
+				
+			switch(uncertanity) {
+				case "true": {
+					confBuilder.setUte(new ProbabilityEvaluator());
 					break;
 				}
 				case "false": {
@@ -85,7 +113,7 @@ public class RunAlterCmd implements Command {
 				}
 			}
 				
-				switch(conflictStrategy) {
+			switch(conflictStrategy) {
 				case "first": {
 					confBuilder.setCsr(new ConflictSetFirstWin());
 					break;
@@ -100,8 +128,8 @@ public class RunAlterCmd implements Command {
 				}
 			}
 				
-			    try {
-			    	switch(mode) {
+			try {
+			    switch(mode) {
 			    	case "foi": {
 			    		Configuration cs = confBuilder.build();
 			    		new FixedOrderInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
@@ -114,8 +142,7 @@ public class RunAlterCmd implements Command {
 
 				        System.out.println("\n\n");
 			    		
-			    		break;
-			    		
+			    		break;			    		
 			    	}
 			    	 
 			    	case "ddi": {
@@ -130,8 +157,7 @@ public class RunAlterCmd implements Command {
 
 				        System.out.println("\n\n");
 			    		
-			    		break;
-			    		
+			    		break;			    		
 			    	}
 			    	
 			    	case "gdi": {
@@ -149,23 +175,22 @@ public class RunAlterCmd implements Command {
 			    		break;
 			    	}
 			    }
-			       			     
-			    } catch(UnsupportedOperationException e){
-			    	e.printStackTrace();				
-				} catch(BuilderException e) {
+			      
+			    if(wmName == null) {
+			    	Haquna.wmMap.put(varName, wm);
+			    }
+			    
+				} catch (BuilderException e) {
 					e.printStackTrace();
+					return;
 				}
-			
-			  } else {
-				  System.out.println("No " + wmName + " WorkingMemory object in memory");
-			  }
+						  
 			} else {
 				System.out.println("No " + modelName + " Model in memory");
 			}
-		
-		
-		
-
+		} else {
+			System.out.println("Variable name: " + varName + " already in use");
+		}
 	}		
 	
 	public boolean matches(String commandStr) {
@@ -176,7 +201,7 @@ public class RunAlterCmd implements Command {
 		return new RunAlterCmd(cmdStr);
 	}
 	
-	private void setupTableNames(String[] commandParts) {
+	private void setupTableNames(String[] commandParts) throws Exception{
 		int tabBegin = 0;
 		int tabEnd = 0;
 		for(int i = 0; i < commandParts.length; i++) {
@@ -196,29 +221,70 @@ public class RunAlterCmd implements Command {
 			}
 		} catch(Exception e) {
 			System.out.println("Table names problem. Should be ['tabName1', 'tabName2']");
+			throw new Exception();
 		}
 	}
 	
-	private void setupNotMandatoryArgs(String[] commandParts) {
-		for(int i = 0; i < commandParts.length; i++) {
-			switch(commandParts[i]) {
-			case "token": {
-				this.token = commandParts[i+1];
-				break;
+	private void setupNotMandatoryArgs(String[] commandParts) throws Exception{
+			System.out.println(commandParts[3]);
+			if(commandParts[3].matches(Haquna.varName)) {
+				if(Haquna.wmMap.containsKey(commandParts[3])) {
+					this.wmName = commandParts[3];
+				
+				} else {
+					  System.out.println("No " + commandParts[3] + " WorkingMemory object in memory");
+				}
 			}
-			
-			case "uncertanity": {
-				this.uncertanity = commandParts[i+1];
-				break;
+							
+			for(int i = 0; i < commandParts.length-1; i++) {
+				String nextArgument = commandParts[i+1];
+				switch(commandParts[i]) {
+				case "mode" : {
+					if(nextArgument.matches("gdi|fdi|foi")) {					
+						this.mode = nextArgument;
+					
+					} else {
+						throw new Exception("Incorrect mode arg.");
+					}
+					break;
+				}
+				
+				case "token": {
+					if(nextArgument.matches("true|false")) {
+						this.token = nextArgument;
+					
+					}else {
+						throw new Exception("Incorrect token arg.");
+					}
+					
+					break;
+				}
+				
+				case "uncertanity": {
+					if(nextArgument.matches("true|false")) {
+						this.uncertanity = nextArgument;
+					
+					} else {
+						throw new Exception("Incorrect uncertanity arg.");
+					}
+					
+					break;
+				}
+				
+				case "conflict_strategy": {
+					if(nextArgument.matches("first|last|all")) {
+						this.conflictStrategy = commandParts[i+1];
+					
+					} else {
+						throw new Exception("Incorrect conflict_strategy arg");
+					}
+					
+					break;
+				}
+				
+				}
 			}
-			
-			case "conflict_strategy": {
-				this.conflictStrategy = commandParts[i+1];
-				break;
-			}
-			
-			}
-		}
+		
 	}
 
 }

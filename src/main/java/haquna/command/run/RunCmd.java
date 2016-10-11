@@ -19,7 +19,7 @@ import heart.xtt.XTTModel;
 
 public class RunCmd implements Command {		
 	//WorkingMemory = run(Model, Wm, ['tabName1','tabName2'], mode=gdi)
-	public static final String pattern = "^[A-Z].*=(\\s*)run[(][A-Z](.*)[,](\\s*)[A-Z](.*)[,](\\s*)[\\[](.*)[\\]][,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
+	public static final String pattern = "^[A-Z].*=(\\s*)runnn[(][A-Z](.*)[,](\\s*)[A-Z](.*)[,](\\s*)[\\[](.*)[\\]][,](\\s*)mode=(gdi|ddi|foi)[)](\\s*)";
 		
 	private String commandStr;
 	private String varName;

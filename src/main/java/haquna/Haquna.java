@@ -50,6 +50,7 @@ public class Haquna {
             CommandFactory cmdFactory = new CommandFactory();
             
             updateCompleter(reader);
+            //myCompleter(reader);
             while ((line = reader.readLine()) != null) {
             	                 	
                 out.println("======>\"" + line + "\"");
@@ -76,6 +77,7 @@ public class Haquna {
                 }
                 
                 updateCompleter(reader);
+                //myCompleter(reader);
             }
         }
         catch (Throwable t) {
@@ -157,6 +159,66 @@ public class Haquna {
         
         reader.setCompletionHandler(handler);
         reader.addCompleter(argComp);
+	}
+	
+	public static void myCompleter(ConsoleReader reader) {
+		for(Completer c : reader.getCompleters()){
+			reader.removeCompleter(c);
+		}
+		
+		completers = new LinkedList<Completer>();
+       /* completers.add(new FileNameCompleter());
+        completers.add(new StringsCompleter(
+                "xload('",
+                ")",
+                "showTablesList()",
+                "showAttributesList()",
+                "showTypesList()",
+                "showRulesList()",
+                "show()",
+                "getTableByName('",
+                "getTableById('",
+                "getAttributeById(",
+                "getAttributeByName(",
+                "getTypeById('",
+                "getTypeByName('",
+                "getRuleById('",
+                "getRuleByName('",
+                "getType()",
+                "getCallback()",
+                "showVars()",
+                "run(",
+                "showCurrentState()",
+                "showValueOf('",
+                "new",
+                "WorkingMemory(",
+                "setValueOf('",
+                "determineValues(",
+                "add(",
+                "Type(",
+                "new",
+                "xsave('"
+                
+                
+                
+   		));
+        completers.add(new StringsCompleter(modelMap.keySet()));
+        completers.add(new StringsCompleter(tableMap.keySet()));
+        completers.add(new StringsCompleter(attribiuteMap.keySet()));
+        completers.add(new StringsCompleter(typeMap.keySet()));
+        completers.add(new StringsCompleter(ruleMap.keySet()));
+        completers.add(new StringsCompleter(callbackMap.keySet()));
+        completers.add(new StringsCompleter(wmMap.keySet()));*/
+        completers.add(new HaqunaCompleter());
+        AggregateCompleter aggComp = new AggregateCompleter(completers);
+        //ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
+                
+        //argComp.setStrict(false);
+        CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
+        handler.setPrintSpaceAfterFullCompletion(false);
+        
+        reader.setCompletionHandler(handler);
+        reader.addCompleter(aggComp);
 	}
 }
 	
