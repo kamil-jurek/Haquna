@@ -3,11 +3,11 @@ package haquna.command.show;
 import haquna.Haquna;
 import haquna.command.Command;
 
-public class ShowVarsCmd implements Command {
+public class PrintVarsCmd implements Command {
 	
-	public static final String pattern = "^showVars[(][)](\\s*)";
+	public static final String pattern = "^printVars[(][)](\\s*)";
 	
-	public ShowVarsCmd() {
+	public PrintVarsCmd() {
 		
 	}
 	
@@ -53,6 +53,6 @@ public class ShowVarsCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new ShowVarsCmd();
+		return new PrintVarsCmd();
 	}
 }

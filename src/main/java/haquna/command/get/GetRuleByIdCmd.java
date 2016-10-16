@@ -3,13 +3,15 @@ package haquna.command.get;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Rule;
 import heart.xtt.Table;
 
 public class GetRuleByIdCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getRuleById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getRuleById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -30,26 +32,19 @@ public class GetRuleByIdCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.tableMap.containsKey(tableName)) {				
-				Table table = Haquna.tableMap.get(tableName);
-				LinkedList<Rule> rules = table.getRules();
-				
-				for(Rule rule : rules) {
-					if(rule.getId().equals(ruleId)) {
-						Haquna.ruleMap.put(varName, rule);
-						return;
-					}
-				}
-				System.out.println("No rule with '" + ruleId + "' id in '" + tableName + "' table");
-										     			
-			} else {
-				System.out.println("No " + tableName + " table in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
-		}
+	public void execute() {
+		try {
+			HaqunaUtils.checkVarName(varName);
+			Table table = HaqunaUtils.getTable(tableName);
+			getRuleById(table);
+			
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
+		}		
 	}		
 	
 	public boolean matches(String commandStr) {
@@ -58,5 +53,16 @@ public class GetRuleByIdCmd implements Command {
 	
 	public Command getNewCommand(String cmdStr) {
 		return new GetRuleByIdCmd(cmdStr);
+	}
+	
+	private void getRuleById(Table table) throws HaqunaException {
+		LinkedList<Rule> rules = table.getRules();		
+		for(Rule rule : rules) {
+			if(rule.getId().equals(ruleId)) {
+				Haquna.ruleMap.put(varName, rule);
+				return;
+			}
+		}
+		throw new HaqunaException("No rule with '" + ruleId + "' id in '" + tableName + "' table");
 	}
 }

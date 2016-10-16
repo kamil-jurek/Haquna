@@ -22,7 +22,6 @@ import haquna.command.io.XsaveCmd;
 import haquna.command.run.DetermineValuesCmd;
 import haquna.command.run.RunAlterCmd;
 import haquna.command.run.RunCmd;
-import haquna.command.set.SetValueOfCmd;
 import haquna.command.show.ShowAttributesListCmd;
 import haquna.command.show.ShowCmd;
 import haquna.command.show.ShowCurrentStateCmd;
@@ -31,8 +30,9 @@ import haquna.command.show.ShowRulesListCmd;
 import haquna.command.show.ShowTablesListCmd;
 import haquna.command.show.ShowTypesListCmd;
 import haquna.command.show.ShowValueOfCmd;
-import haquna.command.show.ShowVarsCmd;
+import haquna.command.show.PrintVarsCmd;
 import haquna.command.wm.NewWorkingMemoryCmd;
+import haquna.command.wm.SetValueOfCmd;
 
 public class CommandFactory {
 	
@@ -86,7 +86,7 @@ public class CommandFactory {
 
 			
 			// utils
-			add(new ShowVarsCmd());
+			add(new PrintVarsCmd());
 			
 		}
 	};

@@ -3,7 +3,9 @@ package haquna.command.show;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Attribute;
 import heart.xtt.XTTModel;
 
@@ -12,7 +14,7 @@ public class ShowAttributesListCmd implements Command {
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]showAttributesList[(][)](\\s*)";
 	
 	private String commandStr;
-	private String varName;
+	private String modelName;
 	
 	public ShowAttributesListCmd() {
 		
@@ -22,28 +24,22 @@ public class ShowAttributesListCmd implements Command {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[.]");	
-		this.varName = commandParts[0];
+		this.modelName = commandParts[0];
 	}
 	
 	public void execute() {
+		
+		try {
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			printAttributesList(model);
 						
-		if(Haquna.modelMap.containsKey(varName)) {
-			XTTModel model = Haquna.modelMap.get(varName);
+			Haquna.wasSucces = true;
 			
-			LinkedList<Attribute> attributes = model.getAttributes();
-			System.out.print("[");
-			for(Attribute attr: attributes){			  
-			    System.out.print(attr.getName());
-			    
-			    if(attr != attributes.getLast()) {
-			    	System.out.print(", ");
-			    }
-			}
-			System.out.println("]");
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
 			
-		} else {
-			System.out.println("No " + varName + " model in memory");
-		}
+			return;
+		}		
 	}
 	
 	public boolean matches(String commandStr) {
@@ -63,12 +59,23 @@ public class ShowAttributesListCmd implements Command {
 	}
 
 	public String getVarName() {
-		return varName;
+		return modelName;
 	}
 
 	public void setVarName(String varName) {
-		this.varName = varName;
+		this.modelName = varName;
 	}
 	
-	
+	private void printAttributesList(XTTModel model) {
+		LinkedList<Attribute> attributes = model.getAttributes();
+		System.out.print("[");
+		for(Attribute attr: attributes){			  
+		    System.out.print(attr.getName());
+		    
+		    if(attr != attributes.getLast()) {
+		    	System.out.print(", ");
+		    }
+		}
+		System.out.println("]");
+	}
 }

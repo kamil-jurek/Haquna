@@ -1,13 +1,15 @@
 package haquna.command.wm;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.xtt.XTTModel;
 
 public class NewWorkingMemoryCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)new(\\s*)WorkingMemory[(][A-Z](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)new(\\s*)WorkingMemory[(]" + Haquna.varName + "[)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -27,20 +29,20 @@ public class NewWorkingMemoryCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);
-				WorkingMemory wm = new WorkingMemory();
-				
-				wm.registerAllAttributes(model);
-				
-				Haquna.wmMap.put(varName, wm);
+		try {
+			HaqunaUtils.checkVarName(varName);
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			WorkingMemory wm = new WorkingMemory();				
 			
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
+			wm.registerAllAttributes(model);				
+			Haquna.wmMap.put(varName, wm);
+				
+			Haquna.wasSucces = true;
+				
+			} catch(HaqunaException e) {
+				HaqunaUtils.printRed(e.getMessage());
+				
+				return;
 		}
 	}		
 	

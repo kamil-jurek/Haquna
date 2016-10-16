@@ -3,7 +3,9 @@ package haquna.command.show;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Rule;
 import heart.xtt.Table;
 
@@ -26,23 +28,16 @@ public class ShowRulesListCmd implements Command {
 	}
 	
 	public void execute() {
-		if(Haquna.tableMap.containsKey(tableName)) {
-			Table table = Haquna.tableMap.get(tableName);
-			LinkedList<Rule> rules = table.getRules();
+		try {
+			Table table = HaqunaUtils.getTable(tableName);
+			printRulesList(table);
 			
-			System.out.print("[");					  
-			for(Rule rule : rules){
-				System.out.print(rule.getName());
-				
-				if(rule != rules.getLast()) {
-					System.out.print(", ");
-				}
-				  
-			}
-			System.out.println("]");
+			Haquna.wasSucces = true;
 			
-		} else {
-			System.out.println("No " + tableName + " table in memory");
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		}		
 	}
 	
@@ -70,5 +65,18 @@ public class ShowRulesListCmd implements Command {
 		this.tableName = varName;
 	}
 	
-	
+	private void printRulesList(Table table) {
+		LinkedList<Rule> rules = table.getRules();
+		
+		System.out.print("[");					  
+		for(Rule rule : rules){
+			System.out.print(rule.getName());
+			
+			if(rule != rules.getLast()) {
+				System.out.print(", ");
+			}
+			  
+		}
+		System.out.println("]");
+	}
 }

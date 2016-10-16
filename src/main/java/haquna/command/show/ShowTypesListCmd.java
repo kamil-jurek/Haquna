@@ -3,7 +3,9 @@ package haquna.command.show;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Type;
 import heart.xtt.XTTModel;
 
@@ -12,7 +14,7 @@ public class ShowTypesListCmd implements Command {
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]" + "(\\s*)" + "showTypesList[(][)](\\s*)";
 	
 	private String commandStr;
-	private String varName;
+	private String modelName;
 	
 	public ShowTypesListCmd() {
 		
@@ -22,26 +24,20 @@ public class ShowTypesListCmd implements Command {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split("[.]");	
-		this.varName = commandParts[0];
+		this.modelName = commandParts[0];
 	}
 	
 	public void execute() {
-		if(Haquna.modelMap.containsKey(varName)) {
-			XTTModel model = Haquna.modelMap.get(varName);
+		try {
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			printTypesList(model);
 			
-			LinkedList<Type> types = model.getTypes();
-			System.out.print("[");
-			for(Type t : types){				
-			    System.out.print(t.getName());
-			    
-			    if(t != types.getLast()) {
-			    	System.out.print(", ");
-			    }			    
-			}
-			System.out.println("]");
+			Haquna.wasSucces = true;
 			
-		} else {
-			System.out.println("No " + varName + " model in memory");
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		}		
 	}
 	
@@ -62,12 +58,23 @@ public class ShowTypesListCmd implements Command {
 	}
 
 	public String getVarName() {
-		return varName;
+		return modelName;
 	}
 
 	public void setVarName(String varName) {
-		this.varName = varName;
+		this.modelName = varName;
 	}
 	
-	
+	private void printTypesList(XTTModel model) {
+		LinkedList<Type> types = model.getTypes();
+		System.out.print("[");
+		for(Type type : types){				
+		    System.out.print(type.getName());
+		    
+		    if(type != types.getLast()) {
+		    	System.out.print(", ");
+		    }			    
+		}
+		System.out.println("]");
+	}
 }

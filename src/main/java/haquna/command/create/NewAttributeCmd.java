@@ -38,9 +38,10 @@ public class NewAttributeCmd implements Command {
 
 	        try {
 				parser.parse(hmr_code);
-				attr = parser.getModel().getAttributes().getFirst();
-			
-	        } catch (ParsingSyntaxException | ModelBuildingException e1) {
+				Attribute.Builder attrBuilder = parser.getAttributeBuilder();
+				//attr = attrBuilder.
+				
+	        } catch (ParsingSyntaxException e1) {
 				e1.printStackTrace();
 				return;
 			}

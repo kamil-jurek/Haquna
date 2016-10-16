@@ -1,14 +1,16 @@
 package haquna.command.show;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.State;
 import heart.StateElement;
 import heart.WorkingMemory;
 
 public class ShowCurrentStateCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showCurrentState[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "[.]showCurrentState[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -25,19 +27,17 @@ public class ShowCurrentStateCmd implements Command {
 	}
 	
 	public void execute() {
-		if(Haquna.wmMap.containsKey(varName)) {
-			WorkingMemory wm = Haquna.wmMap.get(varName);
-			State current = wm.getCurrentState();
+		try {
+			WorkingMemory wm = HaqunaUtils.getWorkingMemory(varName);
+			printCurrentState(wm);
 			
-			System.out.println("=================================");
-			for(StateElement se : current){
-		    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
-		    }
-			System.out.println("=================================");
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
 			
-		} else {
-			System.out.println("No " + varName + " WorkingMemory in memory");
-		}		
+			return;
+		}				
 	}
 	
 	public boolean matches(String commandStr) {
@@ -64,5 +64,10 @@ public class ShowCurrentStateCmd implements Command {
 		this.varName = varName;
 	}
 	
-	
+	private void printCurrentState(WorkingMemory wm) {
+		State current = wm.getCurrentState();
+		for(StateElement se : current){
+	    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
+	    }
+	}
 }

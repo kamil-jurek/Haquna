@@ -3,13 +3,15 @@ package haquna.command.get;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Table;
 import heart.xtt.XTTModel;
 
 public class GetTableByIdCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTableById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getTableById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -31,24 +33,17 @@ public class GetTableByIdCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Table> tables = model.getTables();
-				
-				for(Table table : tables){
-					if(table.getId().equals(tableId)){
-						Haquna.tableMap.put(varName, table);
-						return;
-					}	     
-				}
-				System.out.println("No table with '" + tableId + "' id in '" + modelName + "' model");
+		try {
+			HaqunaUtils.checkVarName(varName);
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			getTableById(model);
 			
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		}
 	}		
 	
@@ -58,5 +53,16 @@ public class GetTableByIdCmd implements Command {
 	
 	public Command getNewCommand(String cmdStr) {
 		return new GetTableByIdCmd(cmdStr);
+	}
+	
+	private void getTableById(XTTModel model) throws HaqunaException {
+		LinkedList<Table> tables = model.getTables();
+		for(Table table : tables){
+			if(table.getId().equals(tableId)){
+				Haquna.tableMap.put(varName, table);
+				return;
+			}	     
+		}
+		throw new HaqunaException("No table with '" + tableId + "' id in '" + modelName + "' model");
 	}
 }

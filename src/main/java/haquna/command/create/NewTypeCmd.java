@@ -2,6 +2,7 @@ package haquna.command.create;
 
 import haquna.Haquna;
 import haquna.command.Command;
+import heart.exceptions.BuilderException;
 import heart.exceptions.ModelBuildingException;
 import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
@@ -38,9 +39,10 @@ public class NewTypeCmd implements Command {
 
 	        try {
 				parser.parse(hmr_code);
-				type = parser.getModel().getTypes().getFirst();
-			
-	        } catch (ParsingSyntaxException | ModelBuildingException e1) {
+				Type.Builder typeBuilder = parser.getTypeBuilder();
+				type = typeBuilder.build();
+				
+	        } catch (ParsingSyntaxException | BuilderException e1) {
 				e1.printStackTrace();
 				return;
 			}

@@ -8,7 +8,7 @@ import heart.xtt.XTTModel;
 
 public class XloadCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)xload[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)xload[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -41,14 +41,18 @@ public class XloadCmd implements Command {
 		    model = parser.getModel();
 			
 			if(!Haquna.isVarUsed(varName)) {
-				Haquna.modelMap.put(varName, model);					
+				Haquna.modelMap.put(varName, model);	
+				
+				Haquna.wasSucces = true;
+			
 			} else {
 				System.out.println("Variable name: " + varName + " already in use");
 			}
 
 		} catch(Exception e) {
-			System.out.println("File '" + modelPath + "' was found");
-			e.printStackTrace();		    			    	
+			e.printStackTrace();	
+			
+			return;
 		}	
 	}		
 	

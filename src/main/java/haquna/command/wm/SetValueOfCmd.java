@@ -1,7 +1,9 @@
-package haquna.command.set;
+package haquna.command.wm;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.alsvfd.Null;
 import heart.alsvfd.SimpleNumeric;
@@ -12,7 +14,9 @@ import heart.exceptions.NotInTheDomainException;
 
 public class SetValueOfCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]setValueOf[(]['](.*)['](\\s*)[,](\\s*)['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "[.]setValueOf[(][']" + 
+											   Haquna.attrNamePattern + "['](\\s*)[,](\\s*)[']" +
+											   Haquna.attrValuePattern+ "(.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -33,41 +37,17 @@ public class SetValueOfCmd implements Command {
 	}
 	
 	public void execute() {
-		if(Haquna.wmMap.containsKey(wmName)) {
-			WorkingMemory wm = Haquna.wmMap.get(wmName);
-			Value attVal;
+		try {
+			WorkingMemory wm = HaqunaUtils.getWorkingMemory(wmName);
+			setValue(wm);
 			
-			if(attributeValue == null) {
-				attVal = new Null();
+			Haquna.wasSucces = true;
 			
-			} else if(attributeValue.matches("-?\\d+(\\.\\d+)?")) {
-				double d = Double.parseDouble(attributeValue);
-				attVal = new SimpleNumeric(d);
-				
-			} else if(attributeValue.contains("/")){
-				String[] splited = attributeValue.split("[/]");
-				attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));
+		} catch (HaqunaException | AttributeNotRegisteredException | NotInTheDomainException e) {
+			HaqunaUtils.printRed(e.getMessage());
 			
-			} else {
-				attVal = new SimpleSymbolic(attributeValue);				
-			
-			}
-							
-			try {
-				wm.setAttributeValue(attributeName, attVal);
-				wm.recordLog();
-			
-			} catch (AttributeNotRegisteredException | NotInTheDomainException e) {
-				e.printStackTrace();
-			}
-			
-			System.out.println("==============SET=================");
-			System.out.println(attributeName + " = " + wm.getAttributeValue(attributeName));
-			System.out.println("=================================");
-			
-		} else {
-			System.out.println("No " + wmName + " WorkingMemory in memory");
-		}		
+			return;
+		}			
 	}
 	
 	public boolean matches(String commandStr) {
@@ -94,5 +74,25 @@ public class SetValueOfCmd implements Command {
 		this.wmName = varName;
 	}
 	
-	
+	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException {
+		Value attVal;		
+		if(attributeValue == null) {
+			attVal = new Null();
+		
+		} else if(attributeValue.matches("-?\\d+(\\.\\d+)?")) {
+			double d = Double.parseDouble(attributeValue);
+			attVal = new SimpleNumeric(d);
+			
+		} else if(attributeValue.contains("/")){
+			String[] splited = attributeValue.split("[/]");
+			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));
+		
+		} else {
+			attVal = new SimpleSymbolic(attributeValue);				
+		
+		}
+						
+		wm.setAttributeValue(attributeName, attVal);
+		wm.recordLog();								
+	}
 }

@@ -34,7 +34,16 @@ public class XsaveCmd implements Command {
 		if(Haquna.modelMap.containsKey(modelName)) {
 			XTTModel model = Haquna.modelMap.get(modelName);
 			
-			XttModelUtils.saveToFile(model, modelPath);
+			try {
+				XttModelUtils.saveToFile(model, modelPath);
+			
+				Haquna.wasSucces = true;
+			
+			} catch(Exception e) {
+				e.printStackTrace();
+				
+				return;
+			}
 		
 		} else {
 			System.out.println("No " + modelName + " model in memory");

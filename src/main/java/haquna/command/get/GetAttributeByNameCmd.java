@@ -3,13 +3,15 @@ package haquna.command.get;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Attribute;
 import heart.xtt.XTTModel;
 
 public class GetAttributeByNameCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getAttributeByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getAttributeByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -31,24 +33,17 @@ public class GetAttributeByNameCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Attribute> attributes = model.getAttributes();
-				
-				for(Attribute att : attributes){					
-					if(att.getName().equals(attributeName)){
-						Haquna.attribiuteMap.put(varName, att);
-						return;
-					}	     
-				}
-				System.out.println("No attribute with '" + attributeName + "' name in '" + modelName + "' model");
-							
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
+		try {
+			HaqunaUtils.checkVarName(varName);
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			getAttributeByName(model);
+			
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		}
 	}		
 	
@@ -92,5 +87,15 @@ public class GetAttributeByNameCmd implements Command {
 		this.attributeName = attribiuteName;
 	}
 	
+	private void getAttributeByName(XTTModel model) throws HaqunaException {
+		LinkedList<Attribute> attributes = model.getAttributes();		
+		for(Attribute att : attributes){					
+			if(att.getName().equals(attributeName)){
+				Haquna.attribiuteMap.put(varName, att);
+				return;
+			}	     
+		}
+		throw new HaqunaException("No attribute with '" + attributeName + "' name in '" + modelName + "' model");
+	}
 	
 }

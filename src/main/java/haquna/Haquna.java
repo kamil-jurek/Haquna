@@ -28,6 +28,10 @@ import jline.console.completer.StringsCompleter;
 
 public class Haquna {
 	public static final String varName = "[A-Z]([A-Z|a-z|0-9|_])*";
+	public static final String attrNamePattern = "[a-z|_]+";
+	public static final String attrValuePattern = "[a-z|A-Z|0-9|_|.]+[/]?[0-9]*";
+	
+	public static boolean wasSucces = false;
 	
 	public static Map<String, XTTModel> modelMap = new HashMap<String, XTTModel>();
 	public static Map<String, Table> tableMap = new HashMap<String, Table>();
@@ -52,10 +56,16 @@ public class Haquna {
             updateCompleter(reader);
             //myCompleter(reader);
             while ((line = reader.readLine()) != null) {
-            	                 	
-                out.println("======>\"" + line + "\"");
+            	           	                            
                 cmdFactory.createCommand(line);
                 
+                if(wasSucces) {
+                	paintItGreeen(line);
+                
+                } else {
+                	paintItRed(line);
+                }
+                wasSucces = false;
                 out.flush();
                 
                 if(line.equalsIgnoreCase("pwd")) {
@@ -77,6 +87,7 @@ public class Haquna {
                 }
                 
                 updateCompleter(reader);
+                
                 //myCompleter(reader);
             }
         }
@@ -126,7 +137,7 @@ public class Haquna {
                 "getRuleByName('",
                 "getType()",
                 "getCallback()",
-                "showVars()",
+                "printVars()",
                 "run(",
                 "showCurrentState()",
                 "showValueOf('",
@@ -219,6 +230,14 @@ public class Haquna {
         
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
+	}
+	
+	public static void paintItGreeen(String line) {
+		System.out.println("\u001B[32m======>" + line + "\"\u001B[0m");
+	}
+	
+	public static void paintItRed(String line) {
+		System.out.println("\u001B[31m======>" + line + "\"\u001B[0m");
 	}
 }
 	

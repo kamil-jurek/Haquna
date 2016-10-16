@@ -1,13 +1,15 @@
 package haquna.command.show;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.alsvfd.Value;
 
 public class ShowValueOfCmd implements Command {
 	
-	public static final String pattern = "^[A-Z](.*)[.]showValueOf[(][']([a-z|0-9|_])['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)[.]showValueOf[(][']" + Haquna.varName + "['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -26,16 +28,17 @@ public class ShowValueOfCmd implements Command {
 	}
 	
 	public void execute() {
-		if(Haquna.wmMap.containsKey(wmName)) {
-			WorkingMemory wm = Haquna.wmMap.get(wmName);
-			Value attVal = wm.getAttributeValue(attributeName);
-			System.out.println("=================================");
-			System.out.println(attributeName + " = " + attVal);
-			System.out.println("=================================");
+		try {
+			WorkingMemory wm = HaqunaUtils.getWorkingMemory(wmName);
+			printValue(wm);
 			
-		} else {
-			System.out.println("No " + wmName + " WorkingMemory in memory");
-		}		
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
+		}
 	}
 	
 	public boolean matches(String commandStr) {
@@ -62,5 +65,8 @@ public class ShowValueOfCmd implements Command {
 		this.wmName = varName;
 	}
 	
-	
+	private void printValue(WorkingMemory wm) {
+		Value attVal = wm.getAttributeValue(attributeName);
+		System.out.println(attributeName + " = " + attVal);
+	}
 }

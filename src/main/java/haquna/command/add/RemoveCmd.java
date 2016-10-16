@@ -146,10 +146,10 @@ public class RemoveCmd implements Command {
         XTTModel newModel = null;
         
         try {
-			builder.removeIncompleteRuleNamed(itemToRemoveName);
+			//builder.removeIncompleteRuleNamed(itemToRemoveName);
 			newModel = builder.build();
 			
-			Haquna.modelMap.put(newModelName, newModel);
+			//Haquna.modelMap.put(newModelName, newModel);
 		
         } catch (ModelBuildingException e) {
 			e.printStackTrace();

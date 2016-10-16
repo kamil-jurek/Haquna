@@ -3,13 +3,15 @@ package haquna.command.get;
 import java.util.LinkedList;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Type;
 import heart.xtt.XTTModel;
 
 public class GetTypeByNameCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getTypeByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getTypeByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -31,24 +33,17 @@ public class GetTypeByNameCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);				
-				LinkedList<Type> types = model.getTypes();
-				
-				for(Type type : types){
-					if(type.getName().equals(typeName)){
-						Haquna.typeMap.put(varName, type);
-						return;
-					}	     
-				}
-				System.out.println("No type with '" + typeName + "' name in '" + modelName + "' model");
+		try {
+			HaqunaUtils.checkVarName(varName);
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			getTypeByName(model);
 			
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
+			Haquna.wasSucces = true;
+		
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		}
 	}		
 	
@@ -92,5 +87,14 @@ public class GetTypeByNameCmd implements Command {
 		this.typeName = typeName;
 	}
 	
-	
+	private void getTypeByName(XTTModel model) throws HaqunaException {
+		LinkedList<Type> types = model.getTypes();		
+		for(Type type : types){
+			if(type.getName().equals(typeName)){
+				Haquna.typeMap.put(varName, type);
+				return;
+			}	     
+		}
+		throw new HaqunaException("No type with '" + typeName + "' name in '" + modelName + "' model");
+	}
 }

@@ -9,14 +9,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import haquna.command.CommandFactory;
+import haquna.utils.HaqunaUtils;
 
 
 public class RunCmdTest {
 	
 	public static CommandFactory cp = new CommandFactory();
 	
-	@BeforeClass
+
 	public static void setup() {
+		HaqunaUtils.clearMemory();
 		cp.createCommand("Model = xload('threat-monitor.hmr')");
 		cp.createCommand("Wm = new WorkingMemory(Model)");
 		cp.createCommand("Wm.setValueOf('hour','16')");
@@ -24,45 +26,41 @@ public class RunCmdTest {
 		cp.createCommand("Wm.setValueOf('activity','walking')");
 		cp.createCommand("Wm.setValueOf('day','mon/1')");
 	}
-	
+		
 	@Test
-	public void testRunCmd1() {
-		String cmd;
-						
+	public void testRunCmd1() {		
+		setup();				
+		
 		cp.createCommand("Wm2 = run(Model, Wm, ['DayTime','Today'])");
+		cp.createCommand("Wm.showCurrentState()");
+		
 		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
 			
 	}
 	
 	@Test
 	public void testRunCmd2() {
-		String cmd;
-			
-		cp.createCommand("Wm2 = run(Model, Wm, mode=gdi, ['Threats'])");
-		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
-			
+		setup();	
+		
+		cp.createCommand("Wm2 = run(Model, Wm, mode=gdi)");		
+		cp.createCommand("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);			
 	}
 	
 	@Test
 	public void testRunCmd3() {
-		String cmd;
+		setup();	
 			
 		cp.createCommand("Wm3 = run(Model,mode=gdi, ['Threats'])");
 		cp.createCommand("Wm3.setValueOf('hour','6')");
 		cp.createCommand("Wm3.showCurrentState()");
+		
 		assertEquals(Haquna.wmMap.containsKey("Wm3"), true);
 			
 	}
 	
-	@Test
-	public void testRunCmd4() {
-		String cmd;
-			
-		cp.createCommand("Wm2 = run(Model,Model,['Threats'])");
-
-		assertEquals(Haquna.wmMap.containsKey("Wm3"), true);
-			
-	}
+	
 	/*@Test
 	public void testXloadCmdNoModel() {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();

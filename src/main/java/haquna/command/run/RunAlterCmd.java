@@ -1,12 +1,14 @@
 package haquna.command.run;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.Configuration;
-import heart.State;
-import heart.StateElement;
 import heart.WorkingMemory;
-import heart.exceptions.BuilderException;
 import heart.inference.DataDrivenInference;
 import heart.inference.FixedOrderInference;
 import heart.inference.GoalDrivenInference;
@@ -26,7 +28,7 @@ public class RunAlterCmd implements Command {
 	private String varName;
 	private String modelName;
 	private String wmName = null;	
-	private String[] tableNames;
+	private String[] tableNames = new String[]{};
 	
 	private String mode = "ddi";
 	private String token = "false";
@@ -34,6 +36,10 @@ public class RunAlterCmd implements Command {
 	private String conflictStrategy = "first";
 	
 	private String[] commandParts;
+	
+	private XTTModel model;
+	private Configuration.Builder confBuilder;
+	private WorkingMemory wm;
 	
 	public RunAlterCmd() {
 		
@@ -44,153 +50,58 @@ public class RunAlterCmd implements Command {
 				
 		commandParts = this.commandStr.split("[(|)=|,|']");	
 		this.varName = commandParts[0];
-		this.modelName = commandParts[2];
-		//this.wmName = commandParts[2];				
-		//this.mode = commandParts[4];
-		
-		try {
-			//setupTableNames(commandParts);				
-			//setupNotMandatoryArgs(commandParts);
-		
-		} catch(Exception e) {
-			e.printStackTrace();
-			
-		}
-						
+		this.modelName = commandParts[2];								
 	}
 	
 	@Override
 	public void execute() {		
-		try {
+		try {						
+			HaqunaUtils.checkVarName(varName);
+			model = HaqunaUtils.getModel(modelName);
+			confBuilder = new Configuration.Builder();
+			
 			setupNotMandatoryArgs(commandParts);
 			setupTableNames(commandParts);
+			setupWorkingMemory();
+			setupToken();
+			setupUncertainty();
+			setupConflictStrategy();
+									
+			switch(mode) {
+	    	  case "foi": {
+	    		Configuration cs = confBuilder.build();
+	    		new FixedOrderInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    			    		
+	    		break;			    		
+	    	  }
+	    	 
+	    	  case "ddi": {
+	    		Configuration cs = confBuilder.build();
+	    		new DataDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    			    		
+	    		break;			    		
+	    	  }
+	    	
+	    	  case "gdi": {
+	    		Configuration cs = confBuilder.build();
+	    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    			    		
+	    		break;
+	    	  }
+			}
+						  
+		    if(wmName == null) {
+		    	Haquna.wmMap.put(varName, wm);
+		    }
+		    
+		    Haquna.wasSucces = true;
 			
 		} catch(Exception e) {
 			e.printStackTrace();
+			HaqunaUtils.printRed(e.getMessage());
+			
 			return;
-		}
-		
-		if(!Haquna.isVarUsed(varName)) {
-		  if(Haquna.modelMap.containsKey(modelName)) {
-			XTTModel model = Haquna.modelMap.get(modelName);
-			Configuration.Builder confBuilder = new Configuration.Builder();
-			WorkingMemory wm;
-			
-			if(wmName == null) {
-				wm = new WorkingMemory();
-				wm.registerAllAttributes(model);
-			
-			} else {
-				wm = Haquna.wmMap.get(wmName);
-				confBuilder.setInitialState(wm.getCurrentState());
-			}
-			
-						 
-			
-				
-				//confBuilder.setCsr(new ConflictSetFirstWin());
-			
-				
-			switch(token) {
-				case "true": {
-					confBuilder.setTokenPassingEnabled(true);
-					break;
-				}
-				case "false": {
-					confBuilder.setTokenPassingEnabled(false);
-					break;
-				}
-			}
-				
-			switch(uncertanity) {
-				case "true": {
-					confBuilder.setUte(new ProbabilityEvaluator());
-					break;
-				}
-				case "false": {
-					//confBuilder.setTokenPassingEnabled(false);
-					break;
-				}
-			}
-				
-			switch(conflictStrategy) {
-				case "first": {
-					confBuilder.setCsr(new ConflictSetFirstWin());
-					break;
-				}
-				case "last": {
-					confBuilder.setCsr(new ConflictSetFirstWin());
-					break;
-				}
-				case "all": {
-					confBuilder.setCsr(new ConflictSetFireAll());
-					break;
-				}
-			}
-				
-			try {
-			    switch(mode) {
-			    	case "foi": {
-			    		Configuration cs = confBuilder.build();
-			    		new FixedOrderInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
-			    		
-			    		System.out.println("Printing current state (after inference FOI)");				        
-			    		State current = wm.getCurrentState(model);
-				        for(StateElement se : current){
-				            System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
-				        }
-
-				        System.out.println("\n\n");
-			    		
-			    		break;			    		
-			    	}
-			    	 
-			    	case "ddi": {
-			    		Configuration cs = confBuilder.build();
-			    		new DataDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
-			    		
-			    		System.out.println("Printing current state (after inference DDI)");				        
-			    		State current = wm.getCurrentState(model);
-				        for(StateElement se : current){
-				            System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
-				        }
-
-				        System.out.println("\n\n");
-			    		
-			    		break;			    		
-			    	}
-			    	
-			    	case "gdi": {
-			    		Configuration cs = confBuilder.build();
-			    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
-			    		
-			    		System.out.println("Printing current state (after inference GDI)");				        
-			    		State current = wm.getCurrentState(model);
-				        for(StateElement se : current){
-				            System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
-				        }
-
-				        System.out.println("\n\n");
-			    		
-			    		break;
-			    	}
-			    }
-			      
-			    if(wmName == null) {
-			    	Haquna.wmMap.put(varName, wm);
-			    }
-			    
-				} catch (BuilderException e) {
-					e.printStackTrace();
-					return;
-				}
-						  
-			} else {
-				System.out.println("No " + modelName + " Model in memory");
-			}
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
-		}
+		}		
 	}		
 	
 	public boolean matches(String commandStr) {
@@ -201,89 +112,157 @@ public class RunAlterCmd implements Command {
 		return new RunAlterCmd(cmdStr);
 	}
 	
-	private void setupTableNames(String[] commandParts) throws Exception{
+	private void setupWorkingMemory() throws HaqunaException {
+		if(wmName == null) {
+			wm = new WorkingMemory();
+			wm.registerAllAttributes(model);
+		
+		} else {
+			wm = HaqunaUtils.getWorkingMemory(wmName);
+			confBuilder.setInitialState(wm.getCurrentState());
+		}
+	}
+	
+	private void setupToken() {
+		switch(token) {
+		  case "true": {
+			confBuilder.setTokenPassingEnabled(true);
+			break;
+		  }
+		  case "false": {
+			confBuilder.setTokenPassingEnabled(false);
+			break;
+		  }
+		}
+	}
+	
+	private void setupUncertainty() {
+		switch(uncertanity) {
+		  case "true": {
+			confBuilder.setUte(new ProbabilityEvaluator());
+			break;
+		  }
+		  case "false": {
+			confBuilder.setUte(null);
+			break;
+		  }
+		}
+	}
+	
+	private void setupConflictStrategy() {
+		switch(conflictStrategy) {
+		  case "first": {
+			confBuilder.setCsr(new ConflictSetFirstWin());
+			break;
+		  }
+		  case "last": {
+			confBuilder.setCsr(new ConflictSetFirstWin());
+			break;
+		  }
+		  case "all": {
+			confBuilder.setCsr(new ConflictSetFireAll());
+			break;
+		  }
+		}
+	}
+	
+	private void setupTableNames(String[] commandParts){
 		int tabBegin = 0;
 		int tabEnd = 0;
-		for(int i = 0; i < commandParts.length; i++) {
-			if(commandParts[i].equals("[")) {
+		
+		String commandParts2[] = commandParts;
+		
+		List<String> list = new ArrayList<String>();
+
+	    for(String s : commandParts2) {
+	       if(s != null && s.length() > 0) {
+	          list.add(s);
+	       }
+	    }
+	    commandParts2 = list.toArray(new String[list.size()]);
+		
+		for(int i = 0; i < commandParts2.length; i++) {
+			if(commandParts2[i].equals("[")) {
 				tabBegin = i;
 			}
 			
-			if(commandParts[i].equals("]")) {
+			if(commandParts2[i].equals("]")) {
 				tabEnd = i;
 			}
 		}
-		try {
+		try {			
 			tableNames = new String[tabEnd - (tabBegin+1)];
 			for(int i = tabBegin+1; i < tabEnd; i++) {
-				tableNames[i-(tabBegin+1)] = commandParts[i];
-				System.out.println(tableNames[i-(tabBegin+1)]);
+				tableNames[i-(tabBegin+1)] = commandParts2[i];
+				
 			}
 		} catch(Exception e) {
-			System.out.println("Table names problem. Should be ['tabName1', 'tabName2']");
-			throw new Exception();
+			//e.printStackTrace();
+			tableNames = new String[]{};
+			System.out.println("Tables names were not initialized");
+			//throw new Exception("Table names problem. Should be ['tabName1', 'tabName2']");
 		}
 	}
 	
 	private void setupNotMandatoryArgs(String[] commandParts) throws Exception{
-			System.out.println(commandParts[3]);
-			if(commandParts[3].matches(Haquna.varName)) {
-				if(Haquna.wmMap.containsKey(commandParts[3])) {
-					this.wmName = commandParts[3];
+		System.out.println(commandParts[3]);
+		if(commandParts[3].matches(Haquna.varName)) {
+			if(Haquna.wmMap.containsKey(commandParts[3])) {
+				this.wmName = commandParts[3];
+			
+			} else {
+				  System.out.println("No " + commandParts[3] + " WorkingMemory object in memory");
+			}
+		}
+						
+		for(int i = 0; i < commandParts.length-1; i++) {
+			String nextArgument = commandParts[i+1];
+			switch(commandParts[i]) {
+			case "mode" : {
+				if(nextArgument.matches("gdi|fdi|foi")) {					
+					this.mode = nextArgument;
 				
 				} else {
-					  System.out.println("No " + commandParts[3] + " WorkingMemory object in memory");
+					throw new Exception("Incorrect mode arg.");
 				}
+				break;
 			}
-							
-			for(int i = 0; i < commandParts.length-1; i++) {
-				String nextArgument = commandParts[i+1];
-				switch(commandParts[i]) {
-				case "mode" : {
-					if(nextArgument.matches("gdi|fdi|foi")) {					
-						this.mode = nextArgument;
-					
-					} else {
-						throw new Exception("Incorrect mode arg.");
-					}
-					break;
+			
+			case "token": {
+				if(nextArgument.matches("true|false")) {
+					this.token = nextArgument;
+				
+				}else {
+					throw new Exception("Incorrect token arg.");
 				}
 				
-				case "token": {
-					if(nextArgument.matches("true|false")) {
-						this.token = nextArgument;
-					
-					}else {
-						throw new Exception("Incorrect token arg.");
-					}
-					
-					break;
-				}
-				
-				case "uncertanity": {
-					if(nextArgument.matches("true|false")) {
-						this.uncertanity = nextArgument;
-					
-					} else {
-						throw new Exception("Incorrect uncertanity arg.");
-					}
-					
-					break;
-				}
-				
-				case "conflict_strategy": {
-					if(nextArgument.matches("first|last|all")) {
-						this.conflictStrategy = commandParts[i+1];
-					
-					} else {
-						throw new Exception("Incorrect conflict_strategy arg");
-					}
-					
-					break;
-				}
-				
-				}
+				break;
 			}
+			
+			case "uncertanity": {
+				if(nextArgument.matches("true|false")) {
+					this.uncertanity = nextArgument;
+				
+				} else {
+					throw new Exception("Incorrect uncertanity arg.");
+				}
+				
+				break;
+			}
+			
+			case "conflict_strategy": {
+				if(nextArgument.matches("first|last|all")) {
+					this.conflictStrategy = commandParts[i+1];
+				
+				} else {
+					throw new Exception("Incorrect conflict_strategy arg");
+				}
+				
+				break;
+			}
+			
+			}
+		}
 		
 	}
 
