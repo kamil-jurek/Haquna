@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import haquna.command.CommandFactory;
+import haquna.completer.FunctionNameCompleter;
+import haquna.completer.MyArgumentCompleter;
+import haquna.completer.MyArgumentDelimiter;
+import haquna.completer.ParameterCompleter;
+import haquna.completer.VarNamesCompleter;
 import heart.WorkingMemory;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
@@ -24,6 +29,7 @@ import jline.console.completer.ArgumentCompleter;
 import jline.console.completer.CandidateListCompletionHandler;
 import jline.console.completer.Completer;
 import jline.console.completer.FileNameCompleter;
+import jline.console.completer.NullCompleter;
 import jline.console.completer.StringsCompleter;
 
 public class Haquna {
@@ -53,8 +59,15 @@ public class Haquna {
             	
             CommandFactory cmdFactory = new CommandFactory();
             
-            updateCompleter(reader);
-            //myCompleter(reader);
+            //updateCompleter(reader);
+           myCompleter(reader);
+            ///////////////////
+            
+            
+            //reader.addCompleter(argComp2);
+            
+            ////////////////////////
+            
             while ((line = reader.readLine()) != null) {
             	           	                            
                 cmdFactory.createCommand(line);
@@ -86,9 +99,9 @@ public class Haquna {
                     reader.clearScreen();
                 }
                 
-                updateCompleter(reader);
+                //updateCompleter(reader);
                 
-                //myCompleter(reader);
+                myCompleter(reader);
             }
         }
         catch (Throwable t) {
@@ -162,14 +175,14 @@ public class Haquna {
         completers.add(new StringsCompleter(wmMap.keySet()));
         
         AggregateCompleter aggComp = new AggregateCompleter(completers);
-        ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
+      //  ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
                 
-        argComp.setStrict(false);
+        //argComp.setStrict(false);
         CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
         handler.setPrintSpaceAfterFullCompletion(false);
         
         reader.setCompletionHandler(handler);
-        reader.addCompleter(argComp);
+        //reader.addCompleter(argComp);
 	}
 	
 	public static void myCompleter(ConsoleReader reader) {
@@ -178,58 +191,57 @@ public class Haquna {
 		}
 		
 		completers = new LinkedList<Completer>();
-       /* completers.add(new FileNameCompleter());
-        completers.add(new StringsCompleter(
-                "xload('",
-                ")",
-                "showTablesList()",
-                "showAttributesList()",
-                "showTypesList()",
-                "showRulesList()",
-                "show()",
-                "getTableByName('",
-                "getTableById('",
-                "getAttributeById(",
-                "getAttributeByName(",
-                "getTypeById('",
-                "getTypeByName('",
-                "getRuleById('",
-                "getRuleByName('",
-                "getType()",
-                "getCallback()",
-                "showVars()",
-                "run(",
-                "showCurrentState()",
-                "showValueOf('",
-                "new",
-                "WorkingMemory(",
-                "setValueOf('",
-                "determineValues(",
-                "add(",
-                "Type(",
-                "new",
-                "xsave('"
-                
-                
-                
-   		));
-        completers.add(new StringsCompleter(modelMap.keySet()));
-        completers.add(new StringsCompleter(tableMap.keySet()));
-        completers.add(new StringsCompleter(attribiuteMap.keySet()));
-        completers.add(new StringsCompleter(typeMap.keySet()));
-        completers.add(new StringsCompleter(ruleMap.keySet()));
-        completers.add(new StringsCompleter(callbackMap.keySet()));
-        completers.add(new StringsCompleter(wmMap.keySet()));*/
-        completers.add(new HaqunaCompleter());
-        AggregateCompleter aggComp = new AggregateCompleter(completers);
-        //ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
-                
-        //argComp.setStrict(false);
-        CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
+        /*completers.add(new StringsCompleter("unoAdin", "junoDwa", "unoTri"));
+        completers.add(new StringsCompleter("duoAdin", "duoDwa", "duoTri"));
+        completers.add(new StringsCompleter("treAdin", "treDwa", "treTri"));
+        completers.add(new StringsCompleter("quatroAdin", "quatroDwa", "quatroTri"));*/
+        completers.add(new VarNamesCompleter());
+        completers.add(new FunctionNameCompleter());
+		MyArgumentCompleter argComp1 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        
+		/*completers = new LinkedList<Completer>();
+        completers.add(new StringsCompleter("jedenEin", "ujedenZwei"));
+        completers.add(new StringsCompleter("dwaEin", "dwaZwei", "dwaDrei"));   */     
+        
+		completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new VarNamesCompleter());
+        completers.add(new FunctionNameCompleter());
+        MyArgumentCompleter argComp2 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        
+        completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new VarNamesCompleter());
+        completers.add(new FunctionNameCompleter());
+        completers.add(new ParameterCompleter());
+        MyArgumentCompleter argComp3 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        
+        completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new StringsCompleter("xload"));
+        completers.add(new FileNameCompleter());
+        MyArgumentCompleter argComp4 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        
+        completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new StringsCompleter("new"));
+        completers.add(new FunctionNameCompleter());
+        completers.add(new ParameterCompleter());       
+        MyArgumentCompleter argComp5 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        
+        argComp1.setStrict(true);
+        argComp2.setStrict(true);
+        argComp3.setStrict(true);
+        argComp4.setStrict(true);
+        argComp5.setStrict(true);
+        
+        CandidateListCompletionHandler handler = new CandidateListCompletionHandler();        
         handler.setPrintSpaceAfterFullCompletion(false);
         
+        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
+        //reader.addCompleter(argComp);
 	}
 	
 	public static void paintItGreeen(String line) {

@@ -1,7 +1,9 @@
 package haquna.command.add;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.exceptions.ModelBuildingException;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
@@ -34,49 +36,19 @@ public class RemoveCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
-		if(!Haquna.isVarUsed(newModelName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				XTTModel model = Haquna.modelMap.get(modelName);
-				
-				switch(determineWhatToRemove(model)) {
-				  case "type": {
-					System.out.println("type");
-					removeType();
-					break;
-				
-				  }				  
-				  case "attribute": {
-					System.out.println("attr");
-					removeAttribute();
-					break;
-					
-				  }
-				  case "rule": {
-					System.out.println("rule");
-					removeRule();
-					break;
-					
-				  }
-				  case "table": {
-				    System.out.println("table");
-					removeTable();
-					break;
-					
-				  }
-				  default: {
-					System.out.println("No type, attribute, rule nor table with '" + itemToRemoveName + "' name");
-					break;
-				  }
-				}
-				
-				
-				
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + newModelName + " already in use");
+	public void execute() {		
+		try {
+			HaqunaUtils.checkVarName(newModelName);
+			XTTModel model = HaqunaUtils.getModel(modelName);
+			
+			removeItem(model, itemToRemoveName);
+			
+			Haquna.wasSucces = true;
+			
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			return;
 		}
 	}		
 	
@@ -87,73 +59,85 @@ public class RemoveCmd implements Command {
 	public Command getNewCommand(String cmdStr) {
 		return new RemoveCmd(cmdStr);
 	}
-
-	private void removeType() {
-		XTTModel model = Haquna.modelMap.get(modelName);	
-
-        XTTModel.Builder builder = model.getBuilder();       
-        XTTModel newModel = null;
-        
-        try {
-			builder.removeIncompleteTypeNamed(itemToRemoveName);
-			newModel = builder.build();
-			
-			Haquna.modelMap.put(newModelName, newModel);
+	
+	private void removeItem(XTTModel model, String itemName) throws HaqunaException, ModelBuildingException {
+		switch(determineWhatToRemove(model)) {
+		  case "type": {
+			System.out.println("type");
+			removeType();
+			break;
 		
-        } catch (ModelBuildingException e) {
-			e.printStackTrace();
-		}              
+		  }				  
+		  case "attribute": {
+			System.out.println("attr");
+			removeAttribute();
+			break;
+			
+		  }
+		  case "rule": {
+			System.out.println("rule");
+			removeRule();
+			break;
+			
+		  }
+		  case "table": {
+		    System.out.println("table");
+			removeTable();
+			break;
+			
+		  }
+		  default: {
+			throw new HaqunaException("No type, attribute, rule nor table with '" + itemToRemoveName + "' name");
+		  }
+		}
 	}
 	
-	private void removeAttribute() {
+	private void removeType() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
         
-        try {
-			builder.removeIncompleteAttributeNamed(itemToRemoveName);
-			newModel = builder.build();
-			
-			Haquna.modelMap.put(newModelName, newModel);
+		builder.removeIncompleteTypeNamed(itemToRemoveName);
+		newModel = builder.build();
 		
-        } catch (ModelBuildingException e) {
-			e.printStackTrace();
-		}              
+		Haquna.modelMap.put(newModelName, newModel);		            
 	}
 	
-	private void removeTable() {
+	private void removeAttribute() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
-        
-        try {
-			builder.removeIncompleteTableNamed(itemToRemoveName);
-			newModel = builder.build();
+
+        builder.removeIncompleteAttributeNamed(itemToRemoveName);
+		newModel = builder.build();
 			
-			Haquna.modelMap.put(newModelName, newModel);
-		
-        } catch (ModelBuildingException e) {
-			e.printStackTrace();
-		}              
+		Haquna.modelMap.put(newModelName, newModel);		          
 	}
 	
-	private void removeRule() {
+	private void removeTable() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
         
-        try {
-			//builder.removeIncompleteRuleNamed(itemToRemoveName);
-			newModel = builder.build();
-			
-			//Haquna.modelMap.put(newModelName, newModel);
+		builder.removeIncompleteTableNamed(itemToRemoveName);
+		newModel = builder.build();
 		
-        } catch (ModelBuildingException e) {
-			e.printStackTrace();
-		}              
+		Haquna.modelMap.put(newModelName, newModel);		            
+	}
+	
+	private void removeRule() throws ModelBuildingException {
+		XTTModel model = Haquna.modelMap.get(modelName);	
+
+        XTTModel.Builder builder = model.getBuilder();       
+        XTTModel newModel = null;
+
+		builder.removeIncompleteRuleNamed(itemToRemoveName);
+		newModel = builder.build();
+		
+		Haquna.modelMap.put(newModelName, newModel);            
 	}
 	
 	private String determineWhatToRemove(XTTModel model) {

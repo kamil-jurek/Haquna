@@ -1,11 +1,17 @@
-package haquna;
+package haquna.completer;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import haquna.Haquna;
 import jline.console.completer.Completer;
 import jline.console.completer.StringsCompleter;
 
@@ -61,6 +67,25 @@ public class HaqunaCompleter implements Completer {
             	candidates.add(buffer+".setValueOf('");
             	strings.add(buffer+".showValueOf('");
             	strings.add(buffer+".setValueOf('");
+            }
+            
+            if(buffer.matches(".*xload\\('")) {
+            	Path dir = Paths.get(System.getProperty("user.dir"));
+        		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*")) {
+        			for(Path file : stream) {
+        				candidates.add(buffer+file.getFileName());
+        				strings.add(buffer+file.getFileName());
+        			}
+        		} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+            
+            if(buffer.matches(".*=.*")) {
+            	candidates.add(buffer+"xload('");
+        		strings.add(buffer+"xload('");
+
             }
         }
 
