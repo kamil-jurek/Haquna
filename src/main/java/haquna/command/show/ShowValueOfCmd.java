@@ -9,7 +9,7 @@ import heart.alsvfd.Value;
 
 public class ShowValueOfCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName +"(\\s*)[.]showValueOf[(][']" + Haquna.varName + "['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)[.]showValueOf[(][']" + Haquna.attrNamePattern + "['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;

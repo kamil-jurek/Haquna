@@ -13,6 +13,7 @@ import java.util.Map;
 
 import haquna.command.CommandFactory;
 import haquna.completer.FunctionNameCompleter;
+import haquna.completer.HaqunaDelimiter;
 import haquna.completer.MyArgumentCompleter;
 import haquna.completer.MyArgumentDelimiter;
 import haquna.completer.ParameterCompleter;
@@ -191,54 +192,54 @@ public class Haquna {
 		}
 		
 		completers = new LinkedList<Completer>();
-        /*completers.add(new StringsCompleter("unoAdin", "junoDwa", "unoTri"));
-        completers.add(new StringsCompleter("duoAdin", "duoDwa", "duoTri"));
-        completers.add(new StringsCompleter("treAdin", "treDwa", "treTri"));
-        completers.add(new StringsCompleter("quatroAdin", "quatroDwa", "quatroTri"));*/
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
-		MyArgumentCompleter argComp1 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
-        
-		/*completers = new LinkedList<Completer>();
-        completers.add(new StringsCompleter("jedenEin", "ujedenZwei"));
-        completers.add(new StringsCompleter("dwaEin", "dwaZwei", "dwaDrei"));   */     
+		MyArgumentCompleter argComp1 = new MyArgumentCompleter(new HaqunaDelimiter('.'), completers);
         
 		completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
-        MyArgumentCompleter argComp2 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        MyArgumentCompleter argComp2 = new MyArgumentCompleter(new HaqunaDelimiter('='), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
         completers.add(new ParameterCompleter());
-        MyArgumentCompleter argComp3 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        MyArgumentCompleter argComp3 = new MyArgumentCompleter(new HaqunaDelimiter('=', '.','\'','('), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("xload"));
         completers.add(new FileNameCompleter());
-        MyArgumentCompleter argComp4 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        MyArgumentCompleter argComp4 = new MyArgumentCompleter(new HaqunaDelimiter('=','(','\''), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("new"));
         completers.add(new FunctionNameCompleter());
         completers.add(new ParameterCompleter());       
-        MyArgumentCompleter argComp5 = new MyArgumentCompleter(new MyArgumentDelimiter(), completers);
+        MyArgumentCompleter argComp5 = new MyArgumentCompleter(new HaqunaDelimiter('=', '('), completers);
+        
+        completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new FunctionNameCompleter());
+        completers.add(new ParameterCompleter());  
+        
+		MyArgumentCompleter argComp6 = new MyArgumentCompleter(new HaqunaDelimiter('.', '(','\''), completers);
         
         argComp1.setStrict(true);
         argComp2.setStrict(true);
         argComp3.setStrict(true);
         argComp4.setStrict(true);
         argComp5.setStrict(true);
+        argComp6.setStrict(true);
         
         CandidateListCompletionHandler handler = new CandidateListCompletionHandler();        
         handler.setPrintSpaceAfterFullCompletion(false);
         
-        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5);
+        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5, argComp6);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
         //reader.addCompleter(argComp);

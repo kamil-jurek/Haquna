@@ -67,6 +67,7 @@ public class HaqunaCompleter implements Completer {
             	candidates.add(buffer+".setValueOf('");
             	strings.add(buffer+".showValueOf('");
             	strings.add(buffer+".setValueOf('");
+            	
             }
             
             if(buffer.matches(".*xload\\('")) {

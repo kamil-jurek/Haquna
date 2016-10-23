@@ -77,6 +77,7 @@ private final SortedSet<String> strings = new TreeSet<String>();
 				State current = wm.getCurrentState();
 				for(StateElement se : current) {
 					strings.add(se.getAttributeName());
+					System.out.println(se.getAttributeName());
 				}				
 			}
 		}			

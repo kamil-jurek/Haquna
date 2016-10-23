@@ -1,7 +1,17 @@
 package haquna.command.io;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+
 import haquna.Haquna;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
+import heart.exceptions.ModelBuildingException;
+import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceFile;
 import heart.xtt.XTTModel;
@@ -13,6 +23,7 @@ public class XloadCmd implements Command {
 	private String commandStr;
 	private String varName;
 	private String modelPath;
+	private String path;
 	
 	public XloadCmd() {
 		
@@ -24,33 +35,28 @@ public class XloadCmd implements Command {
 		String[] commandParts = this.commandStr.split("=xload");		
 		this.varName = commandParts[0];		
 		this.modelPath = commandParts[1].substring(2, commandParts[1].length()-2);
-		
-		if(!this.modelPath.contains("/home/")) {
-			this.modelPath = System.getProperty("user.dir") + "/" + this.modelPath;
-		}
+				
 	}
 	
 	@Override
-	public void execute() {				
-		XTTModel model = null;
-		SourceFile hmr = new SourceFile(modelPath);
-		HMRParser parser = new HMRParser();
-		   	
-		try {		    
+	public void execute() {						
+		try {	
+			setupPath();
+			HaqunaUtils.checkVarName(varName);
+			
+			XTTModel model = null;
+			SourceFile hmr = new SourceFile(path);
+			HMRParser parser = new HMRParser();
+		   				    
 		    parser.parse(hmr);
 		    model = parser.getModel();
 			
-			if(!Haquna.isVarUsed(varName)) {
-				Haquna.modelMap.put(varName, model);	
+			Haquna.modelMap.put(varName, model);	
 				
-				Haquna.wasSucces = true;
+			Haquna.wasSucces = true;
 			
-			} else {
-				System.out.println("Variable name: " + varName + " already in use");
-			}
-
 		} catch(Exception e) {
-			e.printStackTrace();	
+			HaqunaUtils.printRed(e.getMessage());
 			
 			return;
 		}	
@@ -87,7 +93,27 @@ public class XloadCmd implements Command {
 	public void setModelPath(String modelPath) {
 		this.modelPath = modelPath;
 	}
-	
-	
+
+	private void setupPath() throws IOException {
+		URL website = null;
+		try {
+			website = new URL(modelPath);
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos = new FileOutputStream("test.hmr");
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			
+			this.path = "test.hmr";
+		
+		} catch (MalformedURLException e) {
+					
+			if(!this.modelPath.contains("/home/")) {
+				this.modelPath = System.getProperty("user.dir") + "/" + this.modelPath;
+			}
+			
+			path = modelPath;
+			return;
+		}
+				
+	}
 	
 }
