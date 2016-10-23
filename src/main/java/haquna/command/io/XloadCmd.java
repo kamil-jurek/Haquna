@@ -8,6 +8,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.exceptions.ModelBuildingException;
@@ -44,13 +45,8 @@ public class XloadCmd implements Command {
 			setupPath();
 			HaqunaUtils.checkVarName(varName);
 			
-			XTTModel model = null;
-			SourceFile hmr = new SourceFile(path);
-			HMRParser parser = new HMRParser();
-		   				    
-		    parser.parse(hmr);
-		    model = parser.getModel();
-			
+			XTTModel model = parseHMR();
+						
 			Haquna.modelMap.put(varName, model);	
 				
 			Haquna.wasSucces = true;
@@ -100,7 +96,8 @@ public class XloadCmd implements Command {
 			website = new URL(modelPath);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos = new FileOutputStream("test.hmr");
-			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);			
+			fos.close();
 			
 			this.path = "test.hmr";
 		
@@ -112,8 +109,21 @@ public class XloadCmd implements Command {
 			
 			path = modelPath;
 			return;
-		}
-				
+		}				
+	}
+	
+	private XTTModel parseHMR() throws HaqunaException {
+		XTTModel model = null;
+		SourceFile hmr = new SourceFile(path);
+		HMRParser parser = new HMRParser();
+	   	try {			    
+		    parser.parse(hmr);
+		    model = parser.getModel();
+	   	
+		    return model;
+	   	} catch(ParsingSyntaxException | ModelBuildingException e) {
+	   		throw new HaqunaException("ParsingSynatxException parsing '" + path + "'");
+	   	}
 	}
 	
 }

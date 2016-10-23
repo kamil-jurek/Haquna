@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import heart.HeaRT;
 import heart.alsvfd.Formulae;
 import heart.xtt.Attribute;
 import heart.xtt.Decision;

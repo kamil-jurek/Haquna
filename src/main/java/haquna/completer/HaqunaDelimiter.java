@@ -3,21 +3,19 @@ package haquna.completer;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class HaqunaDelimiter extends MyArgumentCompleter.AbstractArgumentDelimiter {	
+public class HaqunaDelimiter extends HaqunaCompleter.AbstractArgumentDelimiter {	
 	private LinkedList<Character> delimiters;
 	
 	public HaqunaDelimiter(final Character ... delims) {
 		this.delimiters = new LinkedList<Character>();
 		this.delimiters.addAll(Arrays.asList(delims));
 		
-		//this.delimiters.add("=");
 		this.delimiters.add(' ');
 		
 	}
 	
 	@Override
 	public boolean isDelimiterChar(CharSequence buffer, int pos) {
-		//System.out.print("isDelimiter call ");
 		char c = buffer.charAt(pos);
 		
 		for(Character s : delimiters) {		
@@ -27,6 +25,5 @@ public class HaqunaDelimiter extends MyArgumentCompleter.AbstractArgumentDelimit
 		}
 		
 		return false;
-		//return !Character.isLetter(c) && c != '_';
 	}
 }

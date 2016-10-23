@@ -21,7 +21,8 @@ public class FunctionNameCompleter implements Completer{
 	
 	@Override
 	public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-        // buffer could be null
+		addFunctionNames();
+		// buffer could be null
         checkNotNull(candidates);
         if (buffer == null) {
             candidates.addAll(strings);
@@ -40,27 +41,34 @@ public class FunctionNameCompleter implements Completer{
     }
 	
 	private void addFunctionNames() {
+		strings.clear();
+		
 		if(Haquna.tableMap.containsKey(varName)) {
 			strings.add("showRulesList()");
 			strings.add("show()");
 			strings.add("getRuleByName");
-		     					
-		} else if(Haquna.attribiuteMap.containsKey(varName)){
+		}
+		
+		if(Haquna.attribiuteMap.containsKey(varName)){
 			strings.add("show()");
 			strings.add("getType()");
 			strings.add("getCallback()");
+		}
 		
-		} else if(Haquna.typeMap.containsKey(varName)){
+		if(Haquna.typeMap.containsKey(varName)){
 			strings.add("show()");		
-		    		
-		} else if(Haquna.ruleMap.containsKey(varName)){
+		}
+		
+		if(Haquna.ruleMap.containsKey(varName)){
 			strings.add("show()");
-			
-		} else if(Haquna.wmMap.containsKey(varName)){
+		}
+		
+		if(Haquna.wmMap.containsKey(varName)){
 			strings.add("showValueOf");
 			strings.add("showCurrentState()");
-						
-		} else if(Haquna.modelMap.containsKey(varName)){
+		}
+		
+		if(Haquna.modelMap.containsKey(varName)){
 			strings.add("show()");
 			strings.add("showTablesList()");
 			strings.add("showAttributesList()");
@@ -69,17 +77,16 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("getAttributeByName");
 			strings.add("getTypeByName");
 			strings.add("remove");
-		
-		} else if(varName.equals("new")){
-			strings.add("WorkingMemory");
-			
-		} else {
-			return;
 		}
+		
+		if(varName != null && varName.equals("new")){
+			strings.add("WorkingMemory");
+			strings.add("Type");
+			
+		} 
     }
 	
 	public void setVarName(String varName) {
-		this.varName = varName;
-		addFunctionNames();
+		this.varName = varName;		
 	}
 }

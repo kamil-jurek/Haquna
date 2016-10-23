@@ -1,118 +1,416 @@
 package haquna.completer;
 
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import jline.console.completer.Completer;
+import jline.internal.Log;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import haquna.Haquna;
-import jline.console.completer.Completer;
-import jline.console.completer.StringsCompleter;
+import static jline.internal.Preconditions.checkNotNull;
+
 
 public class HaqunaCompleter implements Completer {
+    private final ArgumentDelimiter delimiter;
 
-	private final SortedSet<String> strings = new TreeSet<String>();
+    private final List<Completer> completers = new ArrayList<Completer>();
 
-    public HaqunaCompleter() {
-        // empty
+    private boolean strict = true;
+
+    public HaqunaCompleter(final ArgumentDelimiter delimiter, final Collection<Completer> completers) {
+        this.delimiter = checkNotNull(delimiter);
+        checkNotNull(completers);
+        this.completers.addAll(completers);
     }
 
-    public HaqunaCompleter(final Collection<String> strings) {
-        //checkNotNull(strings);
-        getStrings().addAll(strings);
+    public HaqunaCompleter(final ArgumentDelimiter delimiter, final Completer... completers) {
+        this(delimiter, Arrays.asList(completers));
     }
 
-    public HaqunaCompleter(final String... strings) {
-        this(Arrays.asList(strings));
+    public HaqunaCompleter(final Completer... completers) {
+        this(new WhitespaceArgumentDelimiter(), completers);
     }
 
-    public Collection<String> getStrings() {
-        return strings;
+    public HaqunaCompleter(final List<Completer> completers) {
+        this(new WhitespaceArgumentDelimiter(), completers);
+    }
+
+    public void setStrict(final boolean strict) {
+        this.strict = strict;
+    }
+
+    public boolean isStrict() {
+        return this.strict;
+    }
+
+    public ArgumentDelimiter getDelimiter() {
+        return delimiter;
+    }
+
+    public List<Completer> getCompleters() {
+        return completers;
     }
 
     public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-        // buffer could be null
-       // checkNotNull(candidates);
-    	addVarNames();
-        if (buffer == null) {
-        	candidates.addAll(strings);
-        
+        // buffer can be null
+        checkNotNull(candidates);
+
+        ArgumentDelimiter delim = getDelimiter();
+        ArgumentList list = delim.delimit(buffer, cursor);
+        int argpos = list.getArgumentPosition();
+        int argIndex = list.getCursorArgumentIndex();
+
+        if (argIndex < 0) {
+            return -1;
+        }
+
+        List<Completer> completers = getCompleters();
+        Completer completer;
+
+        // if we are beyond the end of the completers, just return
+        if (argIndex >= completers.size()) {
+            return -1;
         }
         else {
-            for (String match : strings.tailSet(buffer)) {
-                if (!match.startsWith(buffer)) {
-                    break;
-                }
+            completer = completers.get(argIndex);
+        }
+        int h = 0;
+        
+        if(completers.size() > 2) {
+        	h = 1;
+        }
+        
+        if(completer instanceof FunctionNameCompleter) {
+        	((FunctionNameCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
+        }
+        
+        if(completer instanceof ParameterCompleter) {
+        	((ParameterCompleter) completer).setVarName(list.getArguments()[argIndex-2]);
+        	((ParameterCompleter) completer).setFunctionName(list.getArguments()[argIndex-1]);
+        }
+        
+        // ensure that all the previous completers are successful before allowing this completer to pass (only if strict).
+        for (int i = h; isStrict() && (i < argIndex); i++) {
+            Completer sub = completers.get(i >= completers.size() ? (completers.size() - 1) : i);
+            String[] args = list.getArguments();
+            String arg = (args == null || i >= args.length) ? "" : args[i];
 
-                candidates.add(match);
-            }
-            
-            if(checkType(buffer).equals("model")) {
-            	candidates.add(buffer+".showTableList()");
-            	candidates.add(buffer+".showTypeList()");
-            	candidates.add(buffer+".showAttributeList()");
-            	strings.add(buffer+".showTableList()");
-            	strings.add(buffer+".showTypeList()");
-            	strings.add(buffer+".showAttributeList()");
-            }
-            
-            if(checkType(buffer).equals("wm")) {
-            	candidates.add(buffer+".showValueOf('");
-            	candidates.add(buffer+".setValueOf('");
-            	strings.add(buffer+".showValueOf('");
-            	strings.add(buffer+".setValueOf('");
-            	
-            }
-            
-            if(buffer.matches(".*xload\\('")) {
-            	Path dir = Paths.get(System.getProperty("user.dir"));
-        		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*")) {
-        			for(Path file : stream) {
-        				candidates.add(buffer+file.getFileName());
-        				strings.add(buffer+file.getFileName());
-        			}
-        		} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-            
-            if(buffer.matches(".*=.*")) {
-            	candidates.add(buffer+"xload('");
-        		strings.add(buffer+"xload('");
+            List<CharSequence> subCandidates = new LinkedList<CharSequence>();
 
+            if (sub.complete(arg, arg.length(), subCandidates) == -1) {
+                return -1;
+            }
+
+            if (!subCandidates.contains(arg)) {
+                return -1;
             }
         }
 
-        return candidates.isEmpty() ? -1 : 0;
+        int ret = completer.complete(list.getCursorArgument(), argpos, candidates);
+
+        if (ret == -1) {
+            return -1;
+        }
+
+        int pos = ret + list.getBufferPosition() - argpos;
+
+        // Special case: when completing in the middle of a line, and the area under the cursor is a delimiter,
+        // then trim any delimiters from the candidates, since we do not need to have an extra delimiter.
+        //
+        // E.g., if we have a completion for "foo", and we enter "f bar" into the buffer, and move to after the "f"
+        // and hit TAB, we want "foo bar" instead of "foo  bar".
+
+        if ((cursor != buffer.length()) && delim.isDelimiter(buffer, cursor)) {
+            for (int i = 0; i < candidates.size(); i++) {
+                CharSequence val = candidates.get(i);
+
+                while (val.length() > 0 && delim.isDelimiter(val, val.length() - 1)) {
+                    val = val.subSequence(0, val.length() - 1);
+                }
+
+                candidates.set(i, val);
+            }
+        }
+
+        Log.trace("Completing ", buffer, " (pos=", cursor, ") with: ", candidates, ": offset=", pos);
+
+        return pos;
     }
-    
-    private void addVarNames() {
-    	strings.addAll(Haquna.modelMap.keySet());
-        strings.addAll(Haquna.tableMap.keySet());
-        strings.addAll(Haquna.attribiuteMap.keySet());
-        strings.addAll(Haquna.typeMap.keySet());
-        strings.addAll(Haquna.ruleMap.keySet());
-        strings.addAll(Haquna.callbackMap.keySet());
-        strings.addAll(Haquna.wmMap.keySet());
+
+    /**
+     * The {@link HaqunaCompleter.ArgumentDelimiter} allows custom breaking up of a {@link String} into individual
+     * arguments in order to dispatch the arguments to the nested {@link Completer}.
+     *
+     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
+     */
+    public static interface ArgumentDelimiter
+    {
+        /**
+         * Break the specified buffer into individual tokens that can be completed on their own.
+         *
+         * @param buffer    The buffer to split
+         * @param pos       The current position of the cursor in the buffer
+         * @return          The tokens
+         */
+        ArgumentList delimit(CharSequence buffer, int pos);
+
+        /**
+         * Returns true if the specified character is a whitespace parameter.
+         *
+         * @param buffer    The complete command buffer
+         * @param pos       The index of the character in the buffer
+         * @return          True if the character should be a delimiter
+         */
+        boolean isDelimiter(CharSequence buffer, int pos);
     }
-    
-    private String checkType(String varName) {
-    	if(Haquna.modelMap.containsKey(varName)) {
-    		return "model";
-    	
-    	} else if(Haquna.wmMap.containsKey(varName)) {
-    		return "wm";
-     		
-    	} else {
-    		return "nullo";
-    	}
-    	
+
+    /**
+     * Abstract implementation of a delimiter that uses the {@link #isDelimiter} method to determine if a particular
+     * character should be used as a delimiter.
+     *
+     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
+     */
+    public abstract static class AbstractArgumentDelimiter
+        implements ArgumentDelimiter
+    {
+        private char[] quoteChars = {'\'', '"'};
+
+        private char[] escapeChars = {'\\'};
+
+        public void setQuoteChars(final char[] chars) {
+            this.quoteChars = chars;
+        }
+
+        public char[] getQuoteChars() {
+            return this.quoteChars;
+        }
+
+        public void setEscapeChars(final char[] chars) {
+            this.escapeChars = chars;
+        }
+
+        public char[] getEscapeChars() {
+            return this.escapeChars;
+        }
+
+        public ArgumentList delimit(final CharSequence buffer, final int cursor) {
+            List<String> args = new LinkedList<String>();
+            StringBuilder arg = new StringBuilder();
+            int argpos = -1;
+            int bindex = -1;
+            int quoteStart = -1;
+
+            for (int i = 0; (buffer != null) && (i < buffer.length()); i++) {
+                // once we reach the cursor, set the
+                // position of the selected index
+                if (i == cursor) {
+                    bindex = args.size();
+                    // the position in the current argument is just the
+                    // length of the current argument
+                    argpos = arg.length();
+                }
+
+                if (quoteStart < 0 && isQuoteChar(buffer, i)) {
+                    // Start a quote block
+                    quoteStart = i;
+                } else if (quoteStart >= 0) {
+                    // In a quote block
+                    if (buffer.charAt(quoteStart) == buffer.charAt(i) && !isEscaped(buffer, i)) {
+                        // End the block; arg could be empty, but that's fine
+                        args.add(arg.toString());
+                        arg.setLength(0);
+                        quoteStart = -1;
+                    } else if (!isEscapeChar(buffer, i)) {
+                        // Take the next character
+                        arg.append(buffer.charAt(i));
+                    }
+                } else {
+                    // Not in a quote block
+                    if (isDelimiter(buffer, i)) {
+                        if (arg.length() > 0) {
+                            args.add(arg.toString());
+                            arg.setLength(0); // reset the arg
+                        }
+                    } else if (!isEscapeChar(buffer, i)) {
+                        arg.append(buffer.charAt(i));
+                    }
+                }
+            }
+
+            if (cursor == buffer.length()) {
+                bindex = args.size();
+                // the position in the current argument is just the
+                // length of the current argument
+                argpos = arg.length();
+            }
+            if (arg.length() > 0) {
+                args.add(arg.toString());
+            }
+
+            return new ArgumentList(args.toArray(new String[args.size()]), bindex, argpos, cursor);
+        }
+
+        /**
+         * Returns true if the specified character is a whitespace parameter. Check to ensure that the character is not
+         * escaped by any of {@link #getQuoteChars}, and is not escaped by ant of the {@link #getEscapeChars}, and
+         * returns true from {@link #isDelimiterChar}.
+         *
+         * @param buffer    The complete command buffer
+         * @param pos       The index of the character in the buffer
+         * @return          True if the character should be a delimiter
+         */
+        public boolean isDelimiter(final CharSequence buffer, final int pos) {
+            return !isQuoted(buffer, pos) && !isEscaped(buffer, pos) && isDelimiterChar(buffer, pos);
+        }
+
+        public boolean isQuoted(final CharSequence buffer, final int pos) {
+            return false;
+        }
+
+        public boolean isQuoteChar(final CharSequence buffer, final int pos) {
+            if (pos < 0) {
+                return false;
+            }
+
+            for (int i = 0; (quoteChars != null) && (i < quoteChars.length); i++) {
+                if (buffer.charAt(pos) == quoteChars[i]) {
+                    return !isEscaped(buffer, pos);
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Check if this character is a valid escape char (i.e. one that has not been escaped)
+         */
+        public boolean isEscapeChar(final CharSequence buffer, final int pos) {
+            if (pos < 0) {
+                return false;
+            }
+
+            for (int i = 0; (escapeChars != null) && (i < escapeChars.length); i++) {
+                if (buffer.charAt(pos) == escapeChars[i]) {
+                    return !isEscaped(buffer, pos); // escape escape
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Check if a character is escaped (i.e. if the previous character is an escape)
+         *
+         * @param buffer
+         *          the buffer to check in
+         * @param pos
+         *          the position of the character to check
+         * @return true if the character at the specified position in the given buffer is an escape character and the character immediately preceding it is not an
+         *         escape character.
+         */
+        public boolean isEscaped(final CharSequence buffer, final int pos) {
+            if (pos <= 0) {
+                return false;
+            }
+
+            return isEscapeChar(buffer, pos - 1);
+        }
+
+        /**
+         * Returns true if the character at the specified position if a delimiter. This method will only be called if
+         * the character is not enclosed in any of the {@link #getQuoteChars}, and is not escaped by ant of the
+         * {@link #getEscapeChars}. To perform escaping manually, override {@link #isDelimiter} instead.
+         */
+        public abstract boolean isDelimiterChar(CharSequence buffer, int pos);
+    }
+
+    /**
+     * {@link HaqunaCompleter.ArgumentDelimiter} implementation that counts all whitespace (as reported by
+     * {@link Character#isWhitespace}) as being a delimiter.
+     *
+     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
+     */
+    public static class WhitespaceArgumentDelimiter
+        extends AbstractArgumentDelimiter
+    {
+        /**
+         * The character is a delimiter if it is whitespace, and the
+         * preceding character is not an escape character.
+         */
+        @Override
+        public boolean isDelimiterChar(final CharSequence buffer, final int pos) {
+            return Character.isWhitespace(buffer.charAt(pos));
+        }
+    }
+
+    /**
+     * The result of a delimited buffer.
+     *
+     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
+     */
+    public static class ArgumentList
+    {
+        private String[] arguments;
+
+        private int cursorArgumentIndex;
+
+        private int argumentPosition;
+
+        private int bufferPosition;
+
+        /**
+         * @param arguments             The array of tokens
+         * @param cursorArgumentIndex   The token index of the cursor
+         * @param argumentPosition      The position of the cursor in the current token
+         * @param bufferPosition        The position of the cursor in the whole buffer
+         */
+        public ArgumentList(final String[] arguments, final int cursorArgumentIndex, final int argumentPosition, final int bufferPosition) {
+            this.arguments = checkNotNull(arguments);
+            this.cursorArgumentIndex = cursorArgumentIndex;
+            this.argumentPosition = argumentPosition;
+            this.bufferPosition = bufferPosition;
+        }
+
+        public void setCursorArgumentIndex(final int i) {
+            this.cursorArgumentIndex = i;
+        }
+
+        public int getCursorArgumentIndex() {
+            return this.cursorArgumentIndex;
+        }
+
+        public String getCursorArgument() {
+            if ((cursorArgumentIndex < 0) || (cursorArgumentIndex >= arguments.length)) {
+                return null;
+            }
+
+            return arguments[cursorArgumentIndex];
+        }
+
+        public void setArgumentPosition(final int pos) {
+            this.argumentPosition = pos;
+        }
+
+        public int getArgumentPosition() {
+            return this.argumentPosition;
+        }
+
+        public void setArguments(final String[] arguments) {
+            this.arguments = arguments;
+        }
+
+        public String[] getArguments() {
+            return this.arguments;
+        }
+
+        public void setBufferPosition(final int pos) {
+            this.bufferPosition = pos;
+        }
+
+        public int getBufferPosition() {
+            return this.bufferPosition;
+        }
     }
 }

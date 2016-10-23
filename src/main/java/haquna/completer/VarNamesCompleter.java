@@ -19,7 +19,9 @@ public class VarNamesCompleter implements Completer {
 	
 	@Override
 	public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-        // buffer could be null
+		addVarNames();
+		
+		// buffer could be null
         checkNotNull(candidates);
         if (buffer == null) {
             candidates.addAll(strings);
@@ -38,6 +40,8 @@ public class VarNamesCompleter implements Completer {
     }
 	
 	private void addVarNames() {
+		strings.clear();
+		
     	strings.addAll(Haquna.modelMap.keySet());
         strings.addAll(Haquna.tableMap.keySet());
         strings.addAll(Haquna.attribiuteMap.keySet());

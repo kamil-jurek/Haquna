@@ -29,7 +29,8 @@ private final SortedSet<String> strings = new TreeSet<String>();
 	
 	@Override
 	public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-        // buffer could be null        				
+		addParameters();
+		// buffer could be null        				
 		checkNotNull(candidates);
         if (buffer == null) {
             candidates.addAll(strings);
@@ -48,6 +49,8 @@ private final SortedSet<String> strings = new TreeSet<String>();
     }
 	
 	private void addParameters() {
+		strings.clear();
+		
 		if(functionName.equals("WorkingMemory")) {
 			strings.addAll(Haquna.modelMap.keySet());
 		}
@@ -61,15 +64,7 @@ private final SortedSet<String> strings = new TreeSet<String>();
 				}				
 			}						
 		}     					
-		/*if(Haquna.attribiuteMap.containsKey(varName)){
-			
-		}
-		if(Haquna.typeMap.containsKey(varName)){
-					
-		}   		
-		if(Haquna.ruleMap.containsKey(varName)){
-			
-		}*/
+				
 		if(Haquna.wmMap.containsKey(varName)){
 			WorkingMemory wm = Haquna.wmMap.get(varName);
 			
@@ -124,12 +119,9 @@ private final SortedSet<String> strings = new TreeSet<String>();
 	
 	public void setVarName(String varName) {
 		this.varName = varName;
-		//addFunctionNames();
 	}
 	
 	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
-		addParameters();
-		
+		this.functionName = functionName;				
 	}
 }

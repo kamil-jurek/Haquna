@@ -14,8 +14,7 @@ import java.util.Map;
 import haquna.command.CommandFactory;
 import haquna.completer.FunctionNameCompleter;
 import haquna.completer.HaqunaDelimiter;
-import haquna.completer.MyArgumentCompleter;
-import haquna.completer.MyArgumentDelimiter;
+import haquna.completer.HaqunaCompleter;
 import haquna.completer.ParameterCompleter;
 import haquna.completer.VarNamesCompleter;
 import heart.WorkingMemory;
@@ -26,11 +25,9 @@ import heart.xtt.Type;
 import heart.xtt.XTTModel;
 import jline.console.ConsoleReader;
 import jline.console.completer.AggregateCompleter;
-import jline.console.completer.ArgumentCompleter;
 import jline.console.completer.CandidateListCompletionHandler;
 import jline.console.completer.Completer;
 import jline.console.completer.FileNameCompleter;
-import jline.console.completer.NullCompleter;
 import jline.console.completer.StringsCompleter;
 
 public class Haquna {
@@ -53,21 +50,14 @@ public class Haquna {
 	public static void main(String[] args) throws IOException {
         try {
             ConsoleReader reader = new ConsoleReader();
-            reader.setPrompt("prompt> ");
+            reader.setPrompt("\u001B[35;1m" + "HaQuNa> " + "\u001B[0m");
                     
             String line;
             PrintWriter out = new PrintWriter(reader.getOutput());
             	
             CommandFactory cmdFactory = new CommandFactory();
             
-            //updateCompleter(reader);
-           myCompleter(reader);
-            ///////////////////
-            
-            
-            //reader.addCompleter(argComp2);
-            
-            ////////////////////////
+            setupCompleter(reader);
             
             while ((line = reader.readLine()) != null) {
             	           	                            
@@ -99,13 +89,10 @@ public class Haquna {
                 if (line.equalsIgnoreCase("cls")) {
                     reader.clearScreen();
                 }
-                
-                //updateCompleter(reader);
-                
-                myCompleter(reader);
+                            
+                //myCompleter(reader);
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }
@@ -126,67 +113,7 @@ public class Haquna {
 		}		
 	}
 	
-	public static void updateCompleter(ConsoleReader reader) {
-		for(Completer c : reader.getCompleters()){
-			reader.removeCompleter(c);
-		}
-		
-		completers = new LinkedList<Completer>();
-        completers.add(new FileNameCompleter());
-        completers.add(new StringsCompleter(
-                "xload('",
-                ")",
-                "showTablesList()",
-                "showAttributesList()",
-                "showTypesList()",
-                "showRulesList()",
-                "show()",
-                "getTableByName('",
-                "getTableById('",
-                "getAttributeById(",
-                "getAttributeByName(",
-                "getTypeById('",
-                "getTypeByName('",
-                "getRuleById('",
-                "getRuleByName('",
-                "getType()",
-                "getCallback()",
-                "printVars()",
-                "run(",
-                "showCurrentState()",
-                "showValueOf('",
-                "new",
-                "WorkingMemory(",
-                "setValueOf('",
-                "determineValues(",
-                "add(",
-                "Type(",
-                "new",
-                "xsave('"
-                
-                
-                
-   		));
-        completers.add(new StringsCompleter(modelMap.keySet()));
-        completers.add(new StringsCompleter(tableMap.keySet()));
-        completers.add(new StringsCompleter(attribiuteMap.keySet()));
-        completers.add(new StringsCompleter(typeMap.keySet()));
-        completers.add(new StringsCompleter(ruleMap.keySet()));
-        completers.add(new StringsCompleter(callbackMap.keySet()));
-        completers.add(new StringsCompleter(wmMap.keySet()));
-        
-        AggregateCompleter aggComp = new AggregateCompleter(completers);
-      //  ArgumentCompleter argComp = new ArgumentCompleter(new MyArgumentDelimiter(), aggComp);
-                
-        //argComp.setStrict(false);
-        CandidateListCompletionHandler handler = new CandidateListCompletionHandler();
-        handler.setPrintSpaceAfterFullCompletion(false);
-        
-        reader.setCompletionHandler(handler);
-        //reader.addCompleter(argComp);
-	}
-	
-	public static void myCompleter(ConsoleReader reader) {
+	public static void setupCompleter(ConsoleReader reader) {
 		for(Completer c : reader.getCompleters()){
 			reader.removeCompleter(c);
 		}
@@ -194,40 +121,40 @@ public class Haquna {
 		completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
-		MyArgumentCompleter argComp1 = new MyArgumentCompleter(new HaqunaDelimiter('.'), completers);
+		HaqunaCompleter argComp1 = new HaqunaCompleter(new HaqunaDelimiter('.'), completers);
         
 		completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
-        MyArgumentCompleter argComp2 = new MyArgumentCompleter(new HaqunaDelimiter('='), completers);
+        HaqunaCompleter argComp2 = new HaqunaCompleter(new HaqunaDelimiter('='), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
         completers.add(new ParameterCompleter());
-        MyArgumentCompleter argComp3 = new MyArgumentCompleter(new HaqunaDelimiter('=', '.','\'','('), completers);
+        HaqunaCompleter argComp3 = new HaqunaCompleter(new HaqunaDelimiter('=', '.','\'','('), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("xload"));
         completers.add(new FileNameCompleter());
-        MyArgumentCompleter argComp4 = new MyArgumentCompleter(new HaqunaDelimiter('=','(','\''), completers);
+        HaqunaCompleter argComp4 = new HaqunaCompleter(new HaqunaDelimiter('=','(','\''), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("new"));
         completers.add(new FunctionNameCompleter());
         completers.add(new ParameterCompleter());       
-        MyArgumentCompleter argComp5 = new MyArgumentCompleter(new HaqunaDelimiter('=', '('), completers);
+        HaqunaCompleter argComp5 = new HaqunaCompleter(new HaqunaDelimiter('=', '('), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
         completers.add(new ParameterCompleter());  
         
-		MyArgumentCompleter argComp6 = new MyArgumentCompleter(new HaqunaDelimiter('.', '(','\''), completers);
+		HaqunaCompleter argComp6 = new HaqunaCompleter(new HaqunaDelimiter('.', '(','\''), completers);
         
         argComp1.setStrict(true);
         argComp2.setStrict(true);
@@ -242,7 +169,6 @@ public class Haquna {
         AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5, argComp6);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
-        //reader.addCompleter(argComp);
 	}
 	
 	public static void paintItGreeen(String line) {

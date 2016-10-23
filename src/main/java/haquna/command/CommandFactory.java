@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import haquna.command.add.AddCmd;
 import haquna.command.add.RemoveCmd;
-import haquna.command.add.RemoveTypeCmd;
 import haquna.command.create.NewAttributeCmd;
 import haquna.command.create.NewTypeCmd;
 import haquna.command.get.GetAttributeByIdCmd;
