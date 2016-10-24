@@ -211,7 +211,7 @@ public class RunAlterCmd implements Command {
 				this.wmName = commandParts[3];
 			
 			} else {
-				  System.out.println("No " + commandParts[3] + " WorkingMemory object in memory");
+				  throw new HaqunaException("No " + commandParts[3] + " WorkingMemory object in memory");
 			}
 		}
 						
@@ -219,7 +219,7 @@ public class RunAlterCmd implements Command {
 			String nextArgument = commandParts[i+1];
 			switch(commandParts[i]) {
 			case "mode" : {
-				if(nextArgument.matches("gdi|fdi|foi")) {					
+				if(nextArgument.matches("gdi|foi|ddi")) {					
 					this.mode = nextArgument;
 				
 				} else {

@@ -16,6 +16,7 @@ import haquna.completer.FunctionNameCompleter;
 import haquna.completer.HaqunaDelimiter;
 import haquna.completer.HaqunaCompleter;
 import haquna.completer.ParameterCompleter;
+import haquna.completer.RunCompleter;
 import haquna.completer.VarNamesCompleter;
 import heart.WorkingMemory;
 import heart.xtt.Attribute;
@@ -152,21 +153,35 @@ public class Haquna {
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
-        completers.add(new ParameterCompleter());  
-        
+        completers.add(new ParameterCompleter());         
 		HaqunaCompleter argComp6 = new HaqunaCompleter(new HaqunaDelimiter('.', '(','\''), completers);
         
+		  
+        completers = new LinkedList<Completer>();
+        completers.add(new VarNamesCompleter());
+        completers.add(new StringsCompleter("run"));
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        completers.add(new RunCompleter());
+        HaqunaCompleter argComp7 = new HaqunaCompleter(new HaqunaDelimiter(',','=','[',']','.', '(','\''), completers);
+       
+		
         argComp1.setStrict(true);
         argComp2.setStrict(true);
         argComp3.setStrict(true);
         argComp4.setStrict(true);
         argComp5.setStrict(true);
         argComp6.setStrict(true);
+        argComp7.setStrict(true);
         
         CandidateListCompletionHandler handler = new CandidateListCompletionHandler();        
         handler.setPrintSpaceAfterFullCompletion(false);
         
-        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5, argComp6);
+        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5, argComp6, argComp7);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
 	}

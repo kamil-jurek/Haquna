@@ -86,6 +86,10 @@ public class HaqunaCompleter implements Completer {
         	((FunctionNameCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
         }
         
+        if(completer instanceof RunCompleter) {
+        	((RunCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
+        }
+        
         if(completer instanceof ParameterCompleter) {
         	((ParameterCompleter) completer).setVarName(list.getArguments()[argIndex-2]);
         	((ParameterCompleter) completer).setFunctionName(list.getArguments()[argIndex-1]);

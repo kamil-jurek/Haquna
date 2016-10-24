@@ -71,8 +71,14 @@ private final SortedSet<String> strings = new TreeSet<String>();
 			if(functionName.contains("showValueOf")) {
 				State current = wm.getCurrentState();
 				for(StateElement se : current) {
-					strings.add(se.getAttributeName());
-					System.out.println(se.getAttributeName());
+					strings.add(se.getAttributeName());					
+				}				
+			}
+			
+			if(functionName.contains("setValueOf")) {
+				State current = wm.getCurrentState();
+				for(StateElement se : current) {
+					strings.add(se.getAttributeName());					
 				}				
 			}
 		}			

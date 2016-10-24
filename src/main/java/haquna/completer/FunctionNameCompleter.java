@@ -65,6 +65,7 @@ public class FunctionNameCompleter implements Completer{
 		
 		if(Haquna.wmMap.containsKey(varName)){
 			strings.add("showValueOf");
+			strings.add("setValueOf");
 			strings.add("showCurrentState()");
 		}
 		
