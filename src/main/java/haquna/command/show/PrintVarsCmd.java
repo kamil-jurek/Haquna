@@ -27,9 +27,9 @@ public class PrintVarsCmd implements Command {
 			System.out.println("\t" + var + " = " + Haquna.attribiuteMap.get(var).getName());
 		}
 		
-		System.out.println("=== TYPES ===");
+		System.out.println("=== TYPES Builder ===");
 		for(String var : Haquna.typeMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.typeMap.get(var).getName());
+			System.out.println("\t" + var + " = " + Haquna.typeMap.get(var).typeBuilder.getName());
 		}
 		
 		System.out.println("=== RULES ===");
@@ -46,6 +46,7 @@ public class PrintVarsCmd implements Command {
 		for(String var : Haquna.wmMap.keySet()) {
 			System.out.println("\t" + var + " = " + Haquna.wmMap.get(var));
 		}
+				
 	}
 	
 	public boolean matches(String commandStr) {

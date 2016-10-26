@@ -1,9 +1,8 @@
 package haquna.command.get;
 
-import java.util.LinkedList;
-
 import haquna.Haquna;
 import haquna.HaqunaException;
+import haquna.TypeVar;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.xtt.Type;
@@ -88,13 +87,21 @@ public class GetTypeByNameCmd implements Command {
 	}
 	
 	private void getTypeByName(XTTModel model) throws HaqunaException {
-		LinkedList<Type> types = model.getTypes();		
-		for(Type type : types){
-			if(type.getName().equals(typeName)){
-				Haquna.typeMap.put(varName, type);
-				return;
+		Type type = null;
+		Type.Builder typeBuilder = model.getBuilder().getIncompleteTypeNamed(typeName);
+				
+		for(Type t : model.getTypes()){
+			if(t.getName().equals(typeName)){
+				type = t;
+				break;
 			}	     
 		}
-		throw new HaqunaException("No type with '" + typeName + "' name in '" + modelName + "' model");
+		
+		if(type != null && typeBuilder != null) {
+			Haquna.typeMap.put(varName, new TypeVar(type, typeBuilder));
+			
+		} else {
+			throw new HaqunaException("No type with '" + typeName + "' name in '" + modelName + "' model");
+		}
 	}
 }

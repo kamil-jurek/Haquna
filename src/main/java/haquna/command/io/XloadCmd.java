@@ -53,7 +53,7 @@ public class XloadCmd implements Command {
 			
 		} catch(Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
-			
+			e.printStackTrace();
 			return;
 		}	
 	}		

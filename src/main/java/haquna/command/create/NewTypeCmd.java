@@ -1,6 +1,7 @@
 package haquna.command.create;
 
 import haquna.Haquna;
+import haquna.TypeVar;
 import haquna.command.Command;
 import heart.exceptions.BuilderException;
 import heart.exceptions.ModelBuildingException;
@@ -32,22 +33,21 @@ public class NewTypeCmd implements Command {
 	@Override
 	public void execute() {				
 		if(!Haquna.isVarUsed(varName)) {	
-			Type type = null;
+			Type.Builder typeBuilder = null;
 			
 	        SourceString hmr_code = new SourceString(hmrCode);
 	        HMRParser parser = new HMRParser();
 
 	        try {
 				parser.parse(hmr_code);
-				Type.Builder typeBuilder = parser.getTypeBuilder();
-				type = typeBuilder.build();
+				typeBuilder = parser.getTypeBuilder();
 				
-	        } catch (ParsingSyntaxException | BuilderException e1) {
-				e1.printStackTrace();
+	        } catch (ParsingSyntaxException e) {
+				e.printStackTrace();
 				return;
 			}
 	        
-	        Haquna.typeMap.put(varName, type);
+	        Haquna.typeMap.put(varName, new TypeVar(null, typeBuilder));
 	        
 		} else {
 			System.out.println("Variable name: " + varName + " already in use");

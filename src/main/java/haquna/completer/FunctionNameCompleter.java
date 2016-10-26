@@ -49,7 +49,7 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("getRuleByName");
 		}
 		
-		if(Haquna.attribiuteMap.containsKey(varName)){
+		if(Haquna.attrMap.containsKey(varName)){
 			strings.add("show()");
 			strings.add("getType()");
 			strings.add("getCallback()");

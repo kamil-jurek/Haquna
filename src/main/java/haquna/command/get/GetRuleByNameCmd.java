@@ -56,13 +56,49 @@ public class GetRuleByNameCmd implements Command {
 	}
 	
 	private void getRuleByName(Table table) throws HaqunaException {
-		LinkedList<Rule> rules = table.getRules();		
+		/*LinkedList<Rule> rules = table.getRules();		
 		for(Rule rule : rules) {
 			if(rule.getName().equals(ruleName)) {
 				Haquna.ruleMap.put(varName, rule);
 				return;
 			}
 		}
-		throw new HaqunaException("No rule with '" + ruleName + "' name in '" + tableName + "' table");
+		throw new HaqunaException("No rule with '" + ruleName + "' name in '" + tableName + "' table");*/
+		String modelName = determineModel();
+		System.out.println(modelName);
+		
+		
+		Rule.Builder ruleBuilder = Haquna.modelMap.get(modelName).getBuilder().getIncompleteRuleNamed(ruleName);
+		/*for(String k : Haquna.modelMap.keySet()) {
+			ruleBuilder = Haquna.modelMap.get(k).getBuilder().getIncompleteRuleNamed(ruleName);
+		}*/
+				
+		if(ruleBuilder != null) {
+			Haquna.ruleBuilderMap.put(varName+"B", ruleBuilder);
+			
+		} else {
+			throw new HaqunaException("No rule with '" + ruleName + "' name in '" + tableName + "' table");
+		}
+		
+	}
+	
+	private String determineModel() {
+		String modelName = null;
+		for(String k : Haquna.modelMap.keySet()) {
+			for(Table t : Haquna.modelMap.get(k).getTables()) {
+				System.out.println(t.getName());
+				System.out.println(Haquna.tableMap.get(tableName).getName());
+				
+				if(t.getName().equals(Haquna.tableMap.get(tableName).getName())) {
+					modelName = k;
+					System.out.print("fsdfsdf");
+					return modelName;
+				}
+				else{
+					System.out.print("2222");
+				}
+			}
+		}
+		return modelName;
 	}
 }

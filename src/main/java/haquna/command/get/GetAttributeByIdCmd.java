@@ -2,6 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
+import haquna.AttrVar;
 import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
@@ -56,13 +57,27 @@ public class GetAttributeByIdCmd implements Command {
 	}
 	
 	private void getAttributeById(XTTModel model) throws HaqunaException {
+		String attrName = null;
+		Attribute attr = null;
+		
 		LinkedList<Attribute> attribiutes = model.getAttributes();			
 		for(Attribute att : attribiutes) {
 			if(att.getId().equals(attribiuteId)){
-				Haquna.attribiuteMap.put(varName, att);
-				return;
+				attrName = att.getName();
+				attr = att;
+				break;
 			}	     
 		}
-		throw new HaqunaException("No attribute with '" + attribiuteId + "' id in '" + modelName + "' model");
+		
+		Attribute.Builder attrBuilder = model.getBuilder().getIncompleteAttributeNamed(attrName);
+		
+		if(attr != null && attrBuilder != null) {
+			Haquna.attrMap.put(varName, new AttrVar(attr, attrBuilder));
+		
+		} else {
+			throw new HaqunaException("No attribute with '" + attribiuteId + "' id in '" + modelName + "' model");
+		}
+		
+		
 	}
 }

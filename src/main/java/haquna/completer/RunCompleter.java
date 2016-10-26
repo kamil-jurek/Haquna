@@ -45,12 +45,16 @@ public class RunCompleter implements Completer{
 	private void addRuns() {
 		strings.clear();
 		
-		if(modelName != null && Haquna.modelMap.containsKey(modelName)) {
-			for(Table t : Haquna.modelMap.get(modelName).getTables()) {
-				strings.add(t.getName());
-			}
+		//if(modelName != null && Haquna.modelMap.containsKey(modelName)) {
+		//	for(Table t : Haquna.modelMap.get(modelName).getTables()) {
+		//		strings.add(t.getName());
+		//	}
+		//}
+		
+		for(String k : Haquna.wmMap.keySet()) {
+			strings.add(k);
 		}
-
+		
 		if(prevArg.equals("run")) {
 			for(String k : Haquna.modelMap.keySet()) {
 				strings.add(k);
@@ -60,7 +64,7 @@ public class RunCompleter implements Completer{
 		if(prevArg.matches(Haquna.varName)) {
 			for(String k : Haquna.wmMap.keySet()) {				
 				strings.add(k);
-				modelName = prevArg;	
+				//modelName = prevArg;	
 			}			
 		}
 		

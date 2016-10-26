@@ -1,8 +1,11 @@
 package haquna.command.get;
 
+import haquna.AttrVar;
 import haquna.Haquna;
+import haquna.HaqunaException;
+import haquna.TypeVar;
 import haquna.command.Command;
-import heart.xtt.Attribute;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.Type;
 
 public class GetTypeCmd implements Command {		
@@ -27,19 +30,20 @@ public class GetTypeCmd implements Command {
 	
 	@Override
 	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.attribiuteMap.containsKey(attribiuteName)) {				
-				Attribute attribiute = Haquna.attribiuteMap.get(attribiuteName);
-				Type type = attribiute.getType();
-				
-				Haquna.typeMap.put(varName, type);
-						     			
-			} else {
-				System.out.println("No " + attribiuteName + " attribiut in memory");
-			}			
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
-		}
+		try {
+			HaqunaUtils.checkVarName(varName);
+			AttrVar attrVar = HaqunaUtils.getAttrVar(attribiuteName);
+			Type type = attrVar.attr.getType();
+			
+			Haquna.typeMap.put(varName, new TypeVar(type, null));
+			
+			Haquna.wasSucces = true;
+			
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
+		}		
 	}		
 	
 	public boolean matches(String commandStr) {

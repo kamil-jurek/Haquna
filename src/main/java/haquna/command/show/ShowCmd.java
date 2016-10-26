@@ -37,8 +37,8 @@ public class ShowCmd implements Command {
 			System.out.println(XttModelUtils.attributeToHMR(attr));
 		
 		} else if(Haquna.typeMap.containsKey(varName)){
-			Type type = Haquna.typeMap.get(varName);
-			System.out.println(XttModelUtils.typeToHMR(type));			
+			Type.Builder typeBuilder = Haquna.typeMap.get(varName).typeBuilder;
+			System.out.println(" builder" + XttModelUtils.typeBuildToHMR(typeBuilder));		
 		    		
 		} else if(Haquna.ruleMap.containsKey(varName)){
 			Rule rule = Haquna.ruleMap.get(varName);
@@ -51,7 +51,7 @@ public class ShowCmd implements Command {
 		} else if(Haquna.modelMap.containsKey(varName)){
 			XTTModel model = Haquna.modelMap.get(varName);
 			System.out.println(XttModelUtils.getHMR(model));
-				    
+		
 		} else {
 			System.out.println("No such object in memory");
 		}

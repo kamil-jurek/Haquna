@@ -7,6 +7,7 @@ import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.xtt.Table;
+import heart.xtt.Type;
 import heart.xtt.XTTModel;
 
 public class GetTableByNameCmd implements Command {		
@@ -89,12 +90,22 @@ public class GetTableByNameCmd implements Command {
 	
 	private void getTableByName(XTTModel model) throws HaqunaException {
 		LinkedList<Table> tables = model.getTables();		
+		Table t = null;
 		for(Table table : tables){
 			if(table.getName().equals(tableName)){
-				Haquna.tableMap.put(varName, table);
-				return;
+				t = table;
+				break;
 			}	     
 		}
-		throw new HaqunaException("No table with '" + tableName + "' name in '" + modelName + "' model");
+		//throw new HaqunaException("No table with '" + tableName + "' name in '" + modelName + "' model");
+		Table.Builder tableBuilder = model.getBuilder().getIncompleteTableNamed(tableName);
+		
+		
+		if(tableBuilder != null) {
+			Haquna.tableBuilderMap.put(varName+"B", tableBuilder);
+			Haquna.tableMap.put(varName, t);
+		} else {
+			throw new HaqunaException("No table with '" + tableName + "' name in '" + modelName + "' model");
+		}
 	}
 }

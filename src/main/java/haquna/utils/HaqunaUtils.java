@@ -1,5 +1,6 @@
 package haquna.utils;
 
+import haquna.AttrVar;
 import haquna.Haquna;
 import haquna.HaqunaException;
 import heart.WorkingMemory;
@@ -10,17 +11,26 @@ public class HaqunaUtils {
 	public static XTTModel getModel(String name) throws HaqunaException {
 		if(Haquna.modelMap.containsKey(name)) {
 			return Haquna.modelMap.get(name);
-		}	
-		else {
+		
+		} else {
 			throw new HaqunaException("No '" + name + "' XTTModel object in memory");
+		}
+	}
+	
+	public static AttrVar getAttrVar(String name) throws HaqunaException {
+		if(Haquna.attrMap.containsKey(name)) {
+			return Haquna.attrMap.get(name);
+		
+		} else {
+			throw new HaqunaException("No " + name + " attribute in memory");
 		}
 	}
 	
 	public static Table getTable(String name) throws HaqunaException {
 		if(Haquna.tableMap.containsKey(name)) {
 			return Haquna.tableMap.get(name);
-		}	
-		else {
+		
+		} else {
 			throw new HaqunaException("No '" + name + "' Table object in memory");
 		}
 	}
@@ -28,8 +38,8 @@ public class HaqunaUtils {
 	public static WorkingMemory getWorkingMemory(String name) throws HaqunaException {
 		if(Haquna.wmMap.containsKey(name)) {
 			return Haquna.wmMap.get(name);
-		}	
-		else {
+		
+		} else {
 			throw new HaqunaException("No '" + name + "' WorkingMemory object in memory");
 		}
 	}
@@ -52,7 +62,7 @@ public class HaqunaUtils {
 		Haquna.modelMap.clear();
 		Haquna.wmMap.clear();
 		Haquna.modelMap.clear();
-		Haquna.attribiuteMap.clear();
+		Haquna.attrMap.clear();
 		Haquna.tableMap.clear();
 		Haquna.ruleMap.clear();
 		Haquna.typeMap.clear();

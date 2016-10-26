@@ -44,7 +44,7 @@ public class VarNamesCompleter implements Completer {
 		
     	strings.addAll(Haquna.modelMap.keySet());
         strings.addAll(Haquna.tableMap.keySet());
-        strings.addAll(Haquna.attribiuteMap.keySet());
+        strings.addAll(Haquna.attrMap.keySet());
         strings.addAll(Haquna.typeMap.keySet());
         strings.addAll(Haquna.ruleMap.keySet());
         strings.addAll(Haquna.callbackMap.keySet());
