@@ -10,8 +10,36 @@ import haquna.utils.HaqunaUtils;
 public class addCmdTest {
 public static CommandFactory cp = new CommandFactory();
 	
-
 	public static void setup() {
+		HaqunaUtils.clearMemory();
+		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		cp.createCommand("Typ = new Type(xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]].)");
+		cp.createCommand("Att = new Attribute(xattr [name: weather,abbrev: weat1,class: simple,type: weather_type,comm: inter].)");
+		cp.createCommand("Tab = new Table(xschm 'Recommendations': [weather] ==> [day].)");
+		cp.createCommand("Rul= new Rule(xrule 'Recommendations'/1: [weather in [sunny,cloudy]]==>[day set [sun]].)");
+	}
+	
+	@Test
+	public void testAddCmd1() {		
+		setup();				
+		
+		cp.createCommand("M1 = Model.add(Typ)");
+		cp.createCommand("M1.showTypesList()");
+		
+		cp.createCommand("M2 = M1.add(Att)");
+		cp.createCommand("M2.showAttributesList()");
+		
+		cp.createCommand("M3 = M2.add(Tab)");
+		cp.createCommand("M3.showTablesList()");
+		
+		cp.createCommand("M4 = M3.add(Rul)");
+		cp.createCommand("M4.show()");
+		
+		assertEquals(Haquna.modelMap.containsKey("M4"), true);
+		System.out.println("=======================================");			
+	}
+		
+	/*public static void setup() {
 		HaqunaUtils.clearMemory();
 		cp.createCommand("Model = xload('threat-monitor.hmr')");
 		cp.createCommand("Typ1 = Model.getTypeByName('day_type')");
@@ -124,6 +152,6 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("M07.showTablesList()");
 		cp.createCommand("M07.show()");
 		assertEquals(Haquna.modelMap.containsKey("M05"), true);
-		System.out.println("=======================================");			
-	}
+		System.out.println("=======================================");*/			
+	
 }

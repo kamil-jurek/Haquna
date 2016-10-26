@@ -40,16 +40,16 @@ public class Haquna {
 	
 	public static Map<String, XTTModel> modelMap = new HashMap<String, XTTModel>();
 	public static Map<String, Table> tableMap = new HashMap<String, Table>();
-	//public static Map<String, Attribute> attribiuteMap = new HashMap<String, Attribute>();
-	//public static Map<String, Type> typeMap = new HashMap<String, Type>();
+	public static Map<String, Attribute> attrMap = new HashMap<String, Attribute>();
+	public static Map<String, Type> typeMap = new HashMap<String, Type>();
 	public static Map<String, Rule> ruleMap = new HashMap<String, Rule>();
 	public static Map<String, String> callbackMap = new HashMap<String, String>();
 	public static Map<String, WorkingMemory> wmMap = new HashMap<String, WorkingMemory>();
 	
-	public static Map<String, TypeVar> typeMap = new HashMap<String, TypeVar>();
-	public static Map<String, AttrVar> attrMap = new HashMap<String, AttrVar>();
-	public static Map<String, Table.Builder> tableBuilderMap = new HashMap<String, Table.Builder>();
-	public static Map<String, Rule.Builder> ruleBuilderMap = new HashMap<String, Rule.Builder>();
+	public static Map<String, Type.Builder> typeBuMap = new HashMap<String, Type.Builder>();
+	public static Map<String, Attribute.Builder> attrBuMap = new HashMap<String, Attribute.Builder>();
+	public static Map<String, Table.Builder> tableBuMap = new HashMap<String, Table.Builder>();
+	public static Map<String, Rule.Builder> ruleBuMap = new HashMap<String, Rule.Builder>();
 	
 	public static List<Completer> completers = new LinkedList<Completer>();
 	
@@ -110,7 +110,11 @@ public class Haquna {
 		   typeMap.containsKey(varName) ||
 		   ruleMap.containsKey(varName) ||
 		   callbackMap.containsKey(varName) ||
-		   wmMap.containsKey(varName)) {
+		   wmMap.containsKey(varName) ||
+		   tableBuMap.containsKey(varName) ||
+		   attrBuMap.containsKey(varName) || 
+		   typeBuMap.containsKey(varName) ||
+		   ruleBuMap.containsKey(varName)) {
 			
 			return true;
 		

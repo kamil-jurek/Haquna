@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import haquna.command.add.AddCmd;
 import haquna.command.add.RemoveCmd;
 import haquna.command.create.NewAttributeCmd;
+import haquna.command.create.NewRuleCmd;
+import haquna.command.create.NewTableCmd;
 import haquna.command.create.NewTypeCmd;
 import haquna.command.get.GetAttributeByIdCmd;
 import haquna.command.get.GetAttributeByNameCmd;
@@ -82,6 +84,8 @@ public class CommandFactory {
 			
 			add(new NewTypeCmd());	
 			add(new NewAttributeCmd());
+			add(new NewTableCmd());
+			add(new NewRuleCmd());
 
 			
 			// utils

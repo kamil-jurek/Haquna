@@ -7,26 +7,28 @@ import haquna.utils.HaqunaUtils;
 import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceString;
-import heart.xtt.Type;
+import heart.xtt.Table;
 
-public class NewTypeCmd implements Command {		
+public class NewTableCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Table[(](.*)[)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String hmrCode;
 	
-	public NewTypeCmd() {
+	public NewTableCmd() {
 		
 	}
 	
-	public NewTypeCmd(String _commandStr) {
+	public NewTableCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
+		this.commandStr = commandStr.replace("==", "--");
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
 		this.varName = commandParts[0];		
 		this.hmrCode = commandParts[2];
+		this.hmrCode = hmrCode.replace("--", "==");
 	}
 	
 	@Override
@@ -38,9 +40,9 @@ public class NewTypeCmd implements Command {
 	        HMRParser parser = new HMRParser();
 	        
 	        parser.parse(hmr_code);
-	        Type.Builder typeBuilder = parser.getTypeBuilder();
+	        Table.Builder typeBuilder = parser.getTableBuilder();
 			
-	        Haquna.typeBuMap.put(varName, typeBuilder);
+	        Haquna.tableBuMap.put(varName, typeBuilder);
 			
 			Haquna.wasSucces = true;
 			
@@ -60,7 +62,7 @@ public class NewTypeCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new NewTypeCmd(cmdStr);
+		return new NewTableCmd(cmdStr);
 	}
 
 	public String getCommandStr() {

@@ -1,6 +1,7 @@
 package haquna.command.get;
 
-import haquna.AttrVar;
+import java.util.LinkedList;
+
 import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
@@ -87,22 +88,14 @@ public class GetAttributeByNameCmd implements Command {
 	}
 	
 	private void getAttributeByName(XTTModel model) throws HaqunaException {
-		Attribute attr = null;
-		Attribute.Builder attrBuilder = model.getBuilder().getIncompleteAttributeNamed(attributeName);
-		
-		for(Attribute att : model.getAttributes()) {					
+		LinkedList<Attribute> attributes = model.getAttributes();		
+		for(Attribute att : attributes){					
 			if(att.getName().equals(attributeName)){
-				attr = att;
-				break;
+				Haquna.attrMap.put(varName, att);
+				return;
 			}	     
 		}
-					
-		if(attr != null && attrBuilder != null) {
-			Haquna.attrMap.put(varName, new AttrVar(attr, attrBuilder));
-			
-		} else {
-			throw new HaqunaException("No attribute with '" + attributeName + "' name in '" + modelName + "' model");
-		}
+		throw new HaqunaException("No attribute with '" + attributeName + "' name in '" + modelName + "' model");
 	}
 	
 }

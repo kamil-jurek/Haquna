@@ -1,9 +1,9 @@
 package haquna.utils;
 
-import haquna.AttrVar;
 import haquna.Haquna;
 import haquna.HaqunaException;
 import heart.WorkingMemory;
+import heart.xtt.Attribute;
 import heart.xtt.Table;
 import heart.xtt.XTTModel;
 
@@ -17,7 +17,7 @@ public class HaqunaUtils {
 		}
 	}
 	
-	public static AttrVar getAttrVar(String name) throws HaqunaException {
+	public static Attribute getAttribute(String name) throws HaqunaException {
 		if(Haquna.attrMap.containsKey(name)) {
 			return Haquna.attrMap.get(name);
 		
@@ -61,11 +61,14 @@ public class HaqunaUtils {
 	public static void clearMemory() {
 		Haquna.modelMap.clear();
 		Haquna.wmMap.clear();
-		Haquna.modelMap.clear();
 		Haquna.attrMap.clear();
 		Haquna.tableMap.clear();
 		Haquna.ruleMap.clear();
 		Haquna.typeMap.clear();
 		Haquna.callbackMap.clear();
+		Haquna.attrBuMap.clear();
+		Haquna.tableBuMap.clear();
+		Haquna.ruleBuMap.clear();
+		Haquna.typeBuMap.clear();
 	}
 }

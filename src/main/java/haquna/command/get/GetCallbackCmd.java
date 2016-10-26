@@ -1,10 +1,10 @@
 package haquna.command.get;
 
-import haquna.AttrVar;
 import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
+import heart.xtt.Attribute;
 
 public class GetCallbackCmd implements Command {		
 	
@@ -30,9 +30,10 @@ public class GetCallbackCmd implements Command {
 	public void execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);
-			AttrVar attrVar = HaqunaUtils.getAttrVar(attribiuteName);
+			Attribute attr = HaqunaUtils.getAttribute(attribiuteName);
 			
-			String callback = attrVar.attr.getCallback();			
+			String callback = attr.getCallback();
+			
 			Haquna.callbackMap.put(varName, callback);
 			
 			Haquna.wasSucces = true;

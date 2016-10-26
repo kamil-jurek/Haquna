@@ -32,13 +32,13 @@ public class ShowCmd implements Command {
 			Table table = Haquna.tableMap.get(varName);			
 			System.out.println(XttModelUtils.tableToHMR(table));
 		     					
-		} else if(Haquna.attribiuteMap.containsKey(varName)){
-			Attribute attr = Haquna.attribiuteMap.get(varName);
+		} else if(Haquna.attrMap.containsKey(varName)){
+			Attribute attr = Haquna.attrMap.get(varName);
 			System.out.println(XttModelUtils.attributeToHMR(attr));
 		
 		} else if(Haquna.typeMap.containsKey(varName)){
-			Type.Builder typeBuilder = Haquna.typeMap.get(varName).typeBuilder;
-			System.out.println(" builder" + XttModelUtils.typeBuildToHMR(typeBuilder));		
+			Type type = Haquna.typeMap.get(varName);
+			System.out.println(" builder" + XttModelUtils.typeToHMR(type));		
 		    		
 		} else if(Haquna.ruleMap.containsKey(varName)){
 			Rule rule = Haquna.ruleMap.get(varName);

@@ -7,26 +7,29 @@ import haquna.utils.HaqunaUtils;
 import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceString;
-import heart.xtt.Type;
+import heart.xtt.Rule;
 
-public class NewTypeCmd implements Command {		
+public class NewRuleCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(](.*)[)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String hmrCode;
 	
-	public NewTypeCmd() {
+	public NewRuleCmd() {
 		
 	}
 	
-	public NewTypeCmd(String _commandStr) {
-		this.commandStr = _commandStr.replace(" ", "");
+	public NewRuleCmd(String _commandStr) {
+		this.commandStr = _commandStr.replaceFirst(" ", "");
+		this.commandStr = commandStr.replace("==", "--");
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
 		this.varName = commandParts[0];		
 		this.hmrCode = commandParts[2];
+		this.hmrCode = hmrCode.replace("--", "==");
+		System.out.println(hmrCode);
 	}
 	
 	@Override
@@ -38,10 +41,10 @@ public class NewTypeCmd implements Command {
 	        HMRParser parser = new HMRParser();
 	        
 	        parser.parse(hmr_code);
-	        Type.Builder typeBuilder = parser.getTypeBuilder();
+	        Rule.Builder ruleBuilder = parser.getRuleBuilder();
 			
-	        Haquna.typeBuMap.put(varName, typeBuilder);
-			
+	        Haquna.ruleBuMap.put(varName, ruleBuilder);
+	        System.out.println(hmrCode);
 			Haquna.wasSucces = true;
 			
 		} catch (HaqunaException | ParsingSyntaxException e) {
@@ -60,7 +63,7 @@ public class NewTypeCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new NewTypeCmd(cmdStr);
+		return new NewRuleCmd(cmdStr);
 	}
 
 	public String getCommandStr() {

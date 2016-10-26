@@ -1,8 +1,9 @@
 package haquna.command.create;
 
-import haquna.AttrVar;
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.exceptions.ParsingSyntaxException;
 import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceString;
@@ -29,26 +30,28 @@ public class NewAttributeCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
-		if(!Haquna.isVarUsed(varName)) {	
-			Attribute.Builder attrBuilder = null;
+	public void execute() {		
+		try {
+			HaqunaUtils.checkVarName(varName);
 			
 	        SourceString hmr_code = new SourceString(hmrCode);
 	        HMRParser parser = new HMRParser();
-
-	        try {
-				parser.parse(hmr_code);
-				attrBuilder = parser.getAttributeBuilder();
-				
-	        } catch (ParsingSyntaxException e1) {
-				e1.printStackTrace();
-				return;
-			}
 	        
-	        Haquna.attrMap.put(varName, new AttrVar(null, attrBuilder));
-	        
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
+	        parser.parse(hmr_code);
+	        Attribute.Builder attrBuilder = parser.getAttributeBuilder();
+			
+	        Haquna.attrBuMap.put(varName, attrBuilder);
+			
+			Haquna.wasSucces = true;
+			
+		} catch (HaqunaException | ParsingSyntaxException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
 		}
 	}		
 	

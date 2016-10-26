@@ -1,11 +1,10 @@
 package haquna.command.get;
 
-import haquna.AttrVar;
 import haquna.Haquna;
 import haquna.HaqunaException;
-import haquna.TypeVar;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
+import heart.xtt.Attribute;
 import heart.xtt.Type;
 
 public class GetTypeCmd implements Command {		
@@ -31,11 +30,11 @@ public class GetTypeCmd implements Command {
 	@Override
 	public void execute() {				
 		try {
-			HaqunaUtils.checkVarName(varName);
-			AttrVar attrVar = HaqunaUtils.getAttrVar(attribiuteName);
-			Type type = attrVar.attr.getType();
+			HaqunaUtils.checkVarName(varName);			
+			Attribute attr = HaqunaUtils.getAttribute(attribiuteName);
+			Type type = attr.getType();
 			
-			Haquna.typeMap.put(varName, new TypeVar(type, null));
+			Haquna.typeMap.put(varName, type);
 			
 			Haquna.wasSucces = true;
 			
