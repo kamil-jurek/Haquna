@@ -68,14 +68,23 @@ public class AddCmd implements Command {
 		if(Haquna.typeBuMap.containsKey(itemToAddName)) {
 			addType();		            				
 		
+		} else if(Haquna.typeMap.containsKey(itemToAddName)) {
+			addTypeNoBuilder();
+		
 		} else if(Haquna.attrBuMap.containsKey(itemToAddName)) {
 			addAttribute();
+		
+		} else if(Haquna.attrMap.containsKey(itemToAddName)) {
+			addAttributeNoBuilder();
 		
 		} else if(Haquna.ruleBuMap.containsKey(itemToAddName)) {
 			addRule();
 		
 		} else if(Haquna.tableBuMap.containsKey(itemToAddName)) {
 			addTable();
+										
+		} else if(Haquna.tableMap.containsKey(itemToAddName)) {
+			addTableNoBuilder();
 										
 		} else {
 			throw new HaqunaException("No " + itemToAddName + " variable in memory");
@@ -87,6 +96,33 @@ public class AddCmd implements Command {
 	         
         XTTModel.Builder builder = model.getBuilder();
         Type.Builder typeBuilder = Haquna.typeBuMap.get(itemToAddName);
+        
+        builder.addIncompleteType(typeBuilder);
+		XTTModel newModel = builder.build();
+			
+		Haquna.modelMap.put(newModelName, newModel);		            
+	}
+	
+	private void addTypeNoBuilder() throws ModelBuildingException {
+		XTTModel model = Haquna.modelMap.get(modelName);		         
+        XTTModel.Builder builder = model.getBuilder();
+        
+        Type type = Haquna.typeMap.get(itemToAddName);
+        
+        String modelWithType = null;
+        String typeName = null;
+        for(String mn : Haquna.modelMap.keySet()) {
+        	for(Type t : Haquna.modelMap.get(mn).getTypes()) {
+        		if(t.getName().equals(type.getName()) &&
+        		   t.getBase().equals(type.getBase()) &&
+        		   t.getDomain().equals(type.getDomain())) {
+        			modelWithType = mn;
+        			typeName = t.getName();
+        			break;
+        		}
+        	}
+        }
+        Type.Builder typeBuilder = Haquna.modelMap.get(modelWithType).getBuilder().getIncompleteTypeNamed(typeName);
         
         builder.addIncompleteType(typeBuilder);
 		XTTModel newModel = builder.build();
@@ -107,6 +143,34 @@ public class AddCmd implements Command {
 		                
 	}
 	
+	private void addAttributeNoBuilder() throws ModelBuildingException {
+		XTTModel model = Haquna.modelMap.get(modelName);			
+        XTTModel.Builder builder = model.getBuilder();
+        
+        Attribute attr = Haquna.attrMap.get(itemToAddName);
+        
+        String modelWithAttr = null;
+        String attrName = null;
+        for(String mn : Haquna.modelMap.keySet()) {
+        	for(Attribute a : Haquna.modelMap.get(mn).getAttributes()) {
+        		if(a.getName().equals(attr.getName()) &&
+        		   a.getAbbreviation().equals(attr.getAbbreviation()) &&
+        		   a.getXTTClass().equals(attr.getXTTClass())) {
+        			modelWithAttr = mn;
+        			attrName = a.getName();
+        			break;
+        		}
+        	}
+        }
+        Attribute.Builder attrBuilder = Haquna.modelMap.get(modelWithAttr).getBuilder().getIncompleteAttributeNamed(attrName);
+        
+   		builder.addIncompleteAttribute(attrBuilder);
+		XTTModel newModel = builder.build();
+			
+		Haquna.modelMap.put(newModelName, newModel);
+		                
+	}
+	
 	private void addTable() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);			       
        
@@ -118,6 +182,31 @@ public class AddCmd implements Command {
 		
 		Haquna.modelMap.put(newModelName, newModel);
 		           
+	}
+	
+	private void addTableNoBuilder() throws ModelBuildingException {
+		XTTModel model = Haquna.modelMap.get(modelName);		         
+        XTTModel.Builder builder = model.getBuilder();
+        
+        Table table = Haquna.tableMap.get(itemToAddName);
+        
+        String modelWithTable = null;
+        String tableName = null;
+        for(String mn : Haquna.modelMap.keySet()) {
+        	for(Table t : Haquna.modelMap.get(mn).getTables()) {
+        		if(t.getName().equals(table.getName())) {
+        			modelWithTable = mn;
+        			tableName = t.getName();
+        			break;
+        		}
+        	}
+        }
+        Table.Builder tableBuilder = Haquna.modelMap.get(modelWithTable).getBuilder().getIncompleteTableNamed(tableName);
+        
+        builder.addIncompleteTable(tableBuilder);
+		XTTModel newModel = builder.build();
+			
+		Haquna.modelMap.put(newModelName, newModel);		            
 	}
 	
 	private void addRule() throws ModelBuildingException {

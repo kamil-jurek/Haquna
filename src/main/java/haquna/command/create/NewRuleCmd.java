@@ -22,14 +22,13 @@ public class NewRuleCmd implements Command {
 	}
 	
 	public NewRuleCmd(String _commandStr) {
-		this.commandStr = _commandStr.replaceFirst(" ", "");
+		this.commandStr = _commandStr.replaceFirst("(\\s*)", "");
 		this.commandStr = commandStr.replace("==", "--");
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
 		this.varName = commandParts[0];		
 		this.hmrCode = commandParts[2];
 		this.hmrCode = hmrCode.replace("--", "==");
-		System.out.println(hmrCode);
 	}
 	
 	@Override
@@ -44,7 +43,7 @@ public class NewRuleCmd implements Command {
 	        Rule.Builder ruleBuilder = parser.getRuleBuilder();
 			
 	        Haquna.ruleBuMap.put(varName, ruleBuilder);
-	        System.out.println(hmrCode);
+
 			Haquna.wasSucces = true;
 			
 		} catch (HaqunaException | ParsingSyntaxException e) {
