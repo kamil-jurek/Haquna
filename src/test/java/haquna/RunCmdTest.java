@@ -2,10 +2,6 @@ package haquna;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import haquna.command.CommandFactory;

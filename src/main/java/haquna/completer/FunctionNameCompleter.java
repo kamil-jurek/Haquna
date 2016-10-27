@@ -47,6 +47,7 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("showRulesList()");
 			strings.add("show()");
 			strings.add("getRuleByName");
+			strings.add("getRuleById");
 		}
 		
 		if(Haquna.attrMap.containsKey(varName)){
@@ -66,6 +67,7 @@ public class FunctionNameCompleter implements Completer{
 		if(Haquna.wmMap.containsKey(varName)){
 			strings.add("showValueOf");
 			strings.add("setValueOf");
+			strings.add("showHistoricalValueOf");
 			strings.add("showCurrentState()");
 		}
 		
@@ -75,14 +77,21 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("showAttributesList()");
 			strings.add("showTypesList()");
 			strings.add("getTableByName");
+			strings.add("getTableById");
 			strings.add("getAttributeByName");
+			strings.add("getAttributeById");
 			strings.add("getTypeByName");
+			strings.add("getTypeById");
+			strings.add("add");
 			strings.add("remove");
 		}
 		
 		if(varName != null && varName.equals("new")){
 			strings.add("WorkingMemory");
 			strings.add("Type");
+			strings.add("Attribute");
+			strings.add("Table");
+			strings.add("Rule");
 			
 		} 
     }

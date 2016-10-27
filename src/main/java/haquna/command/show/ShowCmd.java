@@ -38,7 +38,7 @@ public class ShowCmd implements Command {
 		
 		} else if(Haquna.typeMap.containsKey(varName)){
 			Type type = Haquna.typeMap.get(varName);
-			System.out.println(" builder" + XttModelUtils.typeToHMR(type));		
+			System.out.println(XttModelUtils.typeToHMR(type));		
 		    		
 		} else if(Haquna.ruleMap.containsKey(varName)){
 			Rule rule = Haquna.ruleMap.get(varName);

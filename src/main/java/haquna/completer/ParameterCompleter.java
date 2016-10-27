@@ -51,7 +51,14 @@ private final SortedSet<String> strings = new TreeSet<String>();
 	private void addParameters() {
 		strings.clear();
 		
-		if(functionName.equals("WorkingMemory")) {
+		if(varName.equals("new")) {
+			if(functionName.equals("WorkingMemory")) {
+				strings.addAll(Haquna.modelMap.keySet());
+			}
+		}
+		
+				
+		if(functionName.equals("Type")) {
 			strings.addAll(Haquna.modelMap.keySet());
 		}
 		
@@ -102,6 +109,33 @@ private final SortedSet<String> strings = new TreeSet<String>();
 				for(Attribute a : model.getAttributes()) {
 					strings.add(a.getName());
 				}				
+			}
+			
+			if(functionName.contains("add")) {
+				for(String a : Haquna.attrMap.keySet()) {
+					strings.add(a);
+				}
+				for(String t : Haquna.tableMap.keySet()) {
+					strings.add(t);
+				}	
+				for(String t : Haquna.typeMap.keySet()) {
+					strings.add(t);
+				}
+				for(String r : Haquna.ruleMap.keySet()) {
+					strings.add(r);					
+				}
+				for(String a : Haquna.attrBuMap.keySet()) {
+					strings.add(a);
+				}
+				for(String t : Haquna.tableBuMap.keySet()) {
+					strings.add(t);
+				}	
+				for(String t : Haquna.typeBuMap.keySet()) {
+					strings.add(t);
+				}
+				for(String r : Haquna.ruleBuMap.keySet()) {
+					strings.add(r);					
+				}
 			}
 			
 			if(functionName.contains("remove")) {

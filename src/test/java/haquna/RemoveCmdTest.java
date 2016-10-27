@@ -76,11 +76,12 @@ public class RemoveCmdTest {
 		//cp.createCommand("M5 = M4.remove('today')");
 		//cp.createCommand("M5.showAttributesList()");
 	
-		//cp.createCommand("M6 = M5.remove('day')");
-		//cp.createCommand("M6.showAttributesList()");
-		//cp.createCommand("M7 = M6.remove('day_type')");
+		cp.createCommand("M6 = M4.remove('day')");
+		cp.createCommand("M6.showAttributesList()");
+		cp.createCommand("M7 = M6.remove('day_type')");
+		cp.createCommand("M7.showTypesList()");
 		
-		assertEquals(Haquna.modelMap.containsKey("M4"), true);
+		assertEquals(Haquna.modelMap.containsKey("M7"), true);
 		
 		
 		

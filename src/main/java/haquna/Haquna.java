@@ -177,7 +177,10 @@ public class Haquna {
         completers.add(new RunCompleter());
         completers.add(new RunCompleter());
         HaqunaCompleter argComp7 = new HaqunaCompleter(new HaqunaDelimiter(',','=','[',']','.', '(','\''), completers);
-       
+        
+        completers = new LinkedList<Completer>();
+        completers.add(new StringsCompleter("ls", "pwd", "printVars()", "cls"));
+        HaqunaCompleter argComp8 = new HaqunaCompleter(new HaqunaDelimiter(','), completers);
 		
         argComp1.setStrict(true);
         argComp2.setStrict(true);
@@ -186,11 +189,15 @@ public class Haquna {
         argComp5.setStrict(true);
         argComp6.setStrict(true);
         argComp7.setStrict(true);
+        argComp8.setStrict(true);
         
         CandidateListCompletionHandler handler = new CandidateListCompletionHandler();        
         handler.setPrintSpaceAfterFullCompletion(false);
         
-        AggregateCompleter aggComp = new AggregateCompleter(argComp1, argComp2, argComp3, argComp4, argComp5, argComp6, argComp7);
+        AggregateCompleter aggComp = new AggregateCompleter(argComp1, 
+        								argComp2, argComp3, argComp4, 
+        								argComp5, argComp6, argComp7,
+        								argComp8);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
 	}

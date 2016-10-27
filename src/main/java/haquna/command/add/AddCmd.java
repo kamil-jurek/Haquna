@@ -80,6 +80,9 @@ public class AddCmd implements Command {
 		} else if(Haquna.ruleBuMap.containsKey(itemToAddName)) {
 			addRule();
 		
+		} else if(Haquna.ruleMap.containsKey(itemToAddName)) {
+			addRuleNoBuilder();
+		
 		} else if(Haquna.tableBuMap.containsKey(itemToAddName)) {
 			addTable();
 										
@@ -219,6 +222,38 @@ public class AddCmd implements Command {
 		
 		Haquna.modelMap.put(newModelName, newModel);
 			      
+	}
+	
+	private void addRuleNoBuilder() throws ModelBuildingException {
+		XTTModel model = Haquna.modelMap.get(modelName);		         
+        XTTModel.Builder builder = model.getBuilder();
+        
+        Rule rule = Haquna.ruleMap.get(itemToAddName);
+        
+        String modelWithRule = null;
+        String ruleName = null;
+        for(String mn : Haquna.modelMap.keySet()) {
+        	for(Table t : Haquna.modelMap.get(mn).getTables()) {
+        		for(Rule r : t.getRules()) {
+        			if(r.getName().equals(rule.getName()) &&
+        			   r.getOrderNumber() == rule.getOrderNumber()) {
+            			modelWithRule = mn;
+            			ruleName = r.getName();
+            			
+            			System.out.println(modelWithRule);
+            			System.out.println(ruleName);
+            			break;
+        			}      		
+        		}
+        	}
+        }
+        
+        Rule.Builder ruleBuilder = Haquna.modelMap.get(modelWithRule).getBuilder().getIncompleteRuleNamed(ruleName);
+        
+        builder.addIncompleteRule(ruleBuilder);
+		XTTModel newModel = builder.build();
+			
+		Haquna.modelMap.put(newModelName, newModel);		            
 	}
 	
 	public String getCommandStr() {

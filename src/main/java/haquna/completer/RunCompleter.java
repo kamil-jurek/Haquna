@@ -7,7 +7,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import haquna.Haquna;
-import heart.xtt.Table;
 import jline.console.completer.Completer;
 
 public class RunCompleter implements Completer{
@@ -15,7 +14,6 @@ public class RunCompleter implements Completer{
 	private final SortedSet<String> strings = new TreeSet<String>();
 	
 	private String prevArg;
-	private String modelName = null;
 	
 	public RunCompleter() {
 		
@@ -44,13 +42,7 @@ public class RunCompleter implements Completer{
 	
 	private void addRuns() {
 		strings.clear();
-		
-		//if(modelName != null && Haquna.modelMap.containsKey(modelName)) {
-		//	for(Table t : Haquna.modelMap.get(modelName).getTables()) {
-		//		strings.add(t.getName());
-		//	}
-		//}
-		
+				
 		for(String k : Haquna.wmMap.keySet()) {
 			strings.add(k);
 		}

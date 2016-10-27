@@ -3,6 +3,7 @@ package haquna.command.io;
 import haquna.Haquna;
 import haquna.XttModelUtils;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.xtt.XTTModel;
 
 public class XsaveCmd implements Command {		
@@ -31,25 +32,18 @@ public class XsaveCmd implements Command {
 	
 	@Override
 	public void execute() {						
-		if(Haquna.modelMap.containsKey(modelName)) {
-			XTTModel model = Haquna.modelMap.get(modelName);
+		try {
+			XTTModel model = HaqunaUtils.getModel(modelName);
 			
-			try {
-				XttModelUtils.saveToFile(model, modelPath);
+			XttModelUtils.saveToFile(model, modelPath);
 			
-				Haquna.wasSucces = true;
+			Haquna.wasSucces = true;
 			
-			} catch(Exception e) {
-				e.printStackTrace();
-				
-				return;
-			}
-		
-		} else {
-			System.out.println("No " + modelName + " model in memory");
-		}
-
-			
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			return;
+		}			
 	}		
 	
 	public boolean matches(String commandStr) {

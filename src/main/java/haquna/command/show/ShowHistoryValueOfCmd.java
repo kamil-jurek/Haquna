@@ -1,20 +1,16 @@
 package haquna.command.show;
 
-import java.util.LinkedList;
-
 import haquna.Haquna;
 import haquna.command.Command;
-import heart.RelativeTimePeriod;
+import haquna.utils.HaqunaUtils;
 import heart.RelativeTimestamp;
 import heart.RelativeTimestamp.TimeType;
-import heart.State;
-import heart.StateElement;
 import heart.WorkingMemory;
 import heart.alsvfd.Value;
 
 public class ShowHistoryValueOfCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)[.](\\s*)showValueOf[(]['](.+)['][,]['](.+)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)[.](\\s*)showHistoricalValueOf[(]['](.+)['][,]['](.+)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -31,44 +27,30 @@ public class ShowHistoryValueOfCmd implements Command {
 		String[] commandParts = this.commandStr.split("[.|']");	
 		this.wmName = commandParts[0];
 		this.attributeName = commandParts[2];
-		this.relativeTime = commandParts[4];
+		this.relativeTime = commandParts[4];		
+		 
 	}
 	
 	public void execute() {
-		if(Haquna.wmMap.containsKey(wmName)) {
-			WorkingMemory wm = Haquna.wmMap.get(wmName);
-			
-			
-			/*for(State s : wm.getHistoryLog()) {
-				System.out.println("====" + s.getName() + "======");
-				for(StateElement se : s.getStateElements()){
-			    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
-			    }
-				System.out.println("=================================\n" + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (wm.getCurrentTimestamp())));
-			}*/
-			
-			Long time;
-			Long timeSec;
-			try {
-				timeSec = Long.parseLong(relativeTime);
-				time = timeSec * 1000; 
-				///10000000000000
-				
-			} catch(Exception e) {
-				e.printStackTrace();
-				return;
-			}
-			
-			State s = wm.findHistoricalState(wm.getHistoryLog(), new RelativeTimestamp(-time, TimeType.MILISCOUNT));
-			String ds = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date (s.getTimestamp()));
-			System.out.println(attributeName + " at "+ ds +" was: " + s.getValueOfAttribute(attributeName));
+		try {
+			WorkingMemory wm = HaqunaUtils.getWorkingMemory(wmName);
+			Long timeSec = Long.parseLong(relativeTime);
+			Long time = timeSec * 1000; 
 			
 			System.out.println(time);
-			RelativeTimePeriod rtp1 = new RelativeTimePeriod(-time, wm.getCurrentTimestamp(), 1000, TimeType.MILISCOUNT);
-			LinkedList<Value> values1 = wm.findHistoricalValues(wm.getHistoryLog(), rtp1, attributeName);
-						
-		} else {
-			System.out.println("No " + wmName + " WorkingMemory in memory");
+			
+			RelativeTimestamp rt = new RelativeTimestamp(-time, TimeType.MILISCOUNT);
+			Value val = wm.findHistoricalValue(wm.getHistoryLog(), attributeName, rt);
+			
+			String ds = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new java.util.Date (val.getTimestamp()));
+			System.out.println("now:    " +  new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new java.util.Date()));
+			System.out.println(attributeName + " at "+ ds +" was: " + val);
+			
+			
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			return;
 		}		
 	}
 	

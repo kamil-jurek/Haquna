@@ -7,7 +7,7 @@ import org.junit.Test;
 import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
-public class addCmdTest {
+public class AddCmdTest {
 public static CommandFactory cp = new CommandFactory();
 	
 	public static void setup() {
@@ -25,6 +25,8 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("AttrObj_day = Model.getAttributeByName('day')");
 		cp.createCommand("AttrObj_today = Model.getAttributeByName('today')");
 		cp.createCommand("TabObj = Model.getTableByName('Today')");
+		cp.createCommand("RulObj1 = TabObj.getRuleByName('Today/1')");
+		cp.createCommand("RulObj2 = TabObj.getRuleByName('Today/2')");
 	}
 	
 	@Test
@@ -90,6 +92,27 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("printVars()");
 				
 		assertEquals(Haquna.modelMap.containsKey("M5"), true);
+		System.out.println("=======================================");
+	}
+	
+	@Test
+	public void testAddCmd5() {		
+		setup();				
+		
+		cp.createCommand("M1 = M0.add(TypObj)");	
+		cp.createCommand("M2 = M1.add(TypObj_today)");
+		cp.createCommand("M3 = M2.add(AttrObj_day)");
+		cp.createCommand("M4 = M3.add(AttrObj_today)");
+		cp.createCommand("M5 = M4.add(TabObj)");
+		cp.createCommand("M6 = M5.add(RulObj1)");
+		cp.createCommand("M7 = M6.add(RulObj2)");
+		
+		cp.createCommand("M7.showTypesList()");
+		cp.createCommand("M7.showAttributesList()");
+		
+		cp.createCommand("printVars()");
+				
+		assertEquals(Haquna.modelMap.containsKey("M7"), true);
 		System.out.println("=======================================");
 	}
 	

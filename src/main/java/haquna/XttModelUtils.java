@@ -103,15 +103,13 @@ public class XttModelUtils {
 	
 	public static String ruleToHMR(Rule rule) {
 		String HMRCode = "";
-		/*xrule 'DayTime'/1:
-		      [hour in [14.000 to 18.000]]
-		    ==>
-		      [daytime set afternoon].*/
+		
 		HMRCode += "xrule ";
 		String name = rule.getName().split("/")[0];
 		String number = rule.getName().split("/")[1];
 		HMRCode += ("'" + name + "'/" + number + ":\n");
 		HMRCode += ("      [" );
+		
 		for(Formulae f : rule.getConditions()) {
 			
 			if(f != rule.getConditions().getFirst()) {
@@ -210,10 +208,6 @@ public class XttModelUtils {
 				sVal = new BigDecimal(s).intValue();
 				eVal = new BigDecimal(e).intValue();
 				
-				//domain = domain.replace(";", "to");
-				//domain = domain.replace("<", "");
-				///domain = domain.replace(">", "");
-				
 				HMRCode += ("       " + "domain: [" + sVal + " to " + eVal + "],\n");
 				
 			} else {
@@ -224,11 +218,7 @@ public class XttModelUtils {
 				HMRCode += ("       " + "domain: " + domain + ",\n");
 			}
 		}
-		
-		/*if(type.getDescription() != null) {
-			HMRCode += ("       " + "description: " + type.getDescription() + ",\n");
-		}*/
-		
+				
 		if(HMRCode.lastIndexOf(",") == HMRCode.length()-2) {
 			StringBuilder b = new StringBuilder(HMRCode);
 			b.replace(HMRCode.lastIndexOf(","), HMRCode.lastIndexOf(",") + 1, "");
@@ -281,76 +271,4 @@ public class XttModelUtils {
 		return HMRCode;
 	}
 	
-	public static String typeBuildToHMR(Type.Builder type) {
-		String HMRCode = "";
-		
-		HMRCode += "xtype [";
-		
-		if(type.getId() != null) {
-			HMRCode += ("id: " + type.getId() + ",\n");
-		}
-		
-		if(type.getName() != null) {
-			HMRCode += ("" + "name: " + type.getName() + ",\n");
-		}
-		
-		if(type.getBase() != null) {
-			HMRCode += ("       " + "base: " + type.getBase() + ",\n");
-		}
-		
-		if(type.getLength() != null) {
-			HMRCode += ("       " + "length: " + type.getLength() + ",\n");
-		}
-		
-		if(type.getPrecision() != null) {
-			HMRCode += ("       " + "precision: " + type.getPrecision() + ",\n");
-		}
-		
-		if(type.getOrdered() != null) {
-			HMRCode += ("       " + "ordered: " + type.getOrdered() + ",\n");
-		}
-		
-		if(type.getDomain() != null) {
-			
-			int sVal;
-			int eVal;
-			String domain = type.getDomain().toString();
-			domain = domain.replace(" ", "");
-			if(domain.contains(";")) {
-				domain = domain.replace("[<", "");
-				domain = domain.replace(">]", "");
-				domain = domain.replace(" ", "");
-				String s = domain.split(";")[0];
-				String e = domain.split(";")[1];
-				sVal = new BigDecimal(s).intValue();
-				eVal = new BigDecimal(e).intValue();
-				
-				//domain = domain.replace(";", "to");
-				//domain = domain.replace("<", "");
-				///domain = domain.replace(">", "");
-				
-				HMRCode += ("       " + "domain: [" + sVal + " to " + eVal + "],\n");
-				
-			} else {
-			
-				domain = domain.replace(";", "to");
-				domain = domain.replace("<", "");
-				domain = domain.replace(">", "");
-				HMRCode += ("       " + "domain: " + domain + ",\n");
-			}
-		}
-		
-		/*if(type.getDescription() != null) {
-			HMRCode += ("       " + "description: " + type.getDescription() + ",\n");
-		}*/
-		
-		if(HMRCode.lastIndexOf(",") == HMRCode.length()-2) {
-			StringBuilder b = new StringBuilder(HMRCode);
-			b.replace(HMRCode.lastIndexOf(","), HMRCode.lastIndexOf(",") + 1, "");
-			HMRCode = b.toString();
-		}
-		
-		HMRCode += ("      " + "].\n");
-		return HMRCode; 	
-    }
 }
