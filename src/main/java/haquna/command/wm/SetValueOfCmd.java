@@ -30,7 +30,8 @@ public class SetValueOfCmd implements Command {
 	public SetValueOfCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
-		String[] commandParts = this.commandStr.split("['|.]");				
+		this.commandStr = this.commandStr.replaceFirst("\\.", "@");
+		String[] commandParts = this.commandStr.split("['|@]");				
 		this.wmName = commandParts[0];
 		this.attributeName = commandParts[2];
 		this.attributeValue = commandParts[4];	
@@ -47,7 +48,10 @@ public class SetValueOfCmd implements Command {
 			HaqunaUtils.printRed(e.getMessage());
 			
 			return;
-		}			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean matches(String commandStr) {
@@ -74,25 +78,45 @@ public class SetValueOfCmd implements Command {
 		this.wmName = varName;
 	}
 	
-	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException {
-		Value attVal;		
-		if(attributeValue == null) {
-			attVal = new Null();
+	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException {
+		String[] attrValParts = attributeValue.split("#");
 		
-		} else if(attributeValue.matches("-?\\d+(\\.\\d+)?")) {
-			double d = Double.parseDouble(attributeValue);
+		if(attrValParts.length == 2) {
+			Value v = getParsedAttrValue(attrValParts[0]);
+			v.setCertaintyFactor(Float.parseFloat(attrValParts[1]));
+			
+			wm.setAttributeValue(attributeName, v);
+			wm.recordLog();	
+			
+		} else if(attrValParts.length == 1) {
+			Value v = getParsedAttrValue(attrValParts[0]);
+			v.setCertaintyFactor(1);
+			
+			wm.setAttributeValue(attributeName, v);
+			wm.recordLog();	
+						
+		} else {
+			throw new HaqunaException("Attribute value format inncorrect");
+		}
+		
+	}
+	private Value getParsedAttrValue(String attrValueStr ) {
+		Value attVal;	
+		if(attrValueStr == null) {
+			attVal = new Null();
+					
+		} else if(attrValueStr.matches("-?\\d+(\\.\\d+)?")) {
+			double d = Double.parseDouble(attrValueStr);
 			attVal = new SimpleNumeric(d);
 			
-		} else if(attributeValue.contains("/")){
-			String[] splited = attributeValue.split("[/]");
+		} else if(attrValueStr.contains("/")){
+			String[] splited = attrValueStr.split("[/]");
 			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));
 		
 		} else {
-			attVal = new SimpleSymbolic(attributeValue);				
+			attVal = new SimpleSymbolic(attrValueStr);				
 		
 		}
-						
-		wm.setAttributeValue(attributeName, attVal);
-		wm.recordLog();								
+		return attVal;
 	}
 }

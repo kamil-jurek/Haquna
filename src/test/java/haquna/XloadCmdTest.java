@@ -47,7 +47,7 @@ public class XloadCmdTest {
 						
 		String cmd = "Model2 = xload('threat-monitor2.hmr')";
 		XloadCmd xc = (XloadCmd) cp.createCommand(cmd);
-		String expectedOutput = "File '" + xc.getModelPath() + "' was found\n";
+		String expectedOutput = "File '" + xc.getModelPath() + "' was not found\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
@@ -61,7 +61,7 @@ public class XloadCmdTest {
 		cp.createCommand(cmd);
 		
 		XloadCmd xc = (XloadCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name: " + xc.getVarName() + " already in use\n";
+		String expectedOutput = "Variable name '" + xc.getVarName() + "' already in use\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);				
 	}

@@ -35,7 +35,7 @@ public class GetTableByNameCmdTest {
 		
 		String cmd = "Tab_1 = NoExistingModel.getTableByName('Today')";
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No " + sal.getModelName() + " model in memory\n";
+		String expectedOutput = "No '" + sal.getModelName() + "' XTTModel object in memory\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				
@@ -64,7 +64,7 @@ public class GetTableByNameCmdTest {
 		
 		String cmd = "Tab_3 = Model_2.getTableByName('Today')";
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name: " + sal.getVarName() + " already in use\n";
+		String expectedOutput = "Variable name '" + sal.getVarName() + "' already in use\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				

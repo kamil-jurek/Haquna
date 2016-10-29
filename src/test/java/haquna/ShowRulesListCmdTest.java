@@ -33,7 +33,7 @@ public class ShowRulesListCmdTest {
 		
 		String cmd = "NoExistingTable.showRulesList()";
 		ShowRulesListCmd sal = (ShowRulesListCmd) cp.createCommand(cmd);
-		String expectedOutput = "No " + sal.getVarName() + " table in memory\n";
+		String expectedOutput = "No '" + sal.getVarName() + "' Table object in memory\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				

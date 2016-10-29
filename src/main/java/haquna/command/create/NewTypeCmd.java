@@ -50,9 +50,11 @@ public class NewTypeCmd implements Command {
 			return;
 		
 		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
+			
 			return;
-		}		
+		}
 	}		
 	
 	public boolean matches(String commandStr) {

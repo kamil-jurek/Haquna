@@ -33,7 +33,7 @@ public class ShowAttributesListCmdTest {
 		
 		String cmd = "NoExistingModel.showAttributesList()";
 		ShowAttributesListCmd sal = (ShowAttributesListCmd) cp.createCommand(cmd);
-		String expectedOutput = "No " + sal.getVarName() + " model in memory\n";
+		String expectedOutput = "No '" + sal.getVarName() + "' XTTModel object in memory\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				

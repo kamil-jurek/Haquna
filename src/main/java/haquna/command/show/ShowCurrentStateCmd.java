@@ -67,7 +67,8 @@ public class ShowCurrentStateCmd implements Command {
 	private void printCurrentState(WorkingMemory wm) {
 		State current = wm.getCurrentState();
 		for(StateElement se : current){
-	    	System.out.println("Attribute " + se.getAttributeName()+" = " + se.getValue());
+			//System.out.format("Attribute: %10s = %10s cf = %4f\n", se.getAttributeName(), se.getValue(), se.getValue().getCertaintyFactor());
+	    	System.out.println("Attribute: " + se.getAttributeName()+"  \t= " + se.getValue() + "  \t cf = " + se.getValue().getCertaintyFactor());
 	    }
 	}
 }

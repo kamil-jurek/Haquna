@@ -1,6 +1,7 @@
 package haquna.command.show;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.RelativeTimestamp;
@@ -47,9 +48,14 @@ public class ShowHistoryValueOfCmd implements Command {
 			System.out.println(attributeName + " at "+ ds +" was: " + val);
 			
 			
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			return;
+		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
+			
 			return;
 		}		
 	}

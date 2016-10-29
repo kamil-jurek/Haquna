@@ -51,9 +51,15 @@ public class XloadCmd implements Command {
 				
 			Haquna.wasSucces = true;
 			
-		} catch(Exception e) {
+		} catch(HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
+			return;
+		
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			
 			return;
 		}	
 	}		

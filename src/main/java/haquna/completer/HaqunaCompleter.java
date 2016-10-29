@@ -87,7 +87,7 @@ public class HaqunaCompleter implements Completer {
         }
         
         if(completer instanceof RunCompleter) {
-        	((RunCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
+        	((RunCompleter) completer).setPrevArg(list.getArguments()[argIndex-1]);
         }
         
         if(completer instanceof ParameterCompleter) {

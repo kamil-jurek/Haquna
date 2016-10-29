@@ -90,7 +90,7 @@ public class RunCompleter implements Completer{
 		}
     }
 	
-	public void setVarName(String varName) {
+	public void setPrevArg(String varName) {
 		this.prevArg = varName;		
 	}
 }

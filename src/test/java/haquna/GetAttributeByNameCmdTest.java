@@ -35,7 +35,7 @@ public class GetAttributeByNameCmdTest {
 		
 		String cmd = "Att_1 = NoExistingModel.getAttributeByName('location')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No " + sal.getModelName() + " model in memory\n";
+		String expectedOutput = "No '" + sal.getModelName() + "' XTTModel object in memory\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				
@@ -50,7 +50,7 @@ public class GetAttributeByNameCmdTest {
 		String cmd = "Att_2 = Model_1.getAttributeByName('always')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = "No attribute with '" + sal.getAttribiuteName() + "' name in '" + sal.getModelName() + "' model\n";
-		
+		                       
 		assertEquals(outContent.toString(), expectedOutput);
 				
 	}
@@ -64,7 +64,7 @@ public class GetAttributeByNameCmdTest {
 		
 		String cmd = "Att_3 = Model_2.getAttributeByName('integer')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name: " + sal.getVarName() + " already in use\n";
+		String expectedOutput = "Variable name '" + sal.getVarName() + "' already in use\n";
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				

@@ -44,6 +44,12 @@ public class GetTypeByIdCmd implements Command {
 			HaqunaUtils.printRed(e.getMessage());
 			
 			return;
+		
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			
+			return;
 		}
 	}		
 	

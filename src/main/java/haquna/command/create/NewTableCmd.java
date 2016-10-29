@@ -52,7 +52,9 @@ public class NewTableCmd implements Command {
 			return;
 		
 		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
+			
 			return;
 		}		
 	}		

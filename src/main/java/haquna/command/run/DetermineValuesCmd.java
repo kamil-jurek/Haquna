@@ -1,29 +1,34 @@
 package haquna.command.run;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.command.Command;
+import haquna.utils.HaqunaUtils;
 import heart.Configuration;
-import heart.State;
-import heart.StateElement;
 import heart.WorkingMemory;
-import heart.exceptions.AttributeNotRegisteredException;
-import heart.exceptions.BuilderException;
-import heart.exceptions.NotInTheDomainException;
 import heart.inference.GoalDrivenInference;
 import heart.inference.InferenceAlgorithm;
 import heart.xtt.XTTModel;
 
 public class DetermineValuesCmd implements Command {		
 	//WorkingMemory = determineValues(Model, Wm, ['tabName1','tabName2'])
-	public static final String pattern = "^[A-Z].*=(\\s*)determineValues[(][A-Z](.*)[,](\\s*)([A-Z](.*)[,])*(\\s*)[\\[](.*)[\\]](\\s*)[)](\\s*)";			// )
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)determineValues[(]" +
+									     Haquna.varName + "(\\s*)[,](\\s*)(.*)" + "[\\[](.*)[\\]](\\s*)" + "(.*)[)](\\s*)";			// )
 														
 		
 	private String commandStr;
 	private String varName;
 	private String modelName;
 	private String[] attrNames;
-	private String wmName;
-	private boolean usingWm;
+	private String wmName = null;
+	private String[] commandParts;
+	
+	private XTTModel model;
+	private Configuration.Builder confBuilder;
+	private WorkingMemory wm;
 	
 	public DetermineValuesCmd() {
 		
@@ -32,43 +37,43 @@ public class DetermineValuesCmd implements Command {
 	public DetermineValuesCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 
-		String[] commandParts = this.commandStr.split("[(|)=|,|']");		
+		commandParts = this.commandStr.split("[(|)=|,|']");		
 		this.varName = commandParts[0];
 		this.modelName = commandParts[2];
-		
-		int tabCount = 0;
-		int attrBegin = 0;
-		if(!commandParts[3].equals("[")) { //  WM in command
-			this.wmName = commandParts[3];
-			tabCount = commandParts.length - 6;
-			attrBegin = 5;
-			this.usingWm = true;
-		
-		} else {
-			tabCount = commandParts.length - 5;
-			attrBegin = 4;
-		}
-				
-		if(tabCount > 0) {
-			this.attrNames = new String[tabCount];
-			for(int i = 0; i < tabCount; i++) {
-				int index = i + attrBegin;
-				this.attrNames[i] = commandParts[index];
-				System.out.println(attrNames[i]);
-			}
-		}						
+								
 	}
 	
 	@Override
 	public void execute() {			
-		if(usingWm) {
-			executeUsingWm();
+		try {						
+			HaqunaUtils.checkVarName(varName);
+			model= HaqunaUtils.getModel(modelName);
+			confBuilder = new Configuration.Builder();
 			
-		} else {
-			executeNoWm();
-		}
+			setupTableNames(commandParts);
+			setupWorkingMemory();
+										
+	    	Configuration cs = confBuilder.build();
+	    	new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(attrNames));
+	    			    								  
+		    if(wmName == null) {
+		    	Haquna.wmMap.put(varName, wm);
+		    }
+		    
+		    Haquna.wasSucces = true;
+			
+		} catch(HaqunaException e) {
+			e.printStackTrace();
+			HaqunaUtils.printRed(e.getMessage());
+			
+			return;
 		
-
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			
+			return;
+		}
 	}		
 	
 	public boolean matches(String commandStr) {
@@ -78,95 +83,57 @@ public class DetermineValuesCmd implements Command {
 	public Command getNewCommand(String cmdStr) {
 		return new DetermineValuesCmd(cmdStr);
 	}
+	
+	private void setupTableNames(String[] commandParts) throws Exception{
+		int tabBegin = 0;
+		int tabEnd = 0;
+		
+		String commandParts2[] = commandParts;
+		
+		List<String> list = new ArrayList<String>();
 
-	private void executeUsingWm() {
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {
-				if(Haquna.wmMap.containsKey(wmName)) {
-					XTTModel model = Haquna.modelMap.get(modelName);				
-					WorkingMemory wm = Haquna.wmMap.get(wmName);		    
-				    Configuration.Builder confBuilder = new Configuration.Builder();
-			 				
-				    //////// WM concept in progress ///////
-				    WorkingMemory newWm = new WorkingMemory();
-				    try {
-						newWm.setCurrentState(wm.getCurrentState(), model, true);
-						confBuilder.setInitialState(wm.getCurrentState());
-					} catch (NotInTheDomainException | AttributeNotRegisteredException e1) {					
-						e1.printStackTrace();
-					}			   				    
-				    //////////////////////////////////////
-				    
-				    try {
-				    	Configuration cs = confBuilder.build();
-				    	new GoalDrivenInference(newWm, model, cs).start(new InferenceAlgorithm.AttributeParameters(attrNames));
-				    		
-				    	System.out.println("Printing current state");
-					  	State current = newWm.getCurrentState(model);
-					    for(StateElement se : current){
-					      	System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
-					    }
-	
-					  	System.out.println("\n\n");
-				    				       
-					  	Haquna.wmMap.put(varName, newWm);
-				     
-				    } catch(UnsupportedOperationException e){
-				    	e.printStackTrace();
-				    } catch(BuilderException e) {
-						e.printStackTrace();
-					}
+	    for(String s : commandParts2) {
+	       if(s != null && s.length() > 0) {
+	          list.add(s);
+	       }
+	    }
+	    commandParts2 = list.toArray(new String[list.size()]);
+		
+		for(int i = 0; i < commandParts2.length; i++) {
+			if(commandParts2[i].equals("[")) {
+				tabBegin = i;
+			}
+			
+			if(commandParts2[i].equals("]")) {
+				tabEnd = i;
+			}
+		}
 				
-				  } else {
-					  System.out.println("No " + wmName + " WorkingMemory object in memory");
-				  }
+		attrNames = new String[tabEnd - (tabBegin+1)];
+		for(int i = tabBegin+1; i < tabEnd; i++) {
+			attrNames[i-(tabBegin+1)] = commandParts2[i];				
+		}
+	}
+	
+	private void setupWorkingMemory() throws HaqunaException {
+		
+		if(commandParts[3].matches(Haquna.varName)) {
+			if(Haquna.wmMap.containsKey(commandParts[3])) {
+				this.wmName = commandParts[3];
+			
 			} else {
-				System.out.println("No " + modelName + " model in memory");
+				  throw new HaqunaException("No " + commandParts[3] + " WorkingMemory object in memory");
 			}
+		}
+		
+		if(wmName == null) {
+			wm = new WorkingMemory();
+			wm.registerAllAttributes(model);
 		
 		} else {
-			System.out.println("Variable name: " + varName + " already in use");
-		}	
-		
-	}		
-	
-	private void executeNoWm() {
-		if(!Haquna.isVarUsed(varName)) {
-			if(Haquna.modelMap.containsKey(modelName)) {			 
-				XTTModel model = Haquna.modelMap.get(modelName);						    
-				Configuration.Builder confBuilder = new Configuration.Builder();
-			 
-				//////// WM concept in progress ///////
-				WorkingMemory newWm = new WorkingMemory();
-				confBuilder.setInitialState(newWm.getCurrentState());
-				/////////////////////////////////////
-				    
-				try {
-					Configuration cs = confBuilder.build();
-					new GoalDrivenInference(newWm, model, cs).start(new InferenceAlgorithm.AttributeParameters(attrNames));
-				    		
-					System.out.println("Printing current state");
-					State current = newWm.getCurrentState(model);
-					for(StateElement se : current){
-						System.out.println("Attribute "+se.getAttributeName()+" = "+se.getValue());
-					}
-	
-					  System.out.println("\n\n");
-				      Haquna.wmMap.put(varName, newWm);
-				     
-				} catch(UnsupportedOperationException e){
-				  	e.printStackTrace();
-				} catch(BuilderException e) {
-					e.printStackTrace();
-				}				
-			 				
-			} else {
-				System.out.println("No " + modelName + " model in memory");
-			}
-		
-		} else {
-			System.out.println("Variable name: " + varName + " already in use");
-		}	
+			wm = HaqunaUtils.getWorkingMemory(wmName);
+			confBuilder.setInitialState(wm.getCurrentState());
+		}
 	}
 }
 	

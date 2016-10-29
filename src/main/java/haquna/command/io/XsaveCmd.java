@@ -1,6 +1,7 @@
 package haquna.command.io;
 
 import haquna.Haquna;
+import haquna.HaqunaException;
 import haquna.XttModelUtils;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -39,9 +40,15 @@ public class XsaveCmd implements Command {
 			
 			Haquna.wasSucces = true;
 			
+		} catch (HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			return;
+		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
+			
 			return;
 		}			
 	}		

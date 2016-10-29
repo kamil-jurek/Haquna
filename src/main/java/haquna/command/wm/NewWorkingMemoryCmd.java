@@ -39,10 +39,16 @@ public class NewWorkingMemoryCmd implements Command {
 				
 			Haquna.wasSucces = true;
 				
-			} catch(HaqunaException e) {
-				HaqunaUtils.printRed(e.getMessage());
+		} catch(HaqunaException e) {
+			HaqunaUtils.printRed(e.getMessage());
 				
-				return;
+			return;
+		
+		} catch (Exception e) {
+			HaqunaUtils.printRed(e.getMessage());
+			e.printStackTrace();
+			
+			return;
 		}
 	}		
 	
@@ -53,29 +59,4 @@ public class NewWorkingMemoryCmd implements Command {
 	public Command getNewCommand(String cmdStr) {
 		return new NewWorkingMemoryCmd(cmdStr);
 	}
-
-	public String getCommandStr() {
-		return commandStr;
-	}
-
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
-	public String getVarName() {
-		return varName;
-	}
-
-	public void setVarName(String varName) {
-		this.varName = varName;
-	}
-
-	public String getModelName() {
-		return modelName;
-	}
-
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-
 }

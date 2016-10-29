@@ -43,12 +43,12 @@ public class AddCmd implements Command {
 						
 			Haquna.wasSucces = true;
 			
-		} catch (HaqunaException e) {
+		} catch (HaqunaException | ModelBuildingException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
 			return;
 		
-		} catch (ModelBuildingException e) {
+		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
