@@ -76,6 +76,14 @@ public class XsaveCmd implements Command {
 	public void setModelPath(String modelPath) {
 		this.modelPath = modelPath;
 	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
 	
 	
 	

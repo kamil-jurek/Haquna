@@ -9,17 +9,22 @@ import org.junit.Test;
 
 import haquna.command.CommandFactory;
 import haquna.command.show.ShowRulesListCmd;
+import haquna.utils.HaqunaUtils;
 
 public class ShowRulesListCmdTest {
 	
-	CommandFactory cp = new CommandFactory();
+	public static CommandFactory cp = new CommandFactory();
+	
+	public static void setup() {
+		HaqunaUtils.clearMemory();
+		cp.createCommand("Model = xload('threat-monitor.hmr')");
+	}
 	
 	@Test
 	public void testShowRulesListCmd() {
-		String cmd;
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		setup();
 		
-		cmd = "Table.showRulesList()";
+		String cmd = "Table.showRulesList()";
 		ShowRulesListCmd sal = (ShowRulesListCmd) cp.createCommand(cmd);
 		System.out.println(sal.getVarName());
 		assertEquals(sal.getVarName(), "Table");
@@ -33,9 +38,13 @@ public class ShowRulesListCmdTest {
 		
 		String cmd = "NoExistingTable.showRulesList()";
 		ShowRulesListCmd sal = (ShowRulesListCmd) cp.createCommand(cmd);
-		String expectedOutput = "No '" + sal.getVarName() + "' Table object in memory\n";
+		String expectedOutput = getErrorStringFormat("No '" + sal.getVarName() + "' Table object in memory");
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				
+	}
+	
+	private String getErrorStringFormat(String str) {
+		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }

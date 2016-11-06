@@ -45,11 +45,12 @@ public class XloadCmdTest {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 						
-		String cmd = "Model2 = xload('threat-monitor2.hmr')";
-		XloadCmd xc = (XloadCmd) cp.createCommand(cmd);
-		String expectedOutput = "File '" + xc.getModelPath() + "' was not found\n";
+		String cmd = "Model1234 = xload('threat-monitor2.hmr')";
+		cp.createCommand(cmd);
+		//XloadCmd xc = (XloadCmd) cp.createCommand(cmd);
+		//String expectedOutput = getErrorStringFormat("File '" + xc.getModelPath() + "' was not found");
 		
-		assertEquals(outContent.toString(), expectedOutput);				
+		assertEquals(Haquna.modelMap.containsKey("Model1234"), false);				
 	}
 	
 	@Test
@@ -61,29 +62,21 @@ public class XloadCmdTest {
 		cp.createCommand(cmd);
 		
 		XloadCmd xc = (XloadCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name '" + xc.getVarName() + "' already in use\n";
+		String expectedOutput = getErrorStringFormat("Variable name '" + xc.getVarName() + "' already in use");
 		
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
-/*	@Test
-	public void testShowTableListCmd() {
-		String cmd;
-		cp.createCommand("M = xload('threat-monitor.hmr')");
-		
-		cmd = "M.showTablesList()";
-		assertTrue(((ShowTablesListCmd)(cp.createCommand(cmd))).getVarName().equals("M"));
-		
-		cmd = "M1.showTablesList()";
-		assertTrue(((ShowTablesListCmd)(cp.createCommand(cmd))).getVarName().equals("M1"));
-	}*/
-	/*@Test
-	public void testException(){	    
-		exception.expect(Exception.class);
-	    //exception.expectMessage("Error parsing the hmr file");
-	    
-	    String cmd = "M=xload('threat-monitor.hmr2')";
+	@Test
+	public void testXloadCmdURL() {						
+		String cmd = "ModelUrl = xload('http://student.agh.edu.pl/~jurek/threat_monitor.hmr')";
 		cp.createCommand(cmd);
-	}*/
-
+		
+		
+		assertEquals(Haquna.modelMap.containsKey("ModelUrl"), true);				
+	}
+		
+	private String getErrorStringFormat(String str) {
+		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
+	}
 }

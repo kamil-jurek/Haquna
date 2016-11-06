@@ -9,64 +9,76 @@ import org.junit.Test;
 
 import haquna.command.CommandFactory;
 import haquna.command.get.GetTableByNameCmd;
+import haquna.utils.HaqunaUtils;
 
 public class GetTableByNameCmdTest {
 	
-	CommandFactory cp = new CommandFactory();
+public static CommandFactory cp = new CommandFactory();
+	
+	public static void setup() {
+		HaqunaUtils.clearMemory();
+		cp.createCommand("Model = xload('threat-monitor.hmr')");
+	}
 	
 	@Test
-	public void testGetTableByNameCmdParse() {
-		String cmd;
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
-		
-		cmd = "Tab = Model.getTableByName('Today')";
-		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
+	public void testGetTableByNameCmd() {
+		setup();
+		String cmdStr = "Tab = Model.getTableByName('Today')";
+		cp.createCommand(cmdStr);
 
-		assertEquals(sal.getVarName(), "Tab");
-		assertEquals(sal.getModelName(), "Model");
-		assertEquals(sal.getTableName(), "Today");
-				
+		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
+		assertEquals(Haquna.tableMap.get("Tab").getName(), "Today");
 	}
 	
 	@Test
 	public void testGetTableByNameCmdNoModel() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		
-		String cmd = "Tab_1 = NoExistingModel.getTableByName('Today')";
+		String cmd = "Tab = NoExistingModel.getTableByName('Today')";
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No '" + sal.getModelName() + "' XTTModel object in memory\n";
-		
-		assertEquals(outContent.toString(), expectedOutput);
+		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
 	@Test
 	public void testGetTableByNameCmdNoName() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		cp.createCommand("Model_1 = xload('threat-monitor.hmr')");
 		
-		String cmd = "Tab_2 = Model_1.getTableByName('Tommorow')";
+		
+		String cmd = "Tab = Model.getTableByName('NotExisting')";
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No table with '" + sal.getTableName() + "' name in '" + sal.getModelName() + "' model\n";
+		String expectedOutput = getErrorStringFormat("No table with '" + sal.getTableName() + "' name in '" + sal.getModelName() + "' model");
 		
-		assertEquals(outContent.toString(), expectedOutput);
-				
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
 	@Test
 	public void testGetTableByNameCmdNoVar() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		cp.createCommand("Model_2 = xload('threat-monitor.hmr')");
-		cp.createCommand("Tab_3 = Model_2.getTableByName('Today')");
 		
-		String cmd = "Tab_3 = Model_2.getTableByName('Today')";
+		cp.createCommand("Tab = Model.getTableByName('Today')");
+		
+		String cmd = "Tab = Model.getTableByName('integer')";
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name '" + sal.getVarName() + "' already in use\n";
+		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(outContent.toString(), expectedOutput);
-				
+		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
+		assertEquals(outContent.toString(), expectedOutput);				
+	}
+	
+	private String getErrorStringFormat(String str) {
+		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }

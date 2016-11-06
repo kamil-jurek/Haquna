@@ -9,64 +9,76 @@ import org.junit.Test;
 
 import haquna.command.CommandFactory;
 import haquna.command.get.GetAttributeByNameCmd;
+import haquna.utils.HaqunaUtils;
 
 public class GetAttributeByNameCmdTest {
 	
-	CommandFactory cp = new CommandFactory();
+	public static CommandFactory cp = new CommandFactory();
+	
+	public static void setup() {
+		HaqunaUtils.clearMemory();
+		cp.createCommand("Model = xload('threat-monitor.hmr')");
+	}
 	
 	@Test
-	public void testGetAttributeByNameCmdParse() {
-		String cmd;
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
-		
-		cmd = "Att = Model.getAttributeByName('location')";
-		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
+	public void testGetAttributeByNameCmd() {
+		setup();
+		String cmdStr = "Att = Model.getAttributeByName('location')";
+		cp.createCommand(cmdStr);
 
-		assertEquals(sal.getVarName(), "Att");
-		assertEquals(sal.getModelName(), "Model");
-		assertEquals(sal.getAttribiuteName(), "location");
-				
+		assertEquals(Haquna.attrMap.containsKey("Att"), true);
+		assertEquals(Haquna.attrMap.get("Att").getAttributeName(), "location");
 	}
 	
 	@Test
 	public void testGetAttributeByNameCmdNoModel() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		
-		String cmd = "Att_1 = NoExistingModel.getAttributeByName('location')";
+		String cmd = "Att = NoExistingModel.getAttributeByName('location')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No '" + sal.getModelName() + "' XTTModel object in memory\n";
-		
-		assertEquals(outContent.toString(), expectedOutput);
+		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
+		assertEquals(Haquna.attrMap.containsKey("Att"), false);
+		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
 	@Test
 	public void testGetAttributeByNameCmdNoName() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		cp.createCommand("Model_1 = xload('threat-monitor.hmr')");
 		
-		String cmd = "Att_2 = Model_1.getAttributeByName('always')";
+		
+		String cmd = "Att = Model.getAttributeByName('always')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "No attribute with '" + sal.getAttribiuteName() + "' name in '" + sal.getModelName() + "' model\n";
-		                       
-		assertEquals(outContent.toString(), expectedOutput);
-				
+		String expectedOutput = getErrorStringFormat("No attribute with '" + sal.getAttribiuteName() + "' name in '" + sal.getModelName() + "' model");
+		
+		assertEquals(Haquna.attrMap.containsKey("Att"), false);
+		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
 	@Test
 	public void testGetAttributeByNameCmdNoVar() {
+		setup();
+		
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
-		cp.createCommand("Model_2 = xload('threat-monitor.hmr')");
-		cp.createCommand("Att_3 = Model_2.getAttributeByName('location')");
 		
-		String cmd = "Att_3 = Model_2.getAttributeByName('integer')";
+		cp.createCommand("Att = Model.getAttributeByName('location')");
+		
+		String cmd = "Att = Model.getAttributeByName('integer')";
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
-		String expectedOutput = "Variable name '" + sal.getVarName() + "' already in use\n";
+		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(outContent.toString(), expectedOutput);
-				
+		assertEquals(Haquna.attrMap.containsKey("Att"), true);
+		assertEquals(outContent.toString(), expectedOutput);				
+	}
+	
+	private String getErrorStringFormat(String str) {
+		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }
