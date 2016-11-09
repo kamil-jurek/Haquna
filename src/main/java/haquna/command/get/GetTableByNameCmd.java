@@ -65,34 +65,18 @@ public class GetTableByNameCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return varName;
-	}
-
-	public void setVarName(String varName) {
-		this.varName = varName;
 	}
 
 	public String getModelName() {
 		return modelName;
 	}
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-
 	public String getTableName() {
 		return tableName;
 	}
 
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
-	
 	private void getTableByName(XTTModel model) throws HaqunaException {
 		LinkedList<Table> tables = model.getTables();		
 		for(Table table : tables){

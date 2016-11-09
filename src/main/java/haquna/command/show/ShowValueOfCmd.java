@@ -59,16 +59,8 @@ public class ShowValueOfCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return wmName;
-	}
-
-	public void setVarName(String varName) {
-		this.wmName = varName;
 	}
 	
 	private void printValue(WorkingMemory wm) {

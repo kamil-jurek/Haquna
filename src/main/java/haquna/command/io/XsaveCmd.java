@@ -65,26 +65,11 @@ public class XsaveCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getModelPath() {
 		return modelPath;
 	}
 
-	public void setModelPath(String modelPath) {
-		this.modelPath = modelPath;
-	}
-
 	public String getModelName() {
 		return modelName;
-	}
-
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-	
-	
-	
+	}	
 }

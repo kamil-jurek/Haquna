@@ -65,32 +65,16 @@ public class GetAttributeByNameCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return varName;
-	}
-
-	public void setVarName(String varName) {
-		this.varName = varName;
 	}
 
 	public String getModelName() {
 		return modelName;
 	}
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-
 	public String getAttribiuteName() {
 		return attributeName;
-	}
-
-	public void setAttribiuteName(String attribiuteName) {
-		this.attributeName = attribiuteName;
 	}
 	
 	private void getAttributeByName(XTTModel model) throws HaqunaException {

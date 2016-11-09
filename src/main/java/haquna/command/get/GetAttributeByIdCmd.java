@@ -61,10 +61,22 @@ public class GetAttributeByIdCmd implements Command {
 		return new GetAttributeByIdCmd(cmdStr);
 	}
 	
+	public String getVarName() {
+		return varName;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public String getAttribiuteId() {
+		return attribiuteId;
+	}
+
 	private void getAttributeById(XTTModel model) throws HaqunaException {
 		LinkedList<Attribute> attribiutes = model.getAttributes();			
 		for(Attribute att : attribiutes) {
-			if(att.getId().equals(attribiuteId)){
+			if(att.getId() != null && att.getId().equals(attribiuteId)){
 				Haquna.attrMap.put(varName, att);
 				return;
 			}	     

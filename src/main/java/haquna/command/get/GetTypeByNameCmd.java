@@ -65,32 +65,16 @@ public class GetTypeByNameCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return varName;
-	}
-
-	public void setVarName(String varName) {
-		this.varName = varName;
 	}
 
 	public String getModelName() {
 		return modelName;
 	}
 
-	public void setModelName(String modelName) {
-		this.modelName = modelName;
-	}
-
 	public String getTypeName() {
 		return typeName;
-	}
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
 	}
 	
 	private void getTypeByName(XTTModel model) throws HaqunaException {

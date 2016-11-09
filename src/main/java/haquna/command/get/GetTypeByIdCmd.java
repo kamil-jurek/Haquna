@@ -60,11 +60,23 @@ public class GetTypeByIdCmd implements Command {
 	public Command getNewCommand(String cmdStr) {
 		return new GetTypeByIdCmd(cmdStr);
 	}
-	
+		
+	public String getVarName() {
+		return varName;
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public String getTypeId() {
+		return typeId;
+	}
+
 	private void getTypeById(XTTModel model) throws HaqunaException {
 		LinkedList<Type> types = model.getTypes();		
 		for(Type type : types){
-			if(type.getId().equals(typeId)){
+			if(type.getId() != null && type.getId().equals(typeId)){
 				Haquna.typeMap.put(varName, type);
 				return;
 			}	     

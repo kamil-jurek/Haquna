@@ -60,15 +60,27 @@ public class GetTableByIdCmd implements Command {
 	public Command getNewCommand(String cmdStr) {
 		return new GetTableByIdCmd(cmdStr);
 	}
+		
+	public String getModelName() {
+		return modelName;
+	}
+
+	public String getTableId() {
+		return tableId;
+	}
 	
+	public String getVarName() {
+		return varName;
+	}
+
 	private void getTableById(XTTModel model) throws HaqunaException {
 		LinkedList<Table> tables = model.getTables();
 		for(Table table : tables){
-			if(table.getId().equals(tableId)){
+			if(table.getId() != null && table.getId().equals(tableId)){
 				Haquna.tableMap.put(varName, table);
 				return;
 			}	     
 		}
 		throw new HaqunaException("No table with '" + tableId + "' id in '" + modelName + "' model");
-	}
+	}	
 }

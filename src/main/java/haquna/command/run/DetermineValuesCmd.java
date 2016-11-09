@@ -16,7 +16,7 @@ import heart.xtt.XTTModel;
 public class DetermineValuesCmd implements Command {		
 	//WorkingMemory = determineValues(Model, Wm, ['tabName1','tabName2'])
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)determineValues[(]" +
-									     Haquna.varName + "(\\s*)[,](\\s*)(.*)" + "[\\[](.*)[\\]](\\s*)" + "(.*)[)](\\s*)";			// )
+									     Haquna.varName + "(\\s*)[,](\\s*)(.*)" + "[\\[](.*)[\\]](\\s*)" + "(.*)[)](\\s*)";
 														
 		
 	private String commandStr;

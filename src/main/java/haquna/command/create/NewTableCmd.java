@@ -71,16 +71,7 @@ public class NewTableCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return varName;
 	}
-
-	public void setVarName(String varName) {
-		this.varName = varName;
-	}
-
 }

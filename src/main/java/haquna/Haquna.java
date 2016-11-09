@@ -128,17 +128,20 @@ public class Haquna {
 			reader.removeCompleter(c);
 		}
 		
+		// Model.showTableList()
 		completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
 		HaqunaCompleter argComp1 = new HaqunaCompleter(new HaqunaDelimiter('.'), completers);
         
+		// Type = Attr.getType()
 		completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());
         HaqunaCompleter argComp2 = new HaqunaCompleter(new HaqunaDelimiter('='), completers);
         
+    	// Attr = Model.getAttributeByName('day')
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new VarNamesCompleter());
@@ -146,12 +149,14 @@ public class Haquna {
         completers.add(new ParameterCompleter());
         HaqunaCompleter argComp3 = new HaqunaCompleter(new HaqunaDelimiter('=', '.','\'','('), completers);
         
+        // Model = xload('file.hmr')
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("xload"));
         completers.add(new FileNameCompleter());
         HaqunaCompleter argComp4 = new HaqunaCompleter(new HaqunaDelimiter('=','(','\''), completers);
         
+        // Wm = new WorkingMemory(Model) 
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new StringsCompleter("new"));
@@ -159,6 +164,7 @@ public class Haquna {
         completers.add(new ParameterCompleter());       
         HaqunaCompleter argComp5 = new HaqunaCompleter(new HaqunaDelimiter('=', '('), completers);
         
+        // Wm.setValueOf('attr')
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
         completers.add(new FunctionNameCompleter());

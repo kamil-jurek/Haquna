@@ -59,16 +59,8 @@ public class ShowRulesListCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return tableName;
-	}
-
-	public void setVarName(String varName) {
-		this.tableName = varName;
 	}
 	
 	private void printRulesList(Table table) {

@@ -76,24 +76,12 @@ public class XloadCmd implements Command {
 		return commandStr;
 	}
 
-	public void setCommandStr(String commandStr) {
-		this.commandStr = commandStr;
-	}
-
 	public String getVarName() {
 		return varName;
 	}
 
-	public void setVarName(String varName) {
-		this.varName = varName;
-	}
-
 	public String getModelPath() {
 		return modelPath;
-	}
-
-	public void setModelPath(String modelPath) {
-		this.modelPath = modelPath;
 	}
 
 	private void setupPath() throws IOException {

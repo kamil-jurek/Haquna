@@ -61,10 +61,22 @@ public class GetRuleByIdCmd implements Command {
 		return new GetRuleByIdCmd(cmdStr);
 	}
 	
+	public String getVarName() {
+		return varName;
+	}
+
+	public String getRuleId() {
+		return ruleId;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
 	private void getRuleById(Table table) throws HaqunaException {
 		LinkedList<Rule> rules = table.getRules();		
 		for(Rule rule : rules) {
-			if(rule.getId().equals(ruleId)) {
+			if(rule.getId() != null && rule.getId().equals(ruleId)) {
 				Haquna.ruleMap.put(varName, rule);
 				return;
 			}

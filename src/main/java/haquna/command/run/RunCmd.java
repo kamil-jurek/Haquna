@@ -22,6 +22,7 @@ public class RunCmd implements Command {
 	// run(Model, Wm, mode=gdi, ['tab1', 'tab2'])
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + "run[(]" + "(\\s*)" +
 											   Haquna.varName + "(\\s*)" + 	// Model
+											   "([\\[]([']" + Haquna.varName + "['][,]?)+[\\]])?" + // tables names
 																"(.*)[)](\\s*)";
 		
 	private String commandStr;
@@ -62,7 +63,6 @@ public class RunCmd implements Command {
 			
 			setupNotMandatoryArgs(commandParts);
 			setupTableNames(commandParts);
-			System.out.println("DSfsdfsd");
 			setupWorkingMemory();
 			setupToken();
 			setupUncertainty();
@@ -212,8 +212,8 @@ public class RunCmd implements Command {
 	}
 	
 	private void setupNotMandatoryArgs(String[] commandParts) throws Exception{
-		System.out.println(commandParts[3]);
-		if(commandParts[3].matches(Haquna.varName)) {
+		
+		if(commandParts.length >= 3 && commandParts[3].matches(Haquna.varName)) {
 			if(Haquna.wmMap.containsKey(commandParts[3])) {
 				this.wmName = commandParts[3];
 			
