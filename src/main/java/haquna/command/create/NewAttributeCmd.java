@@ -40,7 +40,7 @@ public class NewAttributeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Attribute.Builder attrBuilder = parser.getAttributeBuilder();
 			
-	        Haquna.attrBuMap.put(varName, attrBuilder);
+	        Haquna.attrBuilderMap.put(varName, attrBuilder);
 			
 			Haquna.wasSucces = true;
 			

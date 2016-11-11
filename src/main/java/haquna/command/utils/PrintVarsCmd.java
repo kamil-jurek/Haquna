@@ -1,4 +1,4 @@
-package haquna.command.show;
+package haquna.command.utils;
 
 import haquna.Haquna;
 import haquna.command.Command;
@@ -43,23 +43,23 @@ public class PrintVarsCmd implements Command {
 		}
 		
 		System.out.println("=== TYPES BUILDERS ===");
-		for(String var : Haquna.typeBuMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.typeBuMap.get(var).getName());
+		for(String var : Haquna.typeBuilderMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.typeBuilderMap.get(var).getName());
 		}
 		
 		System.out.println("=== ATTRIBUTES BUILDERS ===");
-		for(String var : Haquna.attrBuMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.attrBuMap.get(var).getName());
+		for(String var : Haquna.attrBuilderMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.attrBuilderMap.get(var).getName());
 		}
 		
 		System.out.println("=== TABLES BUILDERS ===");
-		for(String var : Haquna.tableBuMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.tableBuMap.get(var).getName());
+		for(String var : Haquna.tableBuilderMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.tableBuilderMap.get(var).getName());
 		}
 		
 		System.out.println("=== RULES BUILDERS ===");
-		for(String var : Haquna.ruleBuMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.ruleBuMap.get(var));
+		for(String var : Haquna.ruleBuilderMap.keySet()) {
+			System.out.println("\t" + var + " = " + Haquna.ruleBuilderMap.get(var));
 		}
 		
 		System.out.println("=== WORKING MEMORY ===");

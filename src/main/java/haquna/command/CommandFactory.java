@@ -30,7 +30,10 @@ import haquna.command.show.ShowRulesListCmd;
 import haquna.command.show.ShowTablesListCmd;
 import haquna.command.show.ShowTypesListCmd;
 import haquna.command.show.ShowValueOfCmd;
-import haquna.command.show.PrintVarsCmd;
+import haquna.command.utils.ClearMemoryCmd;
+import haquna.command.utils.LsCmd;
+import haquna.command.utils.PrintVarsCmd;
+import haquna.command.utils.PwdCmd;
 import haquna.command.wm.NewWorkingMemoryCmd;
 import haquna.command.wm.SetValueOfCmd;
 
@@ -89,6 +92,9 @@ public class CommandFactory {
 			
 			// utils
 			add(new PrintVarsCmd());
+			add(new PwdCmd());
+			add(new LsCmd());
+			add(new ClearMemoryCmd());
 			
 		}
 	};

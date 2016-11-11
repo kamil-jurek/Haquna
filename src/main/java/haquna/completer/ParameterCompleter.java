@@ -124,16 +124,16 @@ private final SortedSet<String> strings = new TreeSet<String>();
 				for(String r : Haquna.ruleMap.keySet()) {
 					strings.add(r);					
 				}
-				for(String a : Haquna.attrBuMap.keySet()) {
+				for(String a : Haquna.attrBuilderMap.keySet()) {
 					strings.add(a);
 				}
-				for(String t : Haquna.tableBuMap.keySet()) {
+				for(String t : Haquna.tableBuilderMap.keySet()) {
 					strings.add(t);
 				}	
-				for(String t : Haquna.typeBuMap.keySet()) {
+				for(String t : Haquna.typeBuilderMap.keySet()) {
 					strings.add(t);
 				}
-				for(String r : Haquna.ruleBuMap.keySet()) {
+				for(String r : Haquna.ruleBuilderMap.keySet()) {
 					strings.add(r);					
 				}
 			}

@@ -28,7 +28,7 @@ public class NewTableCmdTest {
 		cp.createCommand("Rul =new Rule(xrule 'Recommendations'/1:[weather in [sunny,cloudy],user_profile sim [eating],activity eq any]==>[poi set outdor_eating].)");
 		cp.createCommand("printVars()");
 				
-		assertEquals(Haquna.tableBuMap.containsKey("Tab"), true);
+		assertEquals(Haquna.tableBuilderMap.containsKey("Tab"), true);
 		System.out.println("=======================================");			
 	}	
 

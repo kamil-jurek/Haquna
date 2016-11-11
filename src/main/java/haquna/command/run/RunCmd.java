@@ -22,6 +22,8 @@ public class RunCmd implements Command {
 	// run(Model, Wm, mode=gdi, ['tab1', 'tab2'])
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + "run[(]" + "(\\s*)" +
 											   Haquna.varName + "(\\s*)" + 	// Model
+											   "(" + Haquna.varName + ")?" + // WorkingMemory
+											   //"([mode=[ddi|gdi|foi])?" +
 											   "([\\[]([']" + Haquna.varName + "['][,]?)+[\\]])?" + // tables names
 																"(.*)[)](\\s*)";
 		
@@ -56,8 +58,7 @@ public class RunCmd implements Command {
 	
 	@Override
 	public void execute() {		
-		try {						
-			HaqunaUtils.checkVarName(varName);
+		try {									
 			model = HaqunaUtils.getModel(modelName);
 			confBuilder = new Configuration.Builder();
 			
@@ -123,6 +124,7 @@ public class RunCmd implements Command {
 		if(wmName == null) {
 			wm = new WorkingMemory();
 			wm.registerAllAttributes(model);
+			HaqunaUtils.checkVarName(varName);
 		
 		} else {
 			wm = HaqunaUtils.getWorkingMemory(wmName);

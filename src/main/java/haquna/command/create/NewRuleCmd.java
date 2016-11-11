@@ -42,7 +42,7 @@ public class NewRuleCmd implements Command {
 	        parser.parse(hmr_code);
 	        Rule.Builder ruleBuilder = parser.getRuleBuilder();
 			
-	        Haquna.ruleBuMap.put(varName, ruleBuilder);
+	        Haquna.ruleBuilderMap.put(varName, ruleBuilder);
 
 			Haquna.wasSucces = true;
 			

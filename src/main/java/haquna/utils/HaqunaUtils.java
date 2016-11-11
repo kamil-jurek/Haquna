@@ -50,7 +50,7 @@ public class HaqunaUtils {
 		}
 	}
 	
-	public static void printGreeen(String line) {
+	public static void printGreen(String line) {
 		System.out.println("\u001B[32m======>" + line + "\"\u001B[0m");
 	}
 	
@@ -66,9 +66,9 @@ public class HaqunaUtils {
 		Haquna.ruleMap.clear();
 		Haquna.typeMap.clear();
 		Haquna.callbackMap.clear();
-		Haquna.attrBuMap.clear();
-		Haquna.tableBuMap.clear();
-		Haquna.ruleBuMap.clear();
-		Haquna.typeBuMap.clear();
+		Haquna.attrBuilderMap.clear();
+		Haquna.tableBuilderMap.clear();
+		Haquna.ruleBuilderMap.clear();
+		Haquna.typeBuilderMap.clear();
 	}
 }

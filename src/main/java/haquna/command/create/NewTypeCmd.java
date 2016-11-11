@@ -40,7 +40,7 @@ public class NewTypeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Type.Builder typeBuilder = parser.getTypeBuilder();
 			
-	        Haquna.typeBuMap.put(varName, typeBuilder);
+	        Haquna.typeBuilderMap.put(varName, typeBuilder);
 			
 			Haquna.wasSucces = true;
 			

@@ -42,7 +42,7 @@ public class NewTableCmd implements Command {
 	        parser.parse(hmr_code);
 	        Table.Builder typeBuilder = parser.getTableBuilder();
 			
-	        Haquna.tableBuMap.put(varName, typeBuilder);
+	        Haquna.tableBuilderMap.put(varName, typeBuilder);
 			
 			Haquna.wasSucces = true;
 			

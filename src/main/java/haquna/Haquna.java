@@ -2,10 +2,6 @@ package haquna;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +14,7 @@ import haquna.completer.HaqunaCompleter;
 import haquna.completer.ParameterCompleter;
 import haquna.completer.RunCompleter;
 import haquna.completer.VarNamesCompleter;
+import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
@@ -46,10 +43,10 @@ public class Haquna {
 	public static Map<String, String> callbackMap = new HashMap<String, String>();
 	public static Map<String, WorkingMemory> wmMap = new HashMap<String, WorkingMemory>();
 	
-	public static Map<String, Type.Builder> typeBuMap = new HashMap<String, Type.Builder>();
-	public static Map<String, Attribute.Builder> attrBuMap = new HashMap<String, Attribute.Builder>();
-	public static Map<String, Table.Builder> tableBuMap = new HashMap<String, Table.Builder>();
-	public static Map<String, Rule.Builder> ruleBuMap = new HashMap<String, Rule.Builder>();
+	public static Map<String, Type.Builder> typeBuilderMap = new HashMap<String, Type.Builder>();
+	public static Map<String, Attribute.Builder> attrBuilderMap = new HashMap<String, Attribute.Builder>();
+	public static Map<String, Table.Builder> tableBuilderMap = new HashMap<String, Table.Builder>();
+	public static Map<String, Rule.Builder> ruleBuilderMap = new HashMap<String, Rule.Builder>();
 	
 	public static List<Completer> completers = new LinkedList<Completer>();
 	
@@ -65,30 +62,17 @@ public class Haquna {
             
             setupCompleter(reader);
             
-            while ((line = reader.readLine()) != null) {
-            	           	                            
+            while ((line = reader.readLine()) != null) {          	           	                            
                 cmdFactory.createCommand(line);
                 
                 if(wasSucces) {
-                	paintItGreeen(line);
-                
+                	HaqunaUtils.printGreen(line);               
                 } else {
-                	paintItRed(line);
+                	HaqunaUtils.printRed(line);
                 }
                 wasSucces = false;
                 out.flush();
-                
-                if(line.equalsIgnoreCase("pwd")) {
-            		out.println("Working directory: " + System.getProperty("user.dir"));
-            	}          	
-            	if(line.equals("ls")) {
-            		Path dir = Paths.get(System.getProperty("user.dir"));
-            		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*")) {
-            			for(Path file : stream) {
-            				out.println(file.getFileName());
-            			}
-            		}
-            	}
+                               
                 if (line.equalsIgnoreCase("quit") || line.equalsIgnoreCase("exit")) {
                     break;
                 }
@@ -111,10 +95,10 @@ public class Haquna {
 		   ruleMap.containsKey(varName) ||
 		   callbackMap.containsKey(varName) ||
 		   wmMap.containsKey(varName) ||
-		   tableBuMap.containsKey(varName) ||
-		   attrBuMap.containsKey(varName) || 
-		   typeBuMap.containsKey(varName) ||
-		   ruleBuMap.containsKey(varName)) {
+		   tableBuilderMap.containsKey(varName) ||
+		   attrBuilderMap.containsKey(varName) || 
+		   typeBuilderMap.containsKey(varName) ||
+		   ruleBuilderMap.containsKey(varName)) {
 			
 			return true;
 		
@@ -185,7 +169,7 @@ public class Haquna {
         HaqunaCompleter argComp7 = new HaqunaCompleter(new HaqunaDelimiter(',','=','[',']','.', '(','\''), completers);
         
         completers = new LinkedList<Completer>();
-        completers.add(new StringsCompleter("ls", "pwd", "printVars()", "cls"));
+        completers.add(new StringsCompleter("ls", "pwd", "printVars()", "cls", "clearMemory()"));
         HaqunaCompleter argComp8 = new HaqunaCompleter(new HaqunaDelimiter(','), completers);
 		
         argComp1.setStrict(true);
@@ -206,14 +190,6 @@ public class Haquna {
         								argComp8);
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
-	}
-	
-	public static void paintItGreeen(String line) {
-		System.out.println("\u001B[32m======>" + line + "\"\u001B[0m");
-	}
-	
-	public static void paintItRed(String line) {
-		System.out.println("\u001B[31m======>" + line + "\"\u001B[0m");
 	}
 }
 	
