@@ -21,11 +21,11 @@ import heart.xtt.XTTModel;
 public class RunCmd implements Command {		
 	// run(Model, Wm, mode=gdi, ['tab1', 'tab2'])
 	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + "run[(]" + "(\\s*)" +
-											   Haquna.varName + "(\\s*)" + 	// Model
-											   "(" + Haquna.varName + ")?" + // WorkingMemory
-											   //"([mode=[ddi|gdi|foi])?" +
-											   "([\\[]([']" + Haquna.varName + "['][,]?)+[\\]])?" + // tables names
-																"(.*)[)](\\s*)";
+											   Haquna.varName + "(\\s*)[,]?(\\s*)" + 	// Model
+											   "(" + Haquna.varName + ")?(\\s*)[,]?(\\s*)" + // WorkingMemory
+											   "(((mode=((ddi)|(gdi)|(foi)))|(token=((true)|(false)))|(uncertainty=((true)|(false)))|(conflict_strategy=((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
+											   "([\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
+											   "[)](\\s*)";
 		
 	private String commandStr;
 	private String varName;

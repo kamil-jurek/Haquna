@@ -45,8 +45,7 @@ public class DetermineValuesCmd implements Command {
 	
 	@Override
 	public void execute() {			
-		try {						
-			HaqunaUtils.checkVarName(varName);
+		try {									
 			model= HaqunaUtils.getModel(modelName);
 			confBuilder = new Configuration.Builder();
 			
@@ -122,11 +121,12 @@ public class DetermineValuesCmd implements Command {
 				this.wmName = commandParts[3];
 			
 			} else {
-				  throw new HaqunaException("No " + commandParts[3] + " WorkingMemory object in memory");
+				  throw new HaqunaException("No '" + commandParts[3] + "' WorkingMemory object in memory");
 			}
 		}
 		
 		if(wmName == null) {
+			HaqunaUtils.checkVarName(varName);
 			wm = new WorkingMemory();
 			wm.registerAllAttributes(model);
 		
