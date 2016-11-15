@@ -17,26 +17,24 @@ import heart.parser.hmr.HMRParser;
 import heart.parser.hmr.runtime.SourceFile;
 import heart.xtt.XTTModel;
 
-public class XloadCmd implements Command {		
+public class NewModelCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)xload[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)new(\\s*)Model[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
 	private String modelPath;
 	private String path;
 	
-	public XloadCmd() {
+	public NewModelCmd() {
 		
 	}
 	
- 	public XloadCmd(String _commandStr) {
+ 	public NewModelCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
-		
-		String[] commandParts = this.commandStr.split("=xload");		
+		String[] commandParts = this.commandStr.split("[(|)|=]");		
 		this.varName = commandParts[0];		
-		this.modelPath = commandParts[1].substring(2, commandParts[1].length()-2);
-				
+		this.modelPath = commandParts[2].substring(1, commandParts[2].length()-1);;		
 	}
 	
 	@Override
@@ -69,7 +67,7 @@ public class XloadCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new XloadCmd(cmdStr);
+		return new NewModelCmd(cmdStr);
 	}
 	
 	public String getCommandStr() {

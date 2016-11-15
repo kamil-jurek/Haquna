@@ -13,7 +13,7 @@ public static CommandFactory cp = new CommandFactory();
 
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		cp.createCommand("Model = new Model('threat-monitor.hmr')");
 		cp.createCommand("Wm = new WorkingMemory(Model)");
 		cp.createCommand("Wm.setValueOf('hour','16')");
 		cp.createCommand("Wm.setValueOf('location','work')");

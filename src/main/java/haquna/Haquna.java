@@ -136,7 +136,8 @@ public class Haquna {
         // Model = xload('file.hmr')
         completers = new LinkedList<Completer>();
         completers.add(new VarNamesCompleter());
-        completers.add(new StringsCompleter("xload"));
+        completers.add(new StringsCompleter("new"));
+        completers.add(new FunctionNameCompleter());
         completers.add(new FileNameCompleter());
         HaqunaCompleter argComp4 = new HaqunaCompleter(new HaqunaDelimiter('=','(','\''), completers);
         

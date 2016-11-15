@@ -15,7 +15,7 @@ public class RemoveCmdTest {
 
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		cp.createCommand("Model = new Model('threat-monitor.hmr')");
 
 	}
 		
@@ -92,7 +92,7 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedType() {		
 		setup();				
 		
-		cp.createCommand("PoiModel = xload('/home/kamil/Pulpit/poi-recommender.hmr')");
+		cp.createCommand("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
 		cp.createCommand("DayType = Model.getTypeByName('day_type')");
 		
 		cp.createCommand("NewPoiModel = PoiModel.add(DayType)");
@@ -108,7 +108,7 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedAttr() {		
 		setup();				
 		
-		cp.createCommand("PoiModel = xload('/home/kamil/Pulpit/poi-recommender.hmr')");
+		cp.createCommand("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
 		cp.createCommand("DayType = Model.getTypeByName('day_type')");
 		cp.createCommand("Attr = Model.getAttributeByName('day')");
 		

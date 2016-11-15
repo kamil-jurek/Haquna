@@ -18,10 +18,10 @@ import haquna.command.get.GetTableByNameCmd;
 import haquna.command.get.GetTypeByIdCmd;
 import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
-import haquna.command.io.XloadCmd;
+import haquna.command.io.NewModelCmd;
 import haquna.command.io.XsaveCmd;
 import haquna.command.run.DetermineValuesCmd;
-import haquna.command.run.RunCmd;
+//import haquna.command.run.RunCmd;
 import haquna.command.run.RunWithWmCmd;
 import haquna.command.run.RunWithoutWmCmd;
 import haquna.command.show.ShowAttributesListCmd;
@@ -45,7 +45,7 @@ public class CommandFactory {
 	public static LinkedList<Command> commandTypes = new LinkedList<Command>() {
 		{	
 			// IO methods
-			add(new XloadCmd());
+			add(new NewModelCmd());
 			add(new XsaveCmd());
 			
 			// Common methods
@@ -74,7 +74,7 @@ public class CommandFactory {
 			add(new GetCallbackCmd());
 			
 			// Running inference methods
-			add(new RunCmd());
+			//add(new RunCmd());
 			add(new RunWithWmCmd());
 			add(new RunWithoutWmCmd());
 			add(new DetermineValuesCmd());

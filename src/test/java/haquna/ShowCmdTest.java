@@ -12,7 +12,7 @@ public class ShowCmdTest {
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		cp.createCommand("Model = new Model('threat-monitor.hmr')");
 		cp.createCommand("Attr = Model.getAttributeByName('day')");
 		cp.createCommand("Type = Model.getTypeByName('day_type')");
 		cp.createCommand("Table = Model.getTableByName('Threats')");

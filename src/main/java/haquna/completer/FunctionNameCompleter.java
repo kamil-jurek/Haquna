@@ -84,6 +84,8 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("getTypeById");
 			strings.add("add");
 			strings.add("remove");
+			strings.add("xsave");
+			strings.add("run");
 		}
 		
 		if(varName != null && varName.equals("new")){
@@ -92,6 +94,7 @@ public class FunctionNameCompleter implements Completer{
 			strings.add("Attribute");
 			strings.add("Table");
 			strings.add("Rule");
+			strings.add("Model");
 			
 		} 
     }

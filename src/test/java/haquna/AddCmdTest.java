@@ -12,14 +12,14 @@ public static CommandFactory cp = new CommandFactory();
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
-		cp.createCommand("Model_bis = xload('threat-monitor.hmr')");
+		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		cp.createCommand("Model_bis = new Model('threat-monitor.hmr')");
 		cp.createCommand("Typ = new Type('xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]]')");
 		cp.createCommand("Att = new Attribute('xattr [name: weather,abbrev: weat1,class: simple,type: weather_type,comm: inter].')");
 		cp.createCommand("Tab = new Table('xschm 'Recommendations': [weather] ==> [day].')");
 		cp.createCommand("Rul= new Rule('xrule 'Recommendations'/1: [weather in [sunny,cloudy]]==>[day set [sun]].')");
 		
-		cp.createCommand("M0 = xload('poi-recommender.hmr ')");
+		cp.createCommand("M0 = new Model('poi-recommender.hmr ')");
 		cp.createCommand("TypObj = Model.getTypeByName('day_type')");
 		cp.createCommand("TypObj_today = Model.getTypeByName('today_type')");
 		cp.createCommand("AttrObj_day = Model.getAttributeByName('day')");

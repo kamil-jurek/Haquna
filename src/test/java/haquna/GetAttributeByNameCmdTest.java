@@ -17,7 +17,7 @@ public class GetAttributeByNameCmdTest {
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = xload('threat-monitor.hmr')");
+		cp.createCommand("Model = new Model('threat-monitor.hmr')");
 	}
 	
 	@Test
