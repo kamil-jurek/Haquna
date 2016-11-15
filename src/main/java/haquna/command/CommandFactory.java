@@ -22,6 +22,8 @@ import haquna.command.io.XloadCmd;
 import haquna.command.io.XsaveCmd;
 import haquna.command.run.DetermineValuesCmd;
 import haquna.command.run.RunCmd;
+import haquna.command.run.RunWithWmCmd;
+import haquna.command.run.RunWithoutWmCmd;
 import haquna.command.show.ShowAttributesListCmd;
 import haquna.command.show.ShowCmd;
 import haquna.command.show.ShowCurrentStateCmd;
@@ -73,7 +75,8 @@ public class CommandFactory {
 			
 			// Running inference methods
 			add(new RunCmd());
-			add(new RunCmd());
+			add(new RunWithWmCmd());
+			add(new RunWithoutWmCmd());
 			add(new DetermineValuesCmd());
 						
 			// Working memory methods

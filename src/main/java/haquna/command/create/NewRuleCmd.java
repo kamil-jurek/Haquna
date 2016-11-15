@@ -11,7 +11,7 @@ import heart.xtt.Rule;
 
 public class NewRuleCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -22,13 +22,21 @@ public class NewRuleCmd implements Command {
 	}
 	
 	public NewRuleCmd(String _commandStr) {
-		this.commandStr = _commandStr.replaceFirst("(\\s*)", "");
+		this.commandStr = _commandStr.replaceFirst(" ", "");
 		this.commandStr = commandStr.replace("==", "--");
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
 		this.varName = commandParts[0];		
 		this.hmrCode = commandParts[2];
 		this.hmrCode = hmrCode.replace("--", "==");
+		this.hmrCode = hmrCode.substring(1, hmrCode.length()-1);
+		
+		if(!hmrCode.substring(hmrCode.length()-1).equals(".")) {
+			hmrCode += ".";
+		}
+		
+		System.out.println("'" + varName + "'");
+		System.out.println("HMR Code: " + hmrCode);
 	}
 	
 	@Override

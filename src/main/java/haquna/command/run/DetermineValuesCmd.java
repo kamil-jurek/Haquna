@@ -62,7 +62,7 @@ public class DetermineValuesCmd implements Command {
 		    Haquna.wasSucces = true;
 			
 		} catch(HaqunaException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			HaqunaUtils.printRed(e.getMessage());
 			
 			return;

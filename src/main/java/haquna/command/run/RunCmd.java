@@ -215,13 +215,12 @@ public class RunCmd implements Command {
 	
 	private void setupNotMandatoryArgs(String[] commandParts) throws Exception{
 		
-		if(commandParts.length >= 3 && commandParts[3].matches(Haquna.varName)) {
-			if(Haquna.wmMap.containsKey(commandParts[3])) {
+		if(commandParts.length >= 3 && Haquna.wmMap.containsKey(commandParts[3])) {
 				this.wmName = commandParts[3];
 			
-			} else {
-				  throw new HaqunaException("No " + commandParts[3] + " WorkingMemory object in memory");
-			}
+		} else {
+			  //throw new HaqunaException("No '" + commandParts[3] + "' WorkingMemory object in memory");
+			
 		}
 						
 		for(int i = 0; i < commandParts.length-1; i++) {

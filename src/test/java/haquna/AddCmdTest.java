@@ -14,10 +14,10 @@ public static CommandFactory cp = new CommandFactory();
 		HaqunaUtils.clearMemory();
 		cp.createCommand("Model = xload('threat-monitor.hmr')");
 		cp.createCommand("Model_bis = xload('threat-monitor.hmr')");
-		cp.createCommand("Typ = new Type(xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]].)");
-		cp.createCommand("Att = new Attribute(xattr [name: weather,abbrev: weat1,class: simple,type: weather_type,comm: inter].)");
-		cp.createCommand("Tab = new Table(xschm 'Recommendations': [weather] ==> [day].)");
-		cp.createCommand("Rul= new Rule(xrule 'Recommendations'/1: [weather in [sunny,cloudy]]==>[day set [sun]].)");
+		cp.createCommand("Typ = new Type('xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]]')");
+		cp.createCommand("Att = new Attribute('xattr [name: weather,abbrev: weat1,class: simple,type: weather_type,comm: inter].')");
+		cp.createCommand("Tab = new Table('xschm 'Recommendations': [weather] ==> [day].')");
+		cp.createCommand("Rul= new Rule('xrule 'Recommendations'/1: [weather in [sunny,cloudy]]==>[day set [sun]].')");
 		
 		cp.createCommand("M0 = xload('poi-recommender.hmr ')");
 		cp.createCommand("TypObj = Model.getTypeByName('day_type')");

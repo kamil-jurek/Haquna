@@ -11,7 +11,7 @@ import heart.xtt.Table;
 
 public class NewTableCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Table[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Table[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -29,6 +29,11 @@ public class NewTableCmd implements Command {
 		this.varName = commandParts[0];		
 		this.hmrCode = commandParts[2];
 		this.hmrCode = hmrCode.replace("--", "==");
+		this.hmrCode = hmrCode.substring(1, hmrCode.length()-1);
+		
+		if(!hmrCode.substring(hmrCode.length()-1).equals(".")) {
+			hmrCode += ".";
+		}
 	}
 	
 	@Override

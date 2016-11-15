@@ -11,7 +11,7 @@ import heart.xtt.Type;
 
 public class NewTypeCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(](.*)[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -26,7 +26,11 @@ public class NewTypeCmd implements Command {
 		
 		String[] commandParts = this.commandStr.split("[=|(|)]");		
 		this.varName = commandParts[0];		
-		this.hmrCode = commandParts[2];
+		this.hmrCode = commandParts[2].substring(1, commandParts[2].length()-1);
+		
+		if(!hmrCode.substring(hmrCode.length()-1).equals(".")) {
+			hmrCode += ".";
+		}
 	}
 	
 	@Override
