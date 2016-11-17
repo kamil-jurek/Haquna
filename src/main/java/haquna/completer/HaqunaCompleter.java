@@ -76,13 +76,17 @@ public class HaqunaCompleter implements Completer {
         else {
             completer = completers.get(argIndex);
         }
-        int h = 0;
-        
+       
+       /* int h = 0;       
         if(completers.size() > 2) {
         	h = 1;
-        }
+        }*/
         
-        if(completer instanceof FunctionNameCompleter) {
+        if(completer instanceof CompleterAbstract) {
+        	((CompleterAbstract) completer).setContext(list.getArguments(), argIndex);
+        }
+        /*if(completer instanceof FunctionNameCompleter) {
+        	
         	((FunctionNameCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
         }
         
@@ -93,10 +97,12 @@ public class HaqunaCompleter implements Completer {
         if(completer instanceof ParameterCompleter) {
         	((ParameterCompleter) completer).setVarName(list.getArguments()[argIndex-2]);
         	((ParameterCompleter) completer).setFunctionName(list.getArguments()[argIndex-1]);
-        }
+        }*/
+        
+        
         
         // ensure that all the previous completers are successful before allowing this completer to pass (only if strict).
-        for (int i = h; isStrict() && (i < argIndex); i++) {
+        for (int i = 0; isStrict() && (i < argIndex); i++) {
             Completer sub = completers.get(i >= completers.size() ? (completers.size() - 1) : i);
             String[] args = list.getArguments();
             String arg = (args == null || i >= args.length) ? "" : args[i];
@@ -107,7 +113,7 @@ public class HaqunaCompleter implements Completer {
                 return -1;
             }
 
-            if (!subCandidates.contains(arg)) {
+            if (!subCandidates.contains(arg) && !(sub instanceof UniversalCompleter)) {
                 return -1;
             }
         }
@@ -143,12 +149,7 @@ public class HaqunaCompleter implements Completer {
         return pos;
     }
 
-    /**
-     * The {@link HaqunaCompleter.ArgumentDelimiter} allows custom breaking up of a {@link String} into individual
-     * arguments in order to dispatch the arguments to the nested {@link Completer}.
-     *
-     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
-     */
+
     public static interface ArgumentDelimiter
     {
         /**
@@ -170,12 +171,6 @@ public class HaqunaCompleter implements Completer {
         boolean isDelimiter(CharSequence buffer, int pos);
     }
 
-    /**
-     * Abstract implementation of a delimiter that uses the {@link #isDelimiter} method to determine if a particular
-     * character should be used as a delimiter.
-     *
-     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
-     */
     public abstract static class AbstractArgumentDelimiter
         implements ArgumentDelimiter
     {
@@ -322,20 +317,9 @@ public class HaqunaCompleter implements Completer {
             return isEscapeChar(buffer, pos - 1);
         }
 
-        /**
-         * Returns true if the character at the specified position if a delimiter. This method will only be called if
-         * the character is not enclosed in any of the {@link #getQuoteChars}, and is not escaped by ant of the
-         * {@link #getEscapeChars}. To perform escaping manually, override {@link #isDelimiter} instead.
-         */
         public abstract boolean isDelimiterChar(CharSequence buffer, int pos);
     }
 
-    /**
-     * {@link HaqunaCompleter.ArgumentDelimiter} implementation that counts all whitespace (as reported by
-     * {@link Character#isWhitespace}) as being a delimiter.
-     *
-     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
-     */
     public static class WhitespaceArgumentDelimiter
         extends AbstractArgumentDelimiter
     {
@@ -349,11 +333,6 @@ public class HaqunaCompleter implements Completer {
         }
     }
 
-    /**
-     * The result of a delimited buffer.
-     *
-     * @author <a href="mailto:mwp1@cornell.edu">Marc Prud'hommeaux</a>
-     */
     public static class ArgumentList
     {
         private String[] arguments;
