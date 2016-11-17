@@ -46,6 +46,8 @@ public class Haquna {
 	public static List<Completer> completers = new LinkedList<Completer>();
 	public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
+	
+	
 	public static void main(String[] args) throws IOException {
 		try {
             MyLogger.setup();
@@ -56,6 +58,13 @@ public class Haquna {
             throw new RuntimeException("Problems with creating the log files");
 	    }
 		
+		List<String> scriptCmds = null;
+		if(args.length == 1 && args[0].matches("^.*[.]hqn$")) {
+			HaqunaScript hs = new HaqunaScript(args[0]);
+			scriptCmds = hs.getScriptCommands(); 
+		}
+		
+		
 		try {
             ConsoleReader reader = new ConsoleReader();
             reader.setPrompt("\u001B[35;1m" + "HaQuNa> " + "\u001B[0m");
@@ -64,10 +73,21 @@ public class Haquna {
             PrintWriter out = new PrintWriter(reader.getOutput());
             	
             CommandFactory cmdFactory = new CommandFactory();
-            
-            
             new CompleterMenager().setupCompleter(reader);
             
+            if(scriptCmds != null) {
+	            for(String cmd : scriptCmds) {
+	            	cmdFactory.createCommand(cmd);
+	            	if(wasSucces) {
+	                	HaqunaUtils.printGreen(cmd);               
+	                } else {
+	                	HaqunaUtils.printRed(cmd);
+	                }
+	                wasSucces = false;
+	                out.flush();	                               	            	
+	            }
+            }
+            reader.setBellEnabled(true);
             while ((line = reader.readLine()) != null) {          	           	                            
                 cmdFactory.createCommand(line);
                 
@@ -75,6 +95,7 @@ public class Haquna {
                 	HaqunaUtils.printGreen(line);               
                 } else {
                 	HaqunaUtils.printRed(line);
+                	reader.beep();
                 }
                 wasSucces = false;
                 out.flush();
@@ -111,6 +132,10 @@ public class Haquna {
 		} else {
 			return false;
 		}		
+	}
+	
+	public static void log(String sourceClass, String sourceMethod, String msg) {
+		Haquna.LOGGER.info(sourceClass + "\t" + sourceMethod + "\t" + msg);
 	}
 }
 	

@@ -12,8 +12,8 @@ public class RunCompleter2 extends CompleterAbstract {
 	protected void setupStringCandidates() {
 		stringCandidates.clear();
 				
-        Haquna.LOGGER.info("argPos = " + argPos);
-        Haquna.LOGGER.info("arguments = " + Arrays.toString(arguments));
+        Haquna.log(this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
+        Haquna.log(this.getClass().getName(), "setupStringCandidates()", "arguments = " + Arrays.toString(arguments));
 		if(argPos == 2) {
 			stringCandidates.addAll(Haquna.wmMap.keySet());
 		}
@@ -41,13 +41,15 @@ public class RunCompleter2 extends CompleterAbstract {
 			stringCandidates.add("all");
 		}
 				
-		else if(Arrays.asList(arguments).contains("[")) {
-			Haquna.LOGGER.info("modelName = " + arguments[0]);
-			for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
-				Haquna.LOGGER.info("adding table name = " + t.getName());
-				stringCandidates.add(t.getName());
+		/*else if(Arrays.asList(arguments).contains("[")) {
+			Haquna.log(this.getClass().getName(), "setupStringCandidates()", "modelName = " + arguments[0]);
+			for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {				
+				if(!Arrays.asList(arguments).contains(t.getName())) {
+					Haquna.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
+					stringCandidates.add(t.getName());
+				}
 			}			
-		}
+		}*/
 		
 		else {
 			List<String> args = Arrays.asList(arguments);
@@ -55,7 +57,14 @@ public class RunCompleter2 extends CompleterAbstract {
 			if(!args.contains("token")) stringCandidates.add("token");
 			if(!args.contains("unceratinty")) stringCandidates.add("uncertainty");
 			if(!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
-			if(!args.contains("[")) stringCandidates.add("[");
+			//if(!args.contains("[")) stringCandidates.add("[");
+			
+			for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {				
+				if(!Arrays.asList(arguments).contains(t.getName())) {
+					Haquna.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
+					stringCandidates.add(t.getName());
+				}
+			}
 		}
 		
 	}

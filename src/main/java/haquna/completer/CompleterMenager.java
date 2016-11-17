@@ -75,7 +75,7 @@ public class CompleterMenager {
         completers.add(new RunCompleter2());
         completers.add(new RunCompleter2());
         completers.add(new RunCompleter2());
-        HaqunaCompleter argComp7 = new HaqunaCompleter(new HaqunaDelimiter(',','=','.', '(','\''), completers);
+        HaqunaCompleter argComp7 = new HaqunaCompleter(new HaqunaDelimiter('\'', ',', '=', '.', '(', '[', ']'), completers);
         
         completers = new LinkedList<Completer>();
         completers.add(new StringsCompleter("ls", "pwd", "printVars()", "cls", "clearMemory()"));

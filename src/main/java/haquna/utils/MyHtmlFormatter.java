@@ -55,6 +55,7 @@ public class MyHtmlFormatter extends Formatter {
             + "</style>\n"
             + "</head>\n"
             + "<body>\n"
+            + "<div style='height: 300px;'>"
             + "<h1>" + (new Date()) + "</h1>\n"
             + "<table border=\"0\" cellpadding=\"5\" cellspacing=\"3\">\n"
             + "<tr align=\"left\">\n"
@@ -67,7 +68,7 @@ public class MyHtmlFormatter extends Formatter {
     // this method is called just after the handler using this
     // formatter is closed
     public String getTail(Handler h) {
-            return "</table>\n</body>\n</html>";
+            return "</table>\n</div></body>\n</html>";
     }
 
 }

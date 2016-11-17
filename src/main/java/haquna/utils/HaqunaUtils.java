@@ -51,11 +51,11 @@ public class HaqunaUtils {
 	}
 	
 	public static void printGreen(String line) {
-		System.out.println("\u001B[32m======>" + line + "\"\u001B[0m");
+		System.out.println("\u001B[32m======>" + line + "\u001B[0m");
 	}
 	
 	public static void printRed(String line) {
-		System.out.println("\u001B[31m======>" + line + "\"\u001B[0m");
+		System.out.println("\u001B[31m======>" + line + "\u001B[0m");
 	}
 
 	public static void clearMemory() {
