@@ -19,7 +19,7 @@ abstract public class RunAbstactCmd implements Command {
 	protected Configuration.Builder confBuilder;
 	
 	@Override
-	abstract public void execute();		
+	abstract public boolean execute();		
 	
 	abstract public boolean matches(String commandStr);
 	

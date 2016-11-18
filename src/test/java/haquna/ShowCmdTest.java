@@ -35,8 +35,8 @@ public class ShowCmdTest {
 		cp.createCommand("Callback.show()");
 		cp.createCommand("Wm.show()");
 		
-		assertEquals(Haquna.typeMap.containsKey("Type"), true);
-		assertEquals(Haquna.typeMap.get("Type").getName(), "day_type");
+		assertEquals(HaqunaSingleton.typeMap.containsKey("Type"), true);
+		assertEquals(HaqunaSingleton.typeMap.get("Type").getName(), "day_type");
 				
 	}		
 }

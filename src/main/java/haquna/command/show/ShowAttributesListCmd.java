@@ -2,7 +2,7 @@ package haquna.command.show;
 
 import java.util.LinkedList;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.XTTModel;
 
 public class ShowAttributesListCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]showAttributesList[(][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[.]showAttributesList[(][)](\\s*)";
 	
 	private String commandStr;
 	private String modelName;
@@ -27,24 +27,24 @@ public class ShowAttributesListCmd implements Command {
 		this.modelName = commandParts[0];
 	}
 	
-	public void execute() {
+	public boolean execute() {
 		
 		try {
 			XTTModel model = HaqunaUtils.getModel(modelName);
 			printAttributesList(model);
 						
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}
 	

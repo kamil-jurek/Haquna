@@ -2,7 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.XTTModel;
 
 public class GetTypeByNameCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getTypeByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]getTypeByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -32,24 +32,24 @@ public class GetTypeByNameCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
+	public boolean execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);
 			XTTModel model = HaqunaUtils.getModel(modelName);
 			getTypeByName(model);
-			
-			Haquna.wasSucces = true;
+
+			return true;
 		
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	
@@ -81,7 +81,7 @@ public class GetTypeByNameCmd implements Command {
 		LinkedList<Type> types = model.getTypes();		
 		for(Type type : types){
 			if(type.getName().equals(typeName)){
-				Haquna.typeMap.put(varName, type);
+				HaqunaSingleton.typeMap.put(varName, type);
 				return;
 			}	     
 		}

@@ -1,6 +1,6 @@
 package haquna.command.get;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -28,26 +28,26 @@ public class GetTypeCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
+	public boolean execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);			
 			Attribute attr = HaqunaUtils.getAttribute(attribiuteName);
 			Type type = attr.getType();
 			
-			Haquna.typeMap.put(varName, type);
-			
-			Haquna.wasSucces = true;
+			HaqunaSingleton.typeMap.put(varName, type);
+
+			return true;
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}		
 	

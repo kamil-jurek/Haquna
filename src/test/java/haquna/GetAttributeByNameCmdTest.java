@@ -26,8 +26,8 @@ public class GetAttributeByNameCmdTest {
 		String cmdStr = "Att = Model.getAttributeByName('location')";
 		cp.createCommand(cmdStr);
 
-		assertEquals(Haquna.attrMap.containsKey("Att"), true);
-		assertEquals(Haquna.attrMap.get("Att").getAttributeName(), "location");
+		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), true);
+		assertEquals(HaqunaSingleton.attrMap.get("Att").getAttributeName(), "location");
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class GetAttributeByNameCmdTest {
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
-		assertEquals(Haquna.attrMap.containsKey("Att"), false);
+		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -57,7 +57,7 @@ public class GetAttributeByNameCmdTest {
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No attribute with '" + sal.getAttribiuteName() + "' name in '" + sal.getModelName() + "' model");
 		
-		assertEquals(Haquna.attrMap.containsKey("Att"), false);
+		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -74,7 +74,7 @@ public class GetAttributeByNameCmdTest {
 		GetAttributeByNameCmd sal = (GetAttributeByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(Haquna.attrMap.containsKey("Att"), true);
+		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	

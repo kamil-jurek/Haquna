@@ -45,7 +45,7 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("M4 = M3.add(Rul)");
 		//cp.createCommand("M4.show()");
 		
-		assertEquals(Haquna.modelMap.containsKey("M4"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M4"), true);
 		System.out.println("=======================================");			
 	}
 		
@@ -57,7 +57,7 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("M1 = M0.add(TypObj)");
 		cp.createCommand("M1.showTypesList()");
 		
-		assertEquals(Haquna.modelMap.containsKey("M1"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M1"), true);
 		System.out.println("=======================================");			
 	}
 	
@@ -72,7 +72,7 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("M2.showTypesList()");
 		cp.createCommand("M2.showAttributesList()");
 				
-		assertEquals(Haquna.modelMap.containsKey("M2"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), true);
 		System.out.println("=======================================");
 	}
 	
@@ -91,7 +91,7 @@ public static CommandFactory cp = new CommandFactory();
 		
 		cp.createCommand("printVars()");
 				
-		assertEquals(Haquna.modelMap.containsKey("M5"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M5"), true);
 		System.out.println("=======================================");
 	}
 	
@@ -112,7 +112,7 @@ public static CommandFactory cp = new CommandFactory();
 		
 		cp.createCommand("printVars()");
 				
-		assertEquals(Haquna.modelMap.containsKey("M7"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M7"), true);
 		System.out.println("=======================================");
 	}
 }

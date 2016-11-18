@@ -1,6 +1,6 @@
 package haquna.command.show;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.alsvfd.Value;
 
 public class ShowHistoryValueOfCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)[.](\\s*)showHistoricalValueOf[(]['](.+)['][,]['](.+)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)[.](\\s*)showHistoricalValueOf[(]['](.+)['][,]['](.+)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;
@@ -32,7 +32,7 @@ public class ShowHistoryValueOfCmd implements Command {
 		 
 	}
 	
-	public void execute() {
+	public boolean execute() {
 		try {
 			WorkingMemory wm = HaqunaUtils.getWorkingMemory(wmName);
 			Long timeSec = Long.parseLong(relativeTime);
@@ -47,16 +47,17 @@ public class ShowHistoryValueOfCmd implements Command {
 			System.out.println("now:    " +  new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS").format(new java.util.Date()));
 			System.out.println(attributeName + " at "+ ds +" was: " + val);
 			
+			return true;
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}
 	

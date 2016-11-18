@@ -24,8 +24,8 @@ public static CommandFactory cp = new CommandFactory();
 		String cmd = "Type = Attr.getType()";
 		cp.createCommand(cmd);
 						
-		assertEquals(Haquna.typeMap.containsKey("Type"), true);
-		assertEquals(Haquna.typeMap.get("Type").getName(), "day_type");
+		assertEquals(HaqunaSingleton.typeMap.containsKey("Type"), true);
+		assertEquals(HaqunaSingleton.typeMap.get("Type").getName(), "day_type");
 				
 	}		
 }

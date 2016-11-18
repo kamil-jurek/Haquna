@@ -1,6 +1,6 @@
 package haquna.command.utils;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 
@@ -20,27 +20,27 @@ public class ClearMemoryCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {		
+	public boolean execute() {		
 		try {
-			Haquna.modelMap.clear();
-			Haquna.wmMap.clear();
-			Haquna.attrMap.clear();
-			Haquna.tableMap.clear();
-			Haquna.ruleMap.clear();
-			Haquna.typeMap.clear();
-			Haquna.callbackMap.clear();
-			Haquna.attrBuilderMap.clear();
-			Haquna.tableBuilderMap.clear();
-			Haquna.ruleBuilderMap.clear();
-			Haquna.typeBuilderMap.clear();
+			HaqunaSingleton.modelMap.clear();
+			HaqunaSingleton.wmMap.clear();
+			HaqunaSingleton.attrMap.clear();
+			HaqunaSingleton.tableMap.clear();
+			HaqunaSingleton.ruleMap.clear();
+			HaqunaSingleton.typeMap.clear();
+			HaqunaSingleton.callbackMap.clear();
+			HaqunaSingleton.attrBuilderMap.clear();
+			HaqunaSingleton.tableBuilderMap.clear();
+			HaqunaSingleton.ruleBuilderMap.clear();
+			HaqunaSingleton.typeBuilderMap.clear();
 			
-			Haquna.wasSucces = true;
+			return true;
 					
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	

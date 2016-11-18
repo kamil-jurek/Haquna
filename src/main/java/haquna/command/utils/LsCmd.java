@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import haquna.Haquna;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 
@@ -25,7 +24,7 @@ public class LsCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {		
+	public boolean execute() {		
 		try {
 			Path dir = Paths.get(System.getProperty("user.dir"));
     		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir, "*")) {
@@ -34,13 +33,13 @@ public class LsCmd implements Command {
     			}
     		}
 			
-			Haquna.wasSucces = true;
+			return true;
 					
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	

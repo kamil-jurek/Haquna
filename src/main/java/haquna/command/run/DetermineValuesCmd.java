@@ -3,7 +3,7 @@ package haquna.command.run;
 import java.util.ArrayList;
 import java.util.List;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -15,8 +15,8 @@ import heart.xtt.XTTModel;
 
 public class DetermineValuesCmd implements Command {		
 	//WorkingMemory = determineValues(Model, Wm, ['tabName1','tabName2'])
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)determineValues[(]" +
-									     Haquna.varName + "(\\s*)[,](\\s*)(.*)" + "[\\[](.*)[\\]](\\s*)" + "(.*)[)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)determineValues[(]" +
+									     HaqunaSingleton.varName + "(\\s*)[,](\\s*)(.*)" + "[\\[](.*)[\\]](\\s*)" + "(.*)[)](\\s*)";
 														
 		
 	private String commandStr;
@@ -44,7 +44,7 @@ public class DetermineValuesCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {			
+	public boolean execute() {			
 		try {									
 			model= HaqunaUtils.getModel(modelName);
 			confBuilder = new Configuration.Builder();
@@ -56,22 +56,22 @@ public class DetermineValuesCmd implements Command {
 	    	new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(attrNames));
 	    			    								  
 		    if(wmName == null) {
-		    	Haquna.wmMap.put(varName, wm);
+		    	HaqunaSingleton.wmMap.put(varName, wm);
 		    }
 		    
-		    Haquna.wasSucces = true;
+		    return true;
 			
 		} catch(HaqunaException e) {
 			//e.printStackTrace();
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	
@@ -116,8 +116,8 @@ public class DetermineValuesCmd implements Command {
 	
 	private void setupWorkingMemory() throws HaqunaException {
 		
-		if(commandParts[3].matches(Haquna.varName)) {
-			if(Haquna.wmMap.containsKey(commandParts[3])) {
+		if(commandParts[3].matches(HaqunaSingleton.varName)) {
+			if(HaqunaSingleton.wmMap.containsKey(commandParts[3])) {
 				this.wmName = commandParts[3];
 			
 			} else {

@@ -1,6 +1,6 @@
 package haquna.command.get;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -27,27 +27,27 @@ public class GetCallbackCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
+	public boolean execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);
 			Attribute attr = HaqunaUtils.getAttribute(attribiuteName);
 			
 			String callback = attr.getCallback();
 			
-			Haquna.callbackMap.put(varName, callback);
+			HaqunaSingleton.callbackMap.put(varName, callback);
 			
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}				
 	}		
 	

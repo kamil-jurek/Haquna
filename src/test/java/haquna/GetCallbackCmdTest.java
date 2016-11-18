@@ -24,8 +24,8 @@ public static CommandFactory cp = new CommandFactory();
 		String cmd = "Callback = Attr.getCallback()";
 		cp.createCommand(cmd);
 						
-		assertEquals(Haquna.callbackMap.containsKey("Callback"), true);
-		assertEquals(Haquna.callbackMap.get("Callback"), null);
+		assertEquals(HaqunaSingleton.callbackMap.containsKey("Callback"), true);
+		assertEquals(HaqunaSingleton.callbackMap.get("Callback"), null);
 				
 	}		
 }

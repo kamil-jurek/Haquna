@@ -1,6 +1,6 @@
 package haquna.completer;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 
 public class FunctionNamesCompleter2 extends CompleterAbstract{
 
@@ -14,34 +14,34 @@ public class FunctionNamesCompleter2 extends CompleterAbstract{
 		
 		String varName = arguments[argPos-1];
 		
-		if(argPos == 1 && Haquna.isVarUsed(varName)) {
+		if(argPos == 1 && HaqunaSingleton.isVarUsed(varName)) {
 			
 			
-			if(Haquna.tableMap.containsKey(varName)) {
+			if(HaqunaSingleton.tableMap.containsKey(varName)) {
 				stringCandidates.add("showRulesList()");
 				stringCandidates.add("show()");
 			}
 			
-			if(Haquna.attrMap.containsKey(varName)){
+			if(HaqunaSingleton.attrMap.containsKey(varName)){
 				stringCandidates.add("show()");
 			}
 			
-			if(Haquna.typeMap.containsKey(varName)){
+			if(HaqunaSingleton.typeMap.containsKey(varName)){
 				stringCandidates.add("show()");		
 			}
 			
-			if(Haquna.ruleMap.containsKey(varName)){
+			if(HaqunaSingleton.ruleMap.containsKey(varName)){
 				stringCandidates.add("show()");
 			}
 			
-			if(Haquna.wmMap.containsKey(varName)){
+			if(HaqunaSingleton.wmMap.containsKey(varName)){
 				stringCandidates.add("showValueOf");
 				stringCandidates.add("setValueOf");
 				stringCandidates.add("showHistoricalValueOf");
 				stringCandidates.add("showCurrentState()");
 			}
 			
-			if(Haquna.modelMap.containsKey(varName)){
+			if(HaqunaSingleton.modelMap.containsKey(varName)){
 				stringCandidates.add("show()");
 				stringCandidates.add("showTablesList()");
 				stringCandidates.add("showAttributesList()");
@@ -50,18 +50,18 @@ public class FunctionNamesCompleter2 extends CompleterAbstract{
 				//stringCandidates.add("run");
 			}
 			
-		} else if(argPos == 2 && Haquna.isVarUsed(varName)){						
-			if(Haquna.tableMap.containsKey(varName)) {
+		} else if(argPos == 2 && HaqunaSingleton.isVarUsed(varName)){						
+			if(HaqunaSingleton.tableMap.containsKey(varName)) {
 				stringCandidates.add("getRuleByName");
 				stringCandidates.add("getRuleById");
 			}
 			
-			if(Haquna.attrMap.containsKey(varName)){
+			if(HaqunaSingleton.attrMap.containsKey(varName)){
 				stringCandidates.add("getType()");
 				stringCandidates.add("getCallback()");
 			}
 								
-			if(Haquna.modelMap.containsKey(varName)){				
+			if(HaqunaSingleton.modelMap.containsKey(varName)){				
 				stringCandidates.add("getTableByName");
 				stringCandidates.add("getTableById");
 				stringCandidates.add("getAttributeByName");
@@ -72,7 +72,7 @@ public class FunctionNamesCompleter2 extends CompleterAbstract{
 				stringCandidates.add("remove");
 				//stringCandidates.add("run");
 			}				
-		} else if(argPos == 2 && arguments[argPos-2].matches(Haquna.varName)) {
+		} else if(argPos == 2 && arguments[argPos-2].matches(HaqunaSingleton.varName)) {
 			if(varName.equals("new")){
 				stringCandidates.add("WorkingMemory");
 				stringCandidates.add("Type");

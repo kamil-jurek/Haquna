@@ -1,6 +1,6 @@
 package haquna.command.show;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.XttModelUtils;
 import haquna.command.Command;
 import heart.xtt.Attribute;
@@ -11,7 +11,7 @@ import heart.xtt.XTTModel;
 
 public class ShowCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "[.]show[(][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "[.]show[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -27,36 +27,36 @@ public class ShowCmd implements Command {
 		this.varName = commandParts[0];
 	}
 	
-	public void execute() {
-		if(Haquna.tableMap.containsKey(varName)) {
-			Table table = Haquna.tableMap.get(varName);			
+	public boolean execute() {
+		if(HaqunaSingleton.tableMap.containsKey(varName)) {
+			Table table = HaqunaSingleton.tableMap.get(varName);			
 			System.out.println(XttModelUtils.tableToHMR(table));
 		     					
-		} else if(Haquna.attrMap.containsKey(varName)){
-			Attribute attr = Haquna.attrMap.get(varName);
+		} else if(HaqunaSingleton.attrMap.containsKey(varName)){
+			Attribute attr = HaqunaSingleton.attrMap.get(varName);
 			System.out.println(XttModelUtils.attributeToHMR(attr));
 		
-		} else if(Haquna.typeMap.containsKey(varName)){
-			Type type = Haquna.typeMap.get(varName);
+		} else if(HaqunaSingleton.typeMap.containsKey(varName)){
+			Type type = HaqunaSingleton.typeMap.get(varName);
 			System.out.println(XttModelUtils.typeToHMR(type));		
 		    		
-		} else if(Haquna.ruleMap.containsKey(varName)){
-			Rule rule = Haquna.ruleMap.get(varName);
+		} else if(HaqunaSingleton.ruleMap.containsKey(varName)){
+			Rule rule = HaqunaSingleton.ruleMap.get(varName);
 			System.out.println(XttModelUtils.ruleToHMR(rule));
 		
-		} else if(Haquna.callbackMap.containsKey(varName)){
-			String callback = Haquna.callbackMap.get(varName);
+		} else if(HaqunaSingleton.callbackMap.containsKey(varName)){
+			String callback = HaqunaSingleton.callbackMap.get(varName);
 		    System.out.println("Callback: " + callback);
 						
-		} else if(Haquna.modelMap.containsKey(varName)){
-			XTTModel model = Haquna.modelMap.get(varName);
+		} else if(HaqunaSingleton.modelMap.containsKey(varName)){
+			XTTModel model = HaqunaSingleton.modelMap.get(varName);
 			System.out.println(XttModelUtils.getHMR(model));
 		
 		} else {
 			System.out.println("No such object in memory");
 		}
 		
-		Haquna.wasSucces = true;
+		return true;
 	}
 	
 	public boolean matches(String commandStr) {

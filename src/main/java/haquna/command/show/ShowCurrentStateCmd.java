@@ -1,6 +1,6 @@
 package haquna.command.show;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -10,7 +10,7 @@ import heart.WorkingMemory;
 
 public class ShowCurrentStateCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "[.]showCurrentState[(][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "[.]showCurrentState[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -26,17 +26,17 @@ public class ShowCurrentStateCmd implements Command {
 		this.varName = commandParts[0];
 	}
 	
-	public void execute() {
+	public boolean execute() {
 		try {
 			WorkingMemory wm = HaqunaUtils.getWorkingMemory(varName);
 			printCurrentState(wm);
 			
-			Haquna.wasSucces = true;
+			return true;
 		
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		}				
 	}
 	

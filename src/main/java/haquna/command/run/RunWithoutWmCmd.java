@@ -1,6 +1,6 @@
 package haquna.command.run;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -13,10 +13,10 @@ import heart.inference.InferenceAlgorithm;
 import heart.xtt.XTTModel;
 
 public class RunWithoutWmCmd extends RunAbstactCmd {		
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + 
-											   Haquna.varName + "[.]run[(](\\s*)" +
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)" + 
+											   HaqunaSingleton.varName + "[.]run[(](\\s*)" +
 											   "(((mode=((ddi)|(gdi)|(foi)))|(token=((true)|(false)))|(uncertainty=((true)|(false)))|(conflict_strategy=((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
-											   "([\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
+											   "([\\[]([']" + HaqunaSingleton.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
 											   "[)](\\s*)";
 		
 	private String commandStr;
@@ -39,7 +39,7 @@ public class RunWithoutWmCmd extends RunAbstactCmd {
 	}
 	
 	@Override
-	public void execute() {		
+	public boolean execute() {		
 		try {									
 			model = HaqunaUtils.getModel(modelName);
 			confBuilder = new Configuration.Builder();
@@ -78,21 +78,21 @@ public class RunWithoutWmCmd extends RunAbstactCmd {
 	    	  }
 			}
 						  
-		    Haquna.wmMap.put(varName, wm);
+		    HaqunaSingleton.wmMap.put(varName, wm);
 		    
-		    Haquna.wasSucces = true;
-			
+			return true;
+		    
 		} catch(HaqunaException e) {
 			e.printStackTrace();
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}		
 	

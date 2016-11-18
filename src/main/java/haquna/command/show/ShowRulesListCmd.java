@@ -2,7 +2,7 @@ package haquna.command.show;
 
 import java.util.LinkedList;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Table;
 
 public class ShowRulesListCmd implements Command {
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]showRulesList[(][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[.]showRulesList[(][)](\\s*)";
 	
 	private String commandStr;
 	private String tableName;
@@ -27,23 +27,23 @@ public class ShowRulesListCmd implements Command {
 		this.tableName = commandParts[0];
 	}
 	
-	public void execute() {
+	public boolean execute() {
 		try {
 			Table table = HaqunaUtils.getTable(tableName);
 			printRulesList(table);
 			
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}
 	

@@ -26,8 +26,8 @@ public static CommandFactory cp = new CommandFactory();
 		String cmdStr = "Tab = Model.getTableByName('Today')";
 		cp.createCommand(cmdStr);
 
-		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
-		assertEquals(Haquna.tableMap.get("Tab").getName(), "Today");
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
+		assertEquals(HaqunaSingleton.tableMap.get("Tab").getName(), "Today");
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
-		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -57,7 +57,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No table with '" + sal.getTableName() + "' name in '" + sal.getModelName() + "' model");
 		
-		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -74,7 +74,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTableByNameCmd sal = (GetTableByNameCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	

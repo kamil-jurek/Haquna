@@ -28,7 +28,7 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("Wm.setValueOf('hour','22#0.4')");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
 			
 	}
 	
@@ -39,7 +39,7 @@ public static CommandFactory cp = new CommandFactory();
 		cp.createCommand("Wm.setValueOf('hour','20.4')");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
 			
 	}
 }

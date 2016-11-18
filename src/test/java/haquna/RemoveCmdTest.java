@@ -25,7 +25,7 @@ public class RemoveCmdTest {
 		
 		cp.createCommand("M2 = Model.remove('day_type')");
 		
-		assertEquals(Haquna.modelMap.containsKey("M2"), false);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
 			
 	}
 	
@@ -35,7 +35,7 @@ public class RemoveCmdTest {
 		
 		cp.createCommand("M2 = Model.remove('today')");
 		
-		assertEquals(Haquna.modelMap.containsKey("M2"), false);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
 		cp.createCommand("Model.showAttributesList()");
 		cp.createCommand("M2.showAttributesList()");
 			
@@ -47,7 +47,7 @@ public class RemoveCmdTest {
 		
 		cp.createCommand("M2 = Model.remove('Today')");
 		
-		assertEquals(Haquna.modelMap.containsKey("M2"), false);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
 		
 			
 	}
@@ -59,7 +59,7 @@ public class RemoveCmdTest {
 		
 		cp.createCommand("M2 = Model.remove('Today/1')");
 		
-		assertEquals(Haquna.modelMap.containsKey("M2"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), true);
 		
 			
 	}
@@ -81,7 +81,7 @@ public class RemoveCmdTest {
 		cp.createCommand("M7 = M6.remove('day_type')");
 		cp.createCommand("M7.showTypesList()");
 		
-		assertEquals(Haquna.modelMap.containsKey("M7"), true);
+		assertEquals(HaqunaSingleton.modelMap.containsKey("M7"), true);
 		
 		
 		
@@ -101,7 +101,7 @@ public class RemoveCmdTest {
 		cp.createCommand("NewPoiWithoutDay = NewPoiModel.remove('day_type')");
 		cp.createCommand("NewPoiWithoutDay.showTypesList()");
 		
-		assertEquals(Haquna.modelMap.containsKey("NewPoiWithoutDay"), true);							
+		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay"), true);							
 	}
 	
 	@Test
@@ -124,6 +124,6 @@ public class RemoveCmdTest {
 		
 		cp.createCommand("NewPoiWithoutDay2 = NewPoiWithoutDay.remove('day_type')");
 		cp.createCommand("NewPoiWithoutDay2.showTypesList()");
-		assertEquals(Haquna.modelMap.containsKey("NewPoiWithoutDay2"), true);							
+		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay2"), true);							
 	}
 }

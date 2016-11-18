@@ -7,7 +7,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -19,7 +19,7 @@ import heart.xtt.XTTModel;
 
 public class NewModelCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)new(\\s*)Model[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)new(\\s*)Model[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -38,27 +38,27 @@ public class NewModelCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {						
+	public boolean execute() {						
 		try {	
 			setupPath();
 			HaqunaUtils.checkVarName(varName);
 			
 			XTTModel model = parseHMR();
 						
-			Haquna.modelMap.put(varName, model);	
+			HaqunaSingleton.modelMap.put(varName, model);	
 				
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch(HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			//e.printStackTrace();
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			//e.printStackTrace();
 			
-			return;
+			return false;
 		}	
 	}		
 	

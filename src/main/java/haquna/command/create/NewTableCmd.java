@@ -1,6 +1,6 @@
 package haquna.command.create;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Table;
 
 public class NewTableCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Table[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Table[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -37,7 +37,7 @@ public class NewTableCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
+	public boolean execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);
 			
@@ -47,20 +47,20 @@ public class NewTableCmd implements Command {
 	        parser.parse(hmr_code);
 	        Table.Builder typeBuilder = parser.getTableBuilder();
 			
-	        Haquna.tableBuilderMap.put(varName, typeBuilder);
+	        HaqunaSingleton.tableBuilderMap.put(varName, typeBuilder);
 			
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch (HaqunaException | ParsingSyntaxException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}		
 	}		
 	

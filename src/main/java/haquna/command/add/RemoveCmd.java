@@ -1,6 +1,6 @@
 package haquna.command.add;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -13,7 +13,7 @@ import heart.xtt.XTTModel;
 
 public class RemoveCmd implements Command {		
 	// NewModel = Model.add(Type)
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + Haquna.varName + "[.]remove[(][']" + "(.*)" + "['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]remove[(][']" + "(.*)" + "['][)](\\s*)";
 	
 	private String commandStr;
 	private String modelName;
@@ -36,25 +36,25 @@ public class RemoveCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {		
+	public boolean execute() {		
 		try {
 			HaqunaUtils.checkVarName(newModelName);
 			XTTModel model = HaqunaUtils.getModel(modelName);
 			
 			removeItem(model, itemToRemoveName);
-			
-			Haquna.wasSucces = true;
+						
+			return true;
 			
 		} catch (HaqunaException | ModelBuildingException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	
@@ -99,7 +99,7 @@ public class RemoveCmd implements Command {
 	}
 	
 	private void removeType() throws ModelBuildingException {
-		XTTModel model = Haquna.modelMap.get(modelName);	
+		XTTModel model = HaqunaSingleton.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
@@ -107,11 +107,11 @@ public class RemoveCmd implements Command {
 		builder.removeIncompleteTypeNamed(itemToRemoveName);
 		newModel = builder.build();
 		
-		Haquna.modelMap.put(newModelName, newModel);		            
+		HaqunaSingleton.modelMap.put(newModelName, newModel);		            
 	}
 	
 	private void removeAttribute() throws ModelBuildingException {
-		XTTModel model = Haquna.modelMap.get(modelName);	
+		XTTModel model = HaqunaSingleton.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
@@ -119,11 +119,11 @@ public class RemoveCmd implements Command {
         builder.removeIncompleteAttributeNamed(itemToRemoveName);
 		newModel = builder.build();
 			
-		Haquna.modelMap.put(newModelName, newModel);		          
+		HaqunaSingleton.modelMap.put(newModelName, newModel);		          
 	}
 	
 	private void removeTable() throws ModelBuildingException {
-		XTTModel model = Haquna.modelMap.get(modelName);	
+		XTTModel model = HaqunaSingleton.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
@@ -131,11 +131,11 @@ public class RemoveCmd implements Command {
 		builder.removeIncompleteTableNamed(itemToRemoveName);
 		newModel = builder.build();
 		
-		Haquna.modelMap.put(newModelName, newModel);		            
+		HaqunaSingleton.modelMap.put(newModelName, newModel);		            
 	}
 	
 	private void removeRule() throws ModelBuildingException {
-		XTTModel model = Haquna.modelMap.get(modelName);	
+		XTTModel model = HaqunaSingleton.modelMap.get(modelName);	
 
         XTTModel.Builder builder = model.getBuilder();       
         XTTModel newModel = null;
@@ -143,7 +143,7 @@ public class RemoveCmd implements Command {
 		builder.removeIncompleteRuleNamed(itemToRemoveName);
 		newModel = builder.build();
 		
-		Haquna.modelMap.put(newModelName, newModel);            
+		HaqunaSingleton.modelMap.put(newModelName, newModel);            
 	}
 	
 	private String determineWhatToRemove(XTTModel model) {

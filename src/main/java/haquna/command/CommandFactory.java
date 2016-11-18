@@ -106,8 +106,7 @@ public class CommandFactory {
 		for(Command cmdType : commandTypes) {
 			if(cmdType.matches(commandStr)) {
 				Command cmd = cmdType.getNewCommand(commandStr);
-				cmd.execute();
-				
+				//cmd.execute();				
 				return cmd;
 			}
 		}

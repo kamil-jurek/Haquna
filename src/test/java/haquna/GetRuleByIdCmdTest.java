@@ -32,7 +32,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No '" + sal.getTableName() + "' Table object in memory");
 				
-		assertEquals(Haquna.ruleMap.containsKey("Rule"), false);
+		assertEquals(HaqunaSingleton.ruleMap.containsKey("Rule"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -48,7 +48,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No rule with '" + sal.getRuleId() + "' id in '" + sal.getTableName() + "' table");
 		
-		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -65,7 +65,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(Haquna.ruleMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.ruleMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	

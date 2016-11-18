@@ -2,7 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Table;
 
 public class GetRuleByNameCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getRuleByName[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]getRuleByName[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -32,24 +32,24 @@ public class GetRuleByNameCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {	
+	public boolean execute() {	
 		try {
 			HaqunaUtils.checkVarName(varName);
 			Table table = HaqunaUtils.getTable(tableName);
 			getRuleByName(table);
-			
-			Haquna.wasSucces = true;
+
+			return true;
 		
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}	
 	}		
 	
@@ -65,7 +65,7 @@ public class GetRuleByNameCmd implements Command {
 		LinkedList<Rule> rules = table.getRules();		
 		for(Rule rule : rules) {
 			if(rule.getName().equals(ruleName)) {
-				Haquna.ruleMap.put(varName, rule);
+				HaqunaSingleton.ruleMap.put(varName, rule);
 				return;
 			}
 		}

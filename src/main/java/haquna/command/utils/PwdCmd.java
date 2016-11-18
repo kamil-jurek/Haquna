@@ -1,6 +1,5 @@
 package haquna.command.utils;
 
-import haquna.Haquna;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 
@@ -20,17 +19,17 @@ public class PwdCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {		
+	public boolean execute() {		
 		try {
 			System.out.println("Working directory: " + System.getProperty("user.dir"));
 			
-			Haquna.wasSucces = true;
+			return true;
 					
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}
 	}		
 	

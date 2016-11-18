@@ -31,7 +31,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, ['DayTime','Today'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
 			
 	}
 	
@@ -42,7 +42,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, mode=gdi, ['Today'])");		
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, mode=ddi, ['Today'])");		
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, mode=foi, ['Today'])");		
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");			
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class RunCmdTest {
 		cp.createCommand("Wm3 = Model.run(mode=gdi, ['Threats'])");
 		cp.createCommand("Wm3.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm3").getAttributeValue("daytime"), new Null());
+		assertEquals(HaqunaSingleton.wmMap.get("Wm3").getAttributeValue("daytime"), new Null());
 			
 	}
 	
@@ -83,7 +83,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, token=true, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -94,7 +94,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, token=false, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -105,7 +105,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, uncertainty=true, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -116,7 +116,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, uncertainty=false, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -127,7 +127,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, conflict_strategy=first, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -138,7 +138,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, conflict_strategy=last, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -149,7 +149,7 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, conflict_strategy=all, ['DayTime'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
 			
 	}
 	
@@ -160,8 +160,8 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, mode=ddi, ['DayTime', 'Today'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
 			
 	}
 	
@@ -172,8 +172,8 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, mode=ddi, token=true, ['DayTime', 'Today'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
 			
 	}
 	
@@ -184,8 +184,8 @@ public class RunCmdTest {
 		cp.createCommand("Model.run(Wm, token=true, ['DayTime', 'Today'])");
 		cp.createCommand("Wm.showCurrentState()");
 		
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
-		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("daytime").toString(), "afternoon");
+		assertEquals(HaqunaSingleton.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
 			
 	}
 }

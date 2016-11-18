@@ -1,6 +1,6 @@
 package haquna.command.create;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Rule;
 
 public class NewRuleCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -40,7 +40,7 @@ public class NewRuleCmd implements Command {
 	}
 	
 	@Override
-	public void execute() {				
+	public boolean execute() {				
 		try {
 			HaqunaUtils.checkVarName(varName);
 			
@@ -50,20 +50,20 @@ public class NewRuleCmd implements Command {
 	        parser.parse(hmr_code);
 	        Rule.Builder ruleBuilder = parser.getRuleBuilder();
 			
-	        Haquna.ruleBuilderMap.put(varName, ruleBuilder);
+	        HaqunaSingleton.ruleBuilderMap.put(varName, ruleBuilder);
 
-			Haquna.wasSucces = true;
+			return true;
 			
 		} catch (HaqunaException | ParsingSyntaxException e) {
 			HaqunaUtils.printRed(e.getMessage());
 			
-			return;
+			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
 			e.printStackTrace();
 			
-			return;
+			return false;
 		}	
 	}		
 	

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import haquna.Haquna;
+import haquna.HaqunaSingleton;
 import jline.console.completer.Completer;
 
 public class VarNamesCompleter implements Completer {
@@ -42,17 +42,17 @@ public class VarNamesCompleter implements Completer {
 	private void addVarNames() {
 		strings.clear();
 		
-    	strings.addAll(Haquna.modelMap.keySet());
-        strings.addAll(Haquna.tableMap.keySet());
-        strings.addAll(Haquna.attrMap.keySet());
-        strings.addAll(Haquna.typeMap.keySet());
-        strings.addAll(Haquna.ruleMap.keySet());
-        strings.addAll(Haquna.callbackMap.keySet());
-        strings.addAll(Haquna.wmMap.keySet());
-        strings.addAll(Haquna.tableBuilderMap.keySet());
-        strings.addAll(Haquna.attrBuilderMap.keySet());
-        strings.addAll(Haquna.typeBuilderMap.keySet());
-        strings.addAll(Haquna.ruleBuilderMap.keySet());
+    	strings.addAll(HaqunaSingleton.modelMap.keySet());
+        strings.addAll(HaqunaSingleton.tableMap.keySet());
+        strings.addAll(HaqunaSingleton.attrMap.keySet());
+        strings.addAll(HaqunaSingleton.typeMap.keySet());
+        strings.addAll(HaqunaSingleton.ruleMap.keySet());
+        strings.addAll(HaqunaSingleton.callbackMap.keySet());
+        strings.addAll(HaqunaSingleton.wmMap.keySet());
+        strings.addAll(HaqunaSingleton.tableBuilderMap.keySet());
+        strings.addAll(HaqunaSingleton.attrBuilderMap.keySet());
+        strings.addAll(HaqunaSingleton.typeBuilderMap.keySet());
+        strings.addAll(HaqunaSingleton.ruleBuilderMap.keySet());
     }
 
 }

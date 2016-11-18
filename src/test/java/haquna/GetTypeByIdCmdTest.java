@@ -31,7 +31,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
-		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -47,7 +47,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("No type with '" + sal.getTypeId() + "' id in '" + sal.getModelName() + "' model");
 		
-		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -64,7 +64,7 @@ public static CommandFactory cp = new CommandFactory();
 		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
+		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
