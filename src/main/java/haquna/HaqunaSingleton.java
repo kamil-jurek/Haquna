@@ -3,8 +3,6 @@ package haquna;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import haquna.command.Command;
@@ -17,7 +15,6 @@ import heart.xtt.Table;
 import heart.xtt.Type;
 import heart.xtt.XTTModel;
 import jline.console.ConsoleReader;
-import jline.console.completer.Completer;
 
 public class HaqunaSingleton {
 	public static final String varName = "[a-zA-Z_$]([a-zA-Z_$0-9])*";
@@ -120,7 +117,7 @@ public class HaqunaSingleton {
 	}
 	
 	private void printRed(String line) {
-		out.println("\u001B[32m======>" + line + "\u001B[0m");
+		out.println("\u001B[31m======>" + line + "\u001B[0m");
 	}
 	
 	private void printGreen(String line) {
