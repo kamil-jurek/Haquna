@@ -2,7 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.XTTModel;
 
 public class GetTableByIdCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]getTableById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getTableById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -77,7 +77,7 @@ public class GetTableByIdCmd implements Command {
 		LinkedList<Table> tables = model.getTables();
 		for(Table table : tables){
 			if(table.getId() != null && table.getId().equals(tableId)){
-				HaqunaSingleton.tableMap.put(varName, table);
+				Haquna.tableMap.put(varName, table);
 				return;
 			}	     
 		}

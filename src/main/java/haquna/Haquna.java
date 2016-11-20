@@ -16,7 +16,7 @@ import heart.xtt.Type;
 import heart.xtt.XTTModel;
 import jline.console.ConsoleReader;
 
-public class HaqunaSingleton {
+public class Haquna {
 	public static final String varName = "[a-zA-Z_$]([a-zA-Z_$0-9])*";
 	public static final String attrNamePattern = "[a-z|_]+";
 	public static final String attrValuePattern = "[a-z|A-Z|0-9|_|.]+[/]?[0-9]*";
@@ -36,7 +36,7 @@ public class HaqunaSingleton {
 	
 		
 	/////////////////////////////
-	private static HaqunaSingleton singleton = new HaqunaSingleton();
+	private static Haquna singleton = new Haquna();
 	
 	private ConsoleReader reader;
 	private CommandFactory cmdFactory;
@@ -45,7 +45,7 @@ public class HaqunaSingleton {
 		
 	private final String prompt = "\u001B[35;1m" + "HaQuNa> " + "\u001B[0m";
 	
-	private HaqunaSingleton() {
+	private Haquna() {
 		try {
 			reader = new ConsoleReader();
 			cmdFactory = new CommandFactory();
@@ -61,7 +61,7 @@ public class HaqunaSingleton {
 		}       
 	}
 	
-	public static HaqunaSingleton getInstance() {
+	public static Haquna getInstance() {
 		return singleton;
 	}
 	

@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.command.get.GetAttributeByNameCmd;
 import haquna.utils.HaqunaUtils;
 
@@ -24,8 +23,8 @@ public class GetAttributeByNameCmdTest {
 		String cmdStr = "Att = Model.getAttributeByName('location')";
 		TestUtils.createAndExecCmd(cmdStr);
 
-		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), true);
-		assertEquals(HaqunaSingleton.attrMap.get("Att").getAttributeName(), "location");
+		assertEquals(Haquna.attrMap.containsKey("Att"), true);
+		assertEquals(Haquna.attrMap.get("Att").getAttributeName(), "location");
 	}
 
 	@Test
@@ -40,7 +39,7 @@ public class GetAttributeByNameCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 
-		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), false);
+		assertEquals(Haquna.attrMap.containsKey("Att"), false);
 		assertEquals(outContent.toString(), expectedOutput);
 	}
 
@@ -57,7 +56,7 @@ public class GetAttributeByNameCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No attribute with '" + sal.getAttribiuteName() + "' name in '" + sal.getModelName() + "' model");
 
-		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), false);
+		assertEquals(Haquna.attrMap.containsKey("Att"), false);
 		assertEquals(outContent.toString(), expectedOutput);
 	}
 
@@ -75,7 +74,7 @@ public class GetAttributeByNameCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 
-		assertEquals(HaqunaSingleton.attrMap.containsKey("Att"), true);
+		assertEquals(Haquna.attrMap.containsKey("Att"), true);
 		assertEquals(outContent.toString(), expectedOutput);
 	}
 }

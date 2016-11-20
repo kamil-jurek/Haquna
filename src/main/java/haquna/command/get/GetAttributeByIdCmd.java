@@ -2,7 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.XTTModel;
 
 public class GetAttributeByIdCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]getAttributeById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getAttributeById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -77,7 +77,7 @@ public class GetAttributeByIdCmd implements Command {
 		LinkedList<Attribute> attribiutes = model.getAttributes();			
 		for(Attribute att : attribiutes) {
 			if(att.getId() != null && att.getId().equals(attribiuteId)){
-				HaqunaSingleton.attrMap.put(varName, att);
+				Haquna.attrMap.put(varName, att);
 				return;
 			}	     
 		}

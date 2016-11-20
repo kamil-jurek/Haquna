@@ -1,6 +1,6 @@
 package haquna.command.create;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Type;
 
 public class NewTypeCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Type[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -44,7 +44,7 @@ public class NewTypeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Type.Builder typeBuilder = parser.getTypeBuilder();
 			
-	        HaqunaSingleton.typeBuilderMap.put(varName, typeBuilder);
+	        Haquna.typeBuilderMap.put(varName, typeBuilder);
 			
 			return true;
 			

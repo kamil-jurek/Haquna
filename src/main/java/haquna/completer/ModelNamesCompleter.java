@@ -1,12 +1,12 @@
 package haquna.completer;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 public class ModelNamesCompleter extends CompleterAbstract {
 
 	@Override
 	protected void setupStringCandidates() {
 		stringCandidates.clear();		
-		stringCandidates.addAll(HaqunaSingleton.modelMap.keySet());		
+		stringCandidates.addAll(Haquna.modelMap.keySet());
 	}
 
 }

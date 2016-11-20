@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.command.get.GetRuleByIdCmd;
 import haquna.utils.HaqunaUtils;
 
@@ -31,7 +30,7 @@ public class GetRuleByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getTableName() + "' Table object in memory");
 				
-		assertEquals(HaqunaSingleton.ruleMap.containsKey("Rule"), false);
+		assertEquals(Haquna.ruleMap.containsKey("Rule"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -48,7 +47,7 @@ public class GetRuleByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No rule with '" + sal.getRuleId() + "' id in '" + sal.getTableName() + "' table");
 		
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -66,7 +65,7 @@ public class GetRuleByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(HaqunaSingleton.ruleMap.containsKey("Tab"), false);
+		assertEquals(Haquna.ruleMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 }

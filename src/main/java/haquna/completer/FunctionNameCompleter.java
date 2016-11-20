@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import jline.console.completer.Completer;
 
 public class FunctionNameCompleter implements Completer{
@@ -43,35 +43,35 @@ public class FunctionNameCompleter implements Completer{
 	private void addFunctionNames() {
 		strings.clear();
 		
-		if(HaqunaSingleton.tableMap.containsKey(varName)) {
+		if(Haquna.tableMap.containsKey(varName)) {
 			strings.add("showRulesList()");
 			strings.add("show()");
 			strings.add("getRuleByName");
 			strings.add("getRuleById");
 		}
 		
-		if(HaqunaSingleton.attrMap.containsKey(varName)){
+		if(Haquna.attrMap.containsKey(varName)){
 			strings.add("show()");
 			strings.add("getType()");
 			strings.add("getCallback()");
 		}
 		
-		if(HaqunaSingleton.typeMap.containsKey(varName)){
+		if(Haquna.typeMap.containsKey(varName)){
 			strings.add("show()");		
 		}
 		
-		if(HaqunaSingleton.ruleMap.containsKey(varName)){
+		if(Haquna.ruleMap.containsKey(varName)){
 			strings.add("show()");
 		}
 		
-		if(HaqunaSingleton.wmMap.containsKey(varName)){
+		if(Haquna.wmMap.containsKey(varName)){
 			strings.add("showValueOf");
 			strings.add("setValueOf");
 			strings.add("showHistoricalValueOf");
 			strings.add("showCurrentState()");
 		}
 		
-		if(HaqunaSingleton.modelMap.containsKey(varName)){
+		if(Haquna.modelMap.containsKey(varName)){
 			strings.add("show()");
 			strings.add("showTablesList()");
 			strings.add("showAttributesList()");

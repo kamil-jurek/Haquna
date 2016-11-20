@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class ShowCmdTest {
@@ -33,8 +32,8 @@ public class ShowCmdTest {
 		TestUtils.createAndExecCmd("Callback.show()");
 		TestUtils.createAndExecCmd("Wm.show()");
 		
-		assertEquals(HaqunaSingleton.typeMap.containsKey("Type"), true);
-		assertEquals(HaqunaSingleton.typeMap.get("Type").getName(), "day_type");
+		assertEquals(Haquna.typeMap.containsKey("Type"), true);
+		assertEquals(Haquna.typeMap.get("Type").getName(), "day_type");
 				
 	}		
 }

@@ -3,8 +3,8 @@ package haquna.completer;
 import java.util.Arrays;
 import java.util.List;
 
+import haquna.Haquna;
 import haquna.HaqunaMain;
-import haquna.HaqunaSingleton;
 import heart.xtt.Table;
 
 public class RunCompleter2 extends CompleterAbstract {
@@ -16,7 +16,7 @@ public class RunCompleter2 extends CompleterAbstract {
         HaqunaMain.log(this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
         HaqunaMain.log(this.getClass().getName(), "setupStringCandidates()", "arguments = " + Arrays.toString(arguments));
 		if(argPos == 2) {
-			stringCandidates.addAll(HaqunaSingleton.wmMap.keySet());
+			stringCandidates.addAll(Haquna.wmMap.keySet());
 		}
 		
 		String prevArg = arguments[argPos-1];
@@ -43,10 +43,10 @@ public class RunCompleter2 extends CompleterAbstract {
 		}
 				
 		/*else if(Arrays.asList(arguments).contains("[")) {
-			HaqunaSingleton.log(this.getClass().getName(), "setupStringCandidates()", "modelName = " + arguments[0]);
-			for(Table t : HaqunaSingleton.modelMap.get(arguments[0]).getTables()) {				
+			Haquna.log(this.getClass().getName(), "setupStringCandidates()", "modelName = " + arguments[0]);
+			for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
 				if(!Arrays.asList(arguments).contains(t.getName())) {
-					HaqunaSingleton.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
+					Haquna.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
 					stringCandidates.add(t.getName());
 				}
 			}			
@@ -60,7 +60,7 @@ public class RunCompleter2 extends CompleterAbstract {
 			if(!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
 			//if(!args.contains("[")) stringCandidates.add("[");
 			
-			for(Table t : HaqunaSingleton.modelMap.get(arguments[0]).getTables()) {				
+			for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
 				if(!Arrays.asList(arguments).contains(t.getName())) {
 					HaqunaMain.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
 					stringCandidates.add(t.getName());

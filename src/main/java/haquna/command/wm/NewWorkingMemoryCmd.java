@@ -1,6 +1,6 @@
 package haquna.command.wm;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -9,7 +9,7 @@ import heart.xtt.XTTModel;
 
 public class NewWorkingMemoryCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)new(\\s*)WorkingMemory[(]" + HaqunaSingleton.varName + "[)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)new(\\s*)WorkingMemory[(]" + Haquna.varName + "[)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -35,7 +35,7 @@ public class NewWorkingMemoryCmd implements Command {
 			WorkingMemory wm = new WorkingMemory();				
 			
 			wm.registerAllAttributes(model);				
-			HaqunaSingleton.wmMap.put(varName, wm);
+			Haquna.wmMap.put(varName, wm);
 				
 			return true;
 				

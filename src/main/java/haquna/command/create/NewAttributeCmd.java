@@ -1,6 +1,6 @@
 package haquna.command.create;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Attribute;
 
 public class NewAttributeCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Attribute[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Attribute[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -44,7 +44,7 @@ public class NewAttributeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Attribute.Builder attrBuilder = parser.getAttributeBuilder();
 			
-	        HaqunaSingleton.attrBuilderMap.put(varName, attrBuilder);
+	        Haquna.attrBuilderMap.put(varName, attrBuilder);
 			
 			return true;
 			

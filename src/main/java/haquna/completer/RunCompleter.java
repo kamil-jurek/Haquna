@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import jline.console.completer.Completer;
 
 public class RunCompleter implements Completer{
@@ -43,18 +43,18 @@ public class RunCompleter implements Completer{
 	private void addRuns() {
 		strings.clear();
 				
-		for(String k : HaqunaSingleton.wmMap.keySet()) {
+		for(String k : Haquna.wmMap.keySet()) {
 			strings.add(k);
 		}
 		
 		if(prevArg.equals("run")) {
-			for(String k : HaqunaSingleton.modelMap.keySet()) {
+			for(String k : Haquna.modelMap.keySet()) {
 				strings.add(k);
 			}
 		}
 		
-		if(prevArg.matches(HaqunaSingleton.varName)) {
-			for(String k : HaqunaSingleton.wmMap.keySet()) {				
+		if(prevArg.matches(Haquna.varName)) {
+			for(String k : Haquna.wmMap.keySet()) {
 				strings.add(k);
 				//modelName = prevArg;	
 			}			

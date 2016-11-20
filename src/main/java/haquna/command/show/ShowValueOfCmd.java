@@ -1,6 +1,6 @@
 package haquna.command.show;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -9,7 +9,7 @@ import heart.alsvfd.Value;
 
 public class ShowValueOfCmd implements Command {
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)[.]showValueOf[(][']" + HaqunaSingleton.attrNamePattern + "['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)[.]showValueOf[(][']" + Haquna.attrNamePattern + "['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;

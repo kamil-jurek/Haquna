@@ -1,6 +1,6 @@
 package haquna.command.run;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -13,10 +13,10 @@ import heart.inference.InferenceAlgorithm;
 import heart.xtt.XTTModel;
 
 public class RunWithoutWmCmd extends RunAbstactCmd {		
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)=(\\s*)" + 
-											   HaqunaSingleton.varName + "[.]run[(](\\s*)" +
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" +
+											   Haquna.varName + "[.]run[(](\\s*)" +
 											   "(((mode=((ddi)|(gdi)|(foi)))|(token=((true)|(false)))|(uncertainty=((true)|(false)))|(conflict_strategy=((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
-											   "([\\[]([']" + HaqunaSingleton.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
+											   "([\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
 											   "[)](\\s*)";
 		
 	private String commandStr;
@@ -78,7 +78,7 @@ public class RunWithoutWmCmd extends RunAbstactCmd {
 	    	  }
 			}
 						  
-		    HaqunaSingleton.wmMap.put(varName, wm);
+		    Haquna.wmMap.put(varName, wm);
 		    
 			return true;
 		    

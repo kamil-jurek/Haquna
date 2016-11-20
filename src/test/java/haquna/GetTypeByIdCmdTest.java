@@ -33,7 +33,7 @@ public static CommandFactory cp = new CommandFactory();
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -50,7 +50,7 @@ public static CommandFactory cp = new CommandFactory();
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No type with '" + sal.getTypeId() + "' id in '" + sal.getModelName() + "' model");
 		
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -68,7 +68,7 @@ public static CommandFactory cp = new CommandFactory();
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 }

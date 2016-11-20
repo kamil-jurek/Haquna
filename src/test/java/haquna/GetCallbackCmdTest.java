@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class GetCallbackCmdTest {
@@ -21,8 +20,8 @@ public class GetCallbackCmdTest {
 		String cmd = "Callback = Attr.getCallback()";
 		TestUtils.createAndExecCmd(cmd);
 						
-		assertEquals(HaqunaSingleton.callbackMap.containsKey("Callback"), true);
-		assertEquals(HaqunaSingleton.callbackMap.get("Callback"), null);
+		assertEquals(Haquna.callbackMap.containsKey("Callback"), true);
+		assertEquals(Haquna.callbackMap.get("Callback"), null);
 				
 	}		
 }

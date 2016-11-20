@@ -1,6 +1,6 @@
 package haquna.command.create;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Rule;
 
 public class NewRuleCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[=]" + "(\\s*)" + "new" + "(\\s*)" + "Rule[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -50,7 +50,7 @@ public class NewRuleCmd implements Command {
 	        parser.parse(hmr_code);
 	        Rule.Builder ruleBuilder = parser.getRuleBuilder();
 			
-	        HaqunaSingleton.ruleBuilderMap.put(varName, ruleBuilder);
+	        Haquna.ruleBuilderMap.put(varName, ruleBuilder);
 
 			return true;
 			

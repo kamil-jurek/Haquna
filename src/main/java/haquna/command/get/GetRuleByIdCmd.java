@@ -2,7 +2,7 @@ package haquna.command.get;
 
 import java.util.LinkedList;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -11,7 +11,7 @@ import heart.xtt.Table;
 
 public class GetRuleByIdCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName +"(\\s*)=(\\s*)" + HaqunaSingleton.varName + "[.]getRuleById[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName +"(\\s*)=(\\s*)" + Haquna.varName + "[.]getRuleById[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;
@@ -77,7 +77,7 @@ public class GetRuleByIdCmd implements Command {
 		LinkedList<Rule> rules = table.getRules();		
 		for(Rule rule : rules) {
 			if(rule.getId() != null && rule.getId().equals(ruleId)) {
-				HaqunaSingleton.ruleMap.put(varName, rule);
+				Haquna.ruleMap.put(varName, rule);
 				return;
 			}
 		}

@@ -43,7 +43,7 @@ public class AddCmdTest {
 		TestUtils.createAndExecCmd("M4 = M3.add(Rul)");
 		//TestUtils.createAndExecCmd("M4.show()");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M4"), true);
+		assertEquals(Haquna.modelMap.containsKey("M4"), true);
 		System.out.println("=======================================");			
 	}
 		
@@ -55,7 +55,7 @@ public class AddCmdTest {
 		TestUtils.createAndExecCmd("M1 = M0.add(TypObj)");
 		TestUtils.createAndExecCmd("M1.showTypesList()");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M1"), true);
+		assertEquals(Haquna.modelMap.containsKey("M1"), true);
 		System.out.println("=======================================");			
 	}
 	
@@ -70,7 +70,7 @@ public class AddCmdTest {
 		TestUtils.createAndExecCmd("M2.showTypesList()");
 		TestUtils.createAndExecCmd("M2.showAttributesList()");
 				
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), true);
+		assertEquals(Haquna.modelMap.containsKey("M2"), true);
 		System.out.println("=======================================");
 	}
 	
@@ -89,7 +89,7 @@ public class AddCmdTest {
 		
 		TestUtils.createAndExecCmd("printVars()");
 				
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M5"), true);
+		assertEquals(Haquna.modelMap.containsKey("M5"), true);
 		System.out.println("=======================================");
 	}
 	
@@ -110,7 +110,7 @@ public class AddCmdTest {
 		
 		TestUtils.createAndExecCmd("printVars()");
 				
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M7"), true);
+		assertEquals(Haquna.modelMap.containsKey("M7"), true);
 		System.out.println("=======================================");
 	}
 }

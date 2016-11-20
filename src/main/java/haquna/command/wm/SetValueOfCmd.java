@@ -1,6 +1,6 @@
 package haquna.command.wm;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
@@ -14,9 +14,9 @@ import heart.exceptions.NotInTheDomainException;
 
 public class SetValueOfCmd implements Command {
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "[.]setValueOf[(][']" + 
-											   HaqunaSingleton.attrNamePattern + "['](\\s*)[,](\\s*)[']" +
-											   HaqunaSingleton.attrValuePattern+ "(.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "[.]setValueOf[(][']" +
+											   Haquna.attrNamePattern + "['](\\s*)[,](\\s*)[']" +
+											   Haquna.attrValuePattern+ "(.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String wmName;

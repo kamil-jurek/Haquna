@@ -1,6 +1,6 @@
 package haquna.command.io;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.XttModelUtils;
 import haquna.command.Command;
@@ -9,7 +9,7 @@ import heart.xtt.XTTModel;
 
 public class XsaveCmd implements Command {		
 	
-	public static final String pattern = "^" + HaqunaSingleton.varName + "(\\s*)" + "[.]"  + "(\\s*)" + "xsave[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]"  + "(\\s*)" + "xsave[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String modelName;

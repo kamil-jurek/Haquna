@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class SetValueOfCmdTest {
@@ -25,7 +24,7 @@ public class SetValueOfCmdTest {
 		TestUtils.createAndExecCmd("Wm.setValueOf('hour','22#0.4')");
 		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
-		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
 			
 	}
 	
@@ -36,7 +35,7 @@ public class SetValueOfCmdTest {
 		TestUtils.createAndExecCmd("Wm.setValueOf('hour','20.4')");
 		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
-		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
 			
 	}
 }

@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.command.get.GetTableByIdCmd;
 import haquna.utils.HaqunaUtils;
 
@@ -30,7 +29,7 @@ public class GetTableByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -47,7 +46,7 @@ public class GetTableByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("No table with '" + sal.getTableId() + "' id in '" + sal.getModelName() + "' model");
 		
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
@@ -65,7 +64,7 @@ public class GetTableByIdCmdTest {
 		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
-		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
+		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 }

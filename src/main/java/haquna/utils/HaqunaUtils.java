@@ -1,6 +1,6 @@
 package haquna.utils;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import haquna.HaqunaException;
 import heart.WorkingMemory;
 import heart.xtt.Attribute;
@@ -9,8 +9,8 @@ import heart.xtt.XTTModel;
 
 public class HaqunaUtils {
 	public static XTTModel getModel(String name) throws HaqunaException {
-		if(HaqunaSingleton.modelMap.containsKey(name)) {
-			return HaqunaSingleton.modelMap.get(name);
+		if(Haquna.modelMap.containsKey(name)) {
+			return Haquna.modelMap.get(name);
 		
 		} else {
 			throw new HaqunaException("No '" + name + "' XTTModel object in memory");
@@ -18,8 +18,8 @@ public class HaqunaUtils {
 	}
 	
 	public static Attribute getAttribute(String name) throws HaqunaException {
-		if(HaqunaSingleton.attrMap.containsKey(name)) {
-			return HaqunaSingleton.attrMap.get(name);
+		if(Haquna.attrMap.containsKey(name)) {
+			return Haquna.attrMap.get(name);
 		
 		} else {
 			throw new HaqunaException("No " + name + " attribute in memory");
@@ -27,8 +27,8 @@ public class HaqunaUtils {
 	}
 	
 	public static Table getTable(String name) throws HaqunaException {
-		if(HaqunaSingleton.tableMap.containsKey(name)) {
-			return HaqunaSingleton.tableMap.get(name);
+		if(Haquna.tableMap.containsKey(name)) {
+			return Haquna.tableMap.get(name);
 		
 		} else {
 			throw new HaqunaException("No '" + name + "' Table object in memory");
@@ -36,8 +36,8 @@ public class HaqunaUtils {
 	}
 	
 	public static WorkingMemory getWorkingMemory(String name) throws HaqunaException {
-		if(HaqunaSingleton.wmMap.containsKey(name)) {
-			return HaqunaSingleton.wmMap.get(name);
+		if(Haquna.wmMap.containsKey(name)) {
+			return Haquna.wmMap.get(name);
 		
 		} else {
 			throw new HaqunaException("No '" + name + "' WorkingMemory object in memory");
@@ -45,7 +45,7 @@ public class HaqunaUtils {
 	}
 	
 	public static void checkVarName(String varName) throws HaqunaException {
-		if(HaqunaSingleton.isVarUsed(varName)) {
+		if(Haquna.isVarUsed(varName)) {
 			throw new HaqunaException("Variable name '" + varName + "' already in use");
 		}
 	}
@@ -59,16 +59,16 @@ public class HaqunaUtils {
 	}
 
 	public static void clearMemory() {
-		HaqunaSingleton.modelMap.clear();
-		HaqunaSingleton.wmMap.clear();
-		HaqunaSingleton.attrMap.clear();
-		HaqunaSingleton.tableMap.clear();
-		HaqunaSingleton.ruleMap.clear();
-		HaqunaSingleton.typeMap.clear();
-		HaqunaSingleton.callbackMap.clear();
-		HaqunaSingleton.attrBuilderMap.clear();
-		HaqunaSingleton.tableBuilderMap.clear();
-		HaqunaSingleton.ruleBuilderMap.clear();
-		HaqunaSingleton.typeBuilderMap.clear();
+		Haquna.modelMap.clear();
+		Haquna.wmMap.clear();
+		Haquna.attrMap.clear();
+		Haquna.tableMap.clear();
+		Haquna.ruleMap.clear();
+		Haquna.typeMap.clear();
+		Haquna.callbackMap.clear();
+		Haquna.attrBuilderMap.clear();
+		Haquna.tableBuilderMap.clear();
+		Haquna.ruleBuilderMap.clear();
+		Haquna.typeBuilderMap.clear();
 	}
 }

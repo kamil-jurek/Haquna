@@ -1,6 +1,6 @@
 package haquna.completer;
 
-import haquna.HaqunaSingleton;
+import haquna.Haquna;
 import heart.State;
 import heart.StateElement;
 import heart.WorkingMemory;
@@ -20,16 +20,16 @@ public class ParametersCompleter extends CompleterAbstract {
 		
 		if(varName.equals("new")) {
 			if(functionName.equals("WorkingMemory")) {
-				stringCandidates.addAll(HaqunaSingleton.modelMap.keySet());
+				stringCandidates.addAll(Haquna.modelMap.keySet());
 			}
 		}
 						
 		/*if(functionName.equals("Type")) {
-			stringCandidates.addAll(HaqunaSingleton.modelMap.keySet());
+			stringCandidates.addAll(Haquna.modelMap.keySet());
 		}*/
 		
-		if(HaqunaSingleton.tableMap.containsKey(varName)) {
-			Table table = HaqunaSingleton.tableMap.get(varName);
+		if(Haquna.tableMap.containsKey(varName)) {
+			Table table = Haquna.tableMap.get(varName);
 			
 			if(functionName.contains("getRuleByName")) {
 				for(Rule r : table.getRules()) {
@@ -38,8 +38,8 @@ public class ParametersCompleter extends CompleterAbstract {
 			}						
 		}     					
 				
-		if(HaqunaSingleton.wmMap.containsKey(varName)){
-			WorkingMemory wm = HaqunaSingleton.wmMap.get(varName);
+		if(Haquna.wmMap.containsKey(varName)){
+			WorkingMemory wm = Haquna.wmMap.get(varName);
 			
 			if(functionName.contains("showValueOf")) {
 				State current = wm.getCurrentState();
@@ -56,8 +56,8 @@ public class ParametersCompleter extends CompleterAbstract {
 			}
 		}			
 		
-		if(HaqunaSingleton.modelMap.containsKey(varName)){
-			XTTModel model = HaqunaSingleton.modelMap.get(varName);
+		if(Haquna.modelMap.containsKey(varName)){
+			XTTModel model = Haquna.modelMap.get(varName);
 			
 			if(functionName.contains("getTableByName")) {
 				for(Table t : model.getTables()) {
@@ -78,28 +78,28 @@ public class ParametersCompleter extends CompleterAbstract {
 			}
 			
 			if(functionName.contains("add")) {
-				for(String a : HaqunaSingleton.attrMap.keySet()) {
+				for(String a : Haquna.attrMap.keySet()) {
 					stringCandidates.add(a);
 				}
-				for(String t : HaqunaSingleton.tableMap.keySet()) {
+				for(String t : Haquna.tableMap.keySet()) {
 					stringCandidates.add(t);
 				}	
-				for(String t : HaqunaSingleton.typeMap.keySet()) {
+				for(String t : Haquna.typeMap.keySet()) {
 					stringCandidates.add(t);
 				}
-				for(String r : HaqunaSingleton.ruleMap.keySet()) {
+				for(String r : Haquna.ruleMap.keySet()) {
 					stringCandidates.add(r);					
 				}
-				for(String a : HaqunaSingleton.attrBuilderMap.keySet()) {
+				for(String a : Haquna.attrBuilderMap.keySet()) {
 					stringCandidates.add(a);
 				}
-				for(String t : HaqunaSingleton.tableBuilderMap.keySet()) {
+				for(String t : Haquna.tableBuilderMap.keySet()) {
 					stringCandidates.add(t);
 				}	
-				for(String t : HaqunaSingleton.typeBuilderMap.keySet()) {
+				for(String t : Haquna.typeBuilderMap.keySet()) {
 					stringCandidates.add(t);
 				}
-				for(String r : HaqunaSingleton.ruleBuilderMap.keySet()) {
+				for(String r : Haquna.ruleBuilderMap.keySet()) {
 					stringCandidates.add(r);					
 				}
 			}

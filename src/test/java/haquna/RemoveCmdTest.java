@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 
@@ -21,7 +20,7 @@ public class RemoveCmdTest {
 		
 		TestUtils.createAndExecCmd("M2 = Model.remove('day_type')");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
+		assertEquals(Haquna.modelMap.containsKey("M2"), false);
 			
 	}
 	
@@ -31,7 +30,7 @@ public class RemoveCmdTest {
 		
 		TestUtils.createAndExecCmd("M2 = Model.remove('today')");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
+		assertEquals(Haquna.modelMap.containsKey("M2"), false);
 		TestUtils.createAndExecCmd("Model.showAttributesList()");
 		TestUtils.createAndExecCmd("M2.showAttributesList()");
 			
@@ -43,7 +42,7 @@ public class RemoveCmdTest {
 		
 		TestUtils.createAndExecCmd("M2 = Model.remove('Today')");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
+		assertEquals(Haquna.modelMap.containsKey("M2"), false);
 		
 			
 	}
@@ -55,7 +54,7 @@ public class RemoveCmdTest {
 		
 		TestUtils.createAndExecCmd("M2 = Model.remove('Today/1')");
 
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), true);
+		assertEquals(Haquna.modelMap.containsKey("M2"), true);
 		
 			
 	}
@@ -77,7 +76,7 @@ public class RemoveCmdTest {
 		TestUtils.createAndExecCmd("M7 = M6.remove('day_type')");
 		TestUtils.createAndExecCmd("M7.showTypesList()");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("M7"), true);
+		assertEquals(Haquna.modelMap.containsKey("M7"), true);
 		
 		
 		
@@ -97,7 +96,7 @@ public class RemoveCmdTest {
 		TestUtils.createAndExecCmd("NewPoiWithoutDay = NewPoiModel.remove('day_type')");
 		TestUtils.createAndExecCmd("NewPoiWithoutDay.showTypesList()");
 		
-		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay"), true);							
+		assertEquals(Haquna.modelMap.containsKey("NewPoiWithoutDay"), true);
 	}
 	
 	@Test
@@ -120,6 +119,6 @@ public class RemoveCmdTest {
 		
 		TestUtils.createAndExecCmd("NewPoiWithoutDay2 = NewPoiWithoutDay.remove('day_type')");
 		TestUtils.createAndExecCmd("NewPoiWithoutDay2.showTypesList()");
-		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay2"), true);							
+		assertEquals(Haquna.modelMap.containsKey("NewPoiWithoutDay2"), true);
 	}
 }

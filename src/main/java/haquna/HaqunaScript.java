@@ -22,15 +22,24 @@ public class HaqunaScript {
 		) {
 		    while ((line = br.readLine()) != null) {
 		    	scriptCommands.add(line);
-		        // Deal with the line
 		    }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 	
 	public List<String> getScriptCommands() {
 		return this.scriptCommands;
+	}
+
+	public void executeScriptCmds(Haquna haquna) {
+		List<String> scriptCmds = getScriptCommands();
+
+		if(scriptCmds != null) {
+			for(String cmd : scriptCmds) {
+				haquna.executeCmd(cmd);
+			}
+		}
 	}
 }
