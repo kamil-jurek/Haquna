@@ -1,5 +1,6 @@
 package haquna;
 
+import static haquna.TestUtils.getErrorStringFormat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -12,13 +13,10 @@ import haquna.command.get.GetRuleByIdCmd;
 import haquna.utils.HaqunaUtils;
 
 public class GetRuleByIdCmdTest {
-	
-public static CommandFactory cp = new CommandFactory();
-	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
-		cp.createCommand("Table = Model.getTableByName('Threats')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Table = Model.getTableByName('Threats')");
 	}
 		
 	@Test
@@ -29,7 +27,8 @@ public static CommandFactory cp = new CommandFactory();
 		System.setOut(new PrintStream(outContent));
 		
 		String cmd = "Rule = NoExistingTab.getRuleById('Threats/1')";
-		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
+		GetRuleByIdCmd sal = (GetRuleByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getTableName() + "' Table object in memory");
 				
 		assertEquals(HaqunaSingleton.ruleMap.containsKey("Rule"), false);
@@ -45,7 +44,8 @@ public static CommandFactory cp = new CommandFactory();
 		
 		
 		String cmd = "Rule = Table.getRuleById('NotExisting')";
-		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
+		GetRuleByIdCmd sal = (GetRuleByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("No rule with '" + sal.getRuleId() + "' id in '" + sal.getTableName() + "' table");
 		
 		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
@@ -59,17 +59,14 @@ public static CommandFactory cp = new CommandFactory();
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		
-		cp.createCommand("Tab = Model.getTableByName('Today')");
+		TestUtils.createAndExecCmd("Tab = Model.getTableByName('Today')");
 		
 		String cmd = "Tab = Table.getRuleById('integer')";
-		GetRuleByIdCmd sal = (GetRuleByIdCmd) cp.createCommand(cmd);
+		GetRuleByIdCmd sal = (GetRuleByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
 		assertEquals(HaqunaSingleton.ruleMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
-	
-	private String getErrorStringFormat(String str) {
-		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }

@@ -99,21 +99,21 @@ public class HaqunaSingleton {
 	public static boolean isVarUsed(String varName) {
 		if(modelMap.containsKey(varName) ||
 		   tableMap.containsKey(varName) ||
-		   attrMap.containsKey(varName) || 
+		   attrMap.containsKey(varName) ||
 		   typeMap.containsKey(varName) ||
 		   ruleMap.containsKey(varName) ||
 		   callbackMap.containsKey(varName) ||
 		   wmMap.containsKey(varName) ||
 		   tableBuilderMap.containsKey(varName) ||
-		   attrBuilderMap.containsKey(varName) || 
+		   attrBuilderMap.containsKey(varName) ||
 		   typeBuilderMap.containsKey(varName) ||
 		   ruleBuilderMap.containsKey(varName)) {
-			
+
 			return true;
-		
+
 		} else {
 			return false;
-		}		
+		}
 	}
 	
 	private void printRed(String line) {

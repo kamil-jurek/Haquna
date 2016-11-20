@@ -1,5 +1,6 @@
 package haquna;
 
+import static haquna.TestUtils.getErrorStringFormat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -12,12 +13,9 @@ import haquna.command.show.ShowTypesListCmd;
 import haquna.utils.HaqunaUtils;
 
 public class ShowTypesListCmdTest {
-	
-	public static CommandFactory cp = new CommandFactory();
-	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
 	}
 	
 	@Test
@@ -25,10 +23,10 @@ public class ShowTypesListCmdTest {
 		setup();
 		
 		String cmd = "Model.showTypesList()";
-		ShowTypesListCmd sal = (ShowTypesListCmd) cp.createCommand(cmd);
-		System.out.println(sal.getVarName());
+		ShowTypesListCmd sal = (ShowTypesListCmd) TestUtils.createCmd(cmd);
+		sal.execute();
+
 		assertEquals(sal.getVarName(), "Model");
-				
 	}
 	
 	@Test
@@ -37,14 +35,14 @@ public class ShowTypesListCmdTest {
 		System.setOut(new PrintStream(outContent));
 		
 		String cmd = "NoExistingModel.showTypesList()";
-		ShowTypesListCmd sal = (ShowTypesListCmd) cp.createCommand(cmd);
+		ShowTypesListCmd sal = (ShowTypesListCmd) TestUtils.createCmd(cmd);
+		sal.execute();
+
 		String expectedOutput = getErrorStringFormat("No '" + sal.getVarName() + "' XTTModel object in memory");
 		
 		assertEquals(outContent.toString(), expectedOutput);
 				
 	}
 	
-	private String getErrorStringFormat(String str) {
-		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
-	}
+
 }

@@ -25,7 +25,7 @@ public class GetAttributeByIdCmd implements Command {
 	public GetAttributeByIdCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
-		String[] commandParts = this.commandStr.split("[=|.|']");		
+		String[] commandParts = this.commandStr.split("[=.']");
 		this.varName = commandParts[0];		
 		this.modelName = commandParts[1];
 		this.attribiuteId = commandParts[3];

@@ -1,5 +1,6 @@
 package haquna;
 
+import static haquna.TestUtils.getErrorStringFormat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +18,7 @@ public class GetTypeByNameCmdTest {
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
 	}
 	
 	@Test
@@ -25,7 +26,8 @@ public class GetTypeByNameCmdTest {
 		setup();
 		
 		String cmd = "Type = Model.getTypeByName('integer')";
-		GetTypeByNameCmd sal = (GetTypeByNameCmd) cp.createCommand(cmd);
+		GetTypeByNameCmd sal = (GetTypeByNameCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 
 		assertEquals(sal.getVarName(), "Type");
 		assertEquals(sal.getModelName(), "Model");
@@ -39,7 +41,9 @@ public class GetTypeByNameCmdTest {
 		System.setOut(new PrintStream(outContent));
 		
 		String cmd = "Tab_1 = NoExistingModel.getTypeByName('integer')";
-		GetTypeByNameCmd sal = (GetTypeByNameCmd) cp.createCommand(cmd);
+		GetTypeByNameCmd sal = (GetTypeByNameCmd) TestUtils.createCmd(cmd);
+		sal.execute();
+
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 		
 		assertEquals(outContent.toString(), expectedOutput);
@@ -54,11 +58,11 @@ public class GetTypeByNameCmdTest {
 		System.setOut(new PrintStream(outContent));
 		
 		String cmd = "Type = Model.getTypeByName('today')";
-		GetTypeByNameCmd sal = (GetTypeByNameCmd) cp.createCommand(cmd);
+		GetTypeByNameCmd sal = (GetTypeByNameCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("No type with '" + sal.getTypeName() + "' name in '" + sal.getModelName() + "' model");
 		
 		assertEquals(outContent.toString(), expectedOutput);
-				
 	}
 	
 	@Test
@@ -68,16 +72,12 @@ public class GetTypeByNameCmdTest {
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		
-		cp.createCommand("Type = Model.getTypeByName('integer')");		
+		TestUtils.createAndExecCmd("Type = Model.getTypeByName('integer')");		
 		String cmd = "Type = Model.getTypeByName('integer')";
-		GetTypeByNameCmd sal = (GetTypeByNameCmd) cp.createCommand(cmd);
+		GetTypeByNameCmd sal = (GetTypeByNameCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
 		assertEquals(outContent.toString(), expectedOutput);
-				
-	}
-	
-	private String getErrorStringFormat(String str) {
-		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }

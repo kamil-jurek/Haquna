@@ -13,8 +13,8 @@ public static CommandFactory cp = new CommandFactory();
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
-		cp.createCommand("Attr = Model.getAttributeByName('day')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Attr = Model.getAttributeByName('day')");
 	}
 		
 	@Test
@@ -22,7 +22,7 @@ public static CommandFactory cp = new CommandFactory();
 		setup();
 				
 		String cmd = "Type = Attr.getType()";
-		cp.createCommand(cmd);
+		TestUtils.createAndExecCmd(cmd);
 						
 		assertEquals(HaqunaSingleton.typeMap.containsKey("Type"), true);
 		assertEquals(HaqunaSingleton.typeMap.get("Type").getName(), "day_type");

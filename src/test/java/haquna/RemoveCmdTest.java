@@ -9,13 +9,9 @@ import haquna.utils.HaqunaUtils;
 
 
 public class RemoveCmdTest {
-	
-	public static CommandFactory cp = new CommandFactory();
-	
-
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
 
 	}
 		
@@ -23,7 +19,7 @@ public class RemoveCmdTest {
 	public void testRemoveType() {		
 		setup();				
 		
-		cp.createCommand("M2 = Model.remove('day_type')");
+		TestUtils.createAndExecCmd("M2 = Model.remove('day_type')");
 		
 		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
 			
@@ -33,11 +29,11 @@ public class RemoveCmdTest {
 	public void testRemoveAttr() {		
 		setup();				
 		
-		cp.createCommand("M2 = Model.remove('today')");
+		TestUtils.createAndExecCmd("M2 = Model.remove('today')");
 		
 		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
-		cp.createCommand("Model.showAttributesList()");
-		cp.createCommand("M2.showAttributesList()");
+		TestUtils.createAndExecCmd("Model.showAttributesList()");
+		TestUtils.createAndExecCmd("M2.showAttributesList()");
 			
 	}
 	
@@ -45,7 +41,7 @@ public class RemoveCmdTest {
 	public void testRemoveTable() {		
 		setup();				
 		
-		cp.createCommand("M2 = Model.remove('Today')");
+		TestUtils.createAndExecCmd("M2 = Model.remove('Today')");
 		
 		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), false);
 		
@@ -57,8 +53,8 @@ public class RemoveCmdTest {
 	public void testRemoveRule() {		
 		setup();				
 		
-		cp.createCommand("M2 = Model.remove('Today/1')");
-		
+		TestUtils.createAndExecCmd("M2 = Model.remove('Today/1')");
+
 		assertEquals(HaqunaSingleton.modelMap.containsKey("M2"), true);
 		
 			
@@ -68,18 +64,18 @@ public class RemoveCmdTest {
 	public void testRemoveAll() {		
 		setup();				
 		
-		cp.createCommand("M2 = Model.remove('Today/1')");
-		cp.createCommand("M3 = M2.remove('Today/2')");
-		cp.createCommand("M4 = M3.remove('Today')");
-		cp.createCommand("M4.showAttributesList()");
+		TestUtils.createAndExecCmd("M2 = Model.remove('Today/1')");
+		TestUtils.createAndExecCmd("M3 = M2.remove('Today/2')");
+		TestUtils.createAndExecCmd("M4 = M3.remove('Today')");
+		TestUtils.createAndExecCmd("M4.showAttributesList()");
 		
-		//cp.createCommand("M5 = M4.remove('today')");
-		//cp.createCommand("M5.showAttributesList()");
+		//TestUtils.createAndExecCmd("M5 = M4.remove('today')");
+		//TestUtils.createAndExecCmd("M5.showAttributesList()");
 	
-		cp.createCommand("M6 = M4.remove('day')");
-		cp.createCommand("M6.showAttributesList()");
-		cp.createCommand("M7 = M6.remove('day_type')");
-		cp.createCommand("M7.showTypesList()");
+		TestUtils.createAndExecCmd("M6 = M4.remove('day')");
+		TestUtils.createAndExecCmd("M6.showAttributesList()");
+		TestUtils.createAndExecCmd("M7 = M6.remove('day_type')");
+		TestUtils.createAndExecCmd("M7.showTypesList()");
 		
 		assertEquals(HaqunaSingleton.modelMap.containsKey("M7"), true);
 		
@@ -92,14 +88,14 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedType() {		
 		setup();				
 		
-		cp.createCommand("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
-		cp.createCommand("DayType = Model.getTypeByName('day_type')");
+		TestUtils.createAndExecCmd("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
+		TestUtils.createAndExecCmd("DayType = Model.getTypeByName('day_type')");
 		
-		cp.createCommand("NewPoiModel = PoiModel.add(DayType)");
-		cp.createCommand("NewPoiModel.showTypesList()");
+		TestUtils.createAndExecCmd("NewPoiModel = PoiModel.add(DayType)");
+		TestUtils.createAndExecCmd("NewPoiModel.showTypesList()");
 		
-		cp.createCommand("NewPoiWithoutDay = NewPoiModel.remove('day_type')");
-		cp.createCommand("NewPoiWithoutDay.showTypesList()");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay = NewPoiModel.remove('day_type')");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay.showTypesList()");
 		
 		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay"), true);							
 	}
@@ -108,22 +104,22 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedAttr() {		
 		setup();				
 		
-		cp.createCommand("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
-		cp.createCommand("DayType = Model.getTypeByName('day_type')");
-		cp.createCommand("Attr = Model.getAttributeByName('day')");
+		TestUtils.createAndExecCmd("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
+		TestUtils.createAndExecCmd("DayType = Model.getTypeByName('day_type')");
+		TestUtils.createAndExecCmd("Attr = Model.getAttributeByName('day')");
 		
-		cp.createCommand("NewPoiModel = PoiModel.add(DayType)");
-		cp.createCommand("NewPoiModel.showTypesList()");
+		TestUtils.createAndExecCmd("NewPoiModel = PoiModel.add(DayType)");
+		TestUtils.createAndExecCmd("NewPoiModel.showTypesList()");
 		
-		cp.createCommand("AttrAdded = NewPoiModel.add(Attr)");
-		cp.createCommand("AttrAdded.showAttributesList()");
+		TestUtils.createAndExecCmd("AttrAdded = NewPoiModel.add(Attr)");
+		TestUtils.createAndExecCmd("AttrAdded.showAttributesList()");
 		
-		cp.createCommand("NewPoiWithoutDay = AttrAdded.remove('day')");
-		cp.createCommand("NewPoiWithoutDay.showAttributesList()");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay = AttrAdded.remove('day')");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay.showAttributesList()");
 		
 		
-		cp.createCommand("NewPoiWithoutDay2 = NewPoiWithoutDay.remove('day_type')");
-		cp.createCommand("NewPoiWithoutDay2.showTypesList()");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay2 = NewPoiWithoutDay.remove('day_type')");
+		TestUtils.createAndExecCmd("NewPoiWithoutDay2.showTypesList()");
 		assertEquals(HaqunaSingleton.modelMap.containsKey("NewPoiWithoutDay2"), true);							
 	}
 }

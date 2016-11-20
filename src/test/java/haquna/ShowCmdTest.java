@@ -8,32 +8,30 @@ import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class ShowCmdTest {
-	public static CommandFactory cp = new CommandFactory();
-	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
-		cp.createCommand("Attr = Model.getAttributeByName('day')");
-		cp.createCommand("Type = Model.getTypeByName('day_type')");
-		cp.createCommand("Table = Model.getTableByName('Threats')");
-		cp.createCommand("Rule = Table.getRuleByName('Threats/1')");
-		cp.createCommand("Type2 = Attr.getType()");
-		cp.createCommand("Callback = Attr.getCallback()");
-		cp.createCommand("Wm = new WorkingMemory(Model)");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Attr = Model.getAttributeByName('day')");
+		TestUtils.createAndExecCmd("Type = Model.getTypeByName('day_type')");
+		TestUtils.createAndExecCmd("Table = Model.getTableByName('Threats')");
+		TestUtils.createAndExecCmd("Rule = Table.getRuleByName('Threats/1')");
+		TestUtils.createAndExecCmd("Type2 = Attr.getType()");
+		TestUtils.createAndExecCmd("Callback = Attr.getCallback()");
+		TestUtils.createAndExecCmd("Wm = new WorkingMemory(Model)");
 	}
 		
 	@Test
 	public void testGetTypeCmd() {
 		setup();
 				
-		cp.createCommand("Model.show()");
-		cp.createCommand("Attr.show()");
-		cp.createCommand("Type.show()");
-		cp.createCommand("Table.show()");
-		cp.createCommand("Rule.show()");
-		cp.createCommand("Type2.show()");
-		cp.createCommand("Callback.show()");
-		cp.createCommand("Wm.show()");
+		TestUtils.createAndExecCmd("Model.show()");
+		TestUtils.createAndExecCmd("Attr.show()");
+		TestUtils.createAndExecCmd("Type.show()");
+		TestUtils.createAndExecCmd("Table.show()");
+		TestUtils.createAndExecCmd("Rule.show()");
+		TestUtils.createAndExecCmd("Type2.show()");
+		TestUtils.createAndExecCmd("Callback.show()");
+		TestUtils.createAndExecCmd("Wm.show()");
 		
 		assertEquals(HaqunaSingleton.typeMap.containsKey("Type"), true);
 		assertEquals(HaqunaSingleton.typeMap.get("Type").getName(), "day_type");

@@ -8,25 +8,22 @@ import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class SetValueOfCmdTest {
-public static CommandFactory cp = new CommandFactory();
-	
-
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
-		cp.createCommand("Wm = new WorkingMemory(Model)");
-		cp.createCommand("Wm.setValueOf('hour','16')");
-		cp.createCommand("Wm.setValueOf('location','work')");
-		cp.createCommand("Wm.setValueOf('activity','walking')");
-		cp.createCommand("Wm.setValueOf('day','mon/1')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Wm = new WorkingMemory(Model)");
+		TestUtils.createAndExecCmd("Wm.setValueOf('hour','16')");
+		TestUtils.createAndExecCmd("Wm.setValueOf('location','work')");
+		TestUtils.createAndExecCmd("Wm.setValueOf('activity','walking')");
+		TestUtils.createAndExecCmd("Wm.setValueOf('day','mon/1')");
 	}
 		
 	@Test
 	public void testRunCmd1() {		
 		setup();				
 		
-		cp.createCommand("Wm.setValueOf('hour','22#0.4')");
-		cp.createCommand("Wm.showCurrentState()");
+		TestUtils.createAndExecCmd("Wm.setValueOf('hour','22#0.4')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
 		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
 			
@@ -36,8 +33,8 @@ public static CommandFactory cp = new CommandFactory();
 	public void testRunCmd2() {		
 		setup();				
 		
-		cp.createCommand("Wm.setValueOf('hour','20.4')");
-		cp.createCommand("Wm.showCurrentState()");
+		TestUtils.createAndExecCmd("Wm.setValueOf('hour','20.4')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
 		assertEquals(HaqunaSingleton.wmMap.containsKey("Wm"), true);
 			

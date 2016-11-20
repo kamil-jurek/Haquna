@@ -13,11 +13,9 @@ import haquna.command.io.XsaveCmd;
 import haquna.utils.HaqunaUtils;
 
 public class XsaveCmdTest {
-public static CommandFactory cp = new CommandFactory();
-	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -33,7 +31,7 @@ public static CommandFactory cp = new CommandFactory();
 		stringBuilder.append("')");
 		
 		String cmdStr = stringBuilder.toString();
-		cp.createCommand(cmdStr);
+		TestUtils.createAndExecCmd(cmdStr);
 		
 		assert(true);
 	}
@@ -54,13 +52,12 @@ public static CommandFactory cp = new CommandFactory();
 		System.setOut(new PrintStream(outContent));
 						
 		String cmdStr = stringBuilder.toString();
-		XsaveCmd xc = (XsaveCmd) cp.createCommand(cmdStr);
-		String expectedOutput = getErrorStringFormat("No '" + xc.getModelName() + "' XTTModel object in memory");
+		XsaveCmd xc = (XsaveCmd) TestUtils.createCmd(cmdStr);
+		xc.execute();
+		String expectedOutput = TestUtils.getErrorStringFormat("No '" + xc.getModelName() + "' XTTModel object in memory");
 		
 		assertEquals(outContent.toString(), expectedOutput);						
 	}
 		
-	private String getErrorStringFormat(String str) {
-		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
-	}
+
 }

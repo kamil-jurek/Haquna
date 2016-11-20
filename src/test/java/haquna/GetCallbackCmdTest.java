@@ -8,13 +8,10 @@ import haquna.command.CommandFactory;
 import haquna.utils.HaqunaUtils;
 
 public class GetCallbackCmdTest {
-	
-public static CommandFactory cp = new CommandFactory();
-	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
-		cp.createCommand("Attr = Model.getAttributeByName('day')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Attr = Model.getAttributeByName('day')");
 	}
 		
 	@Test
@@ -22,7 +19,7 @@ public static CommandFactory cp = new CommandFactory();
 		setup();
 				
 		String cmd = "Callback = Attr.getCallback()";
-		cp.createCommand(cmd);
+		TestUtils.createAndExecCmd(cmd);
 						
 		assertEquals(HaqunaSingleton.callbackMap.containsKey("Callback"), true);
 		assertEquals(HaqunaSingleton.callbackMap.get("Callback"), null);

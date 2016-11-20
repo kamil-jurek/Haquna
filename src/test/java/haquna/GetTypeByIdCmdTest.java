@@ -1,5 +1,6 @@
 package haquna;
 
+import static haquna.TestUtils.getErrorStringFormat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +18,7 @@ public static CommandFactory cp = new CommandFactory();
 	
 	public static void setup() {
 		HaqunaUtils.clearMemory();
-		cp.createCommand("Model = new Model('threat-monitor.hmr')");
+		TestUtils.createAndExecCmd("Model = new Model('threat-monitor.hmr')");
 	}
 		
 	@Test
@@ -28,7 +29,8 @@ public static CommandFactory cp = new CommandFactory();
 		System.setOut(new PrintStream(outContent));
 		
 		String cmd = "Tab = NoExistingModel.getTypeById('Today')";
-		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
+		GetTypeByIdCmd sal = (GetTypeByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("No '" + sal.getModelName() + "' XTTModel object in memory");
 				
 		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
@@ -44,7 +46,8 @@ public static CommandFactory cp = new CommandFactory();
 		
 		
 		String cmd = "Tab = Model.getTypeById('NotExisting')";
-		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
+		GetTypeByIdCmd sal = (GetTypeByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("No type with '" + sal.getTypeId() + "' id in '" + sal.getModelName() + "' model");
 		
 		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), false);
@@ -58,17 +61,14 @@ public static CommandFactory cp = new CommandFactory();
 		ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(outContent));
 		
-		cp.createCommand("Tab = Model.getTableByName('Today')");
+		TestUtils.createAndExecCmd("Tab = Model.getTableByName('Today')");
 		
 		String cmd = "Tab = Model.getTypeById('integer')";
-		GetTypeByIdCmd sal = (GetTypeByIdCmd) cp.createCommand(cmd);
+		GetTypeByIdCmd sal = (GetTypeByIdCmd) TestUtils.createCmd(cmd);
+		sal.execute();
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
 		assertEquals(HaqunaSingleton.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
-	
-	private String getErrorStringFormat(String str) {
-		return "\u001B[31m======>" + str + "\"\u001B[0m\n";
 	}
 }
