@@ -1,15 +1,18 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'haquna.Haquna'
+mainClassName = 'haquna.HaqunaMain'
 
 sourceCompatibility = 1.7
 
 jar{
 	manifest {
-        attributes 'Implementation-Title': 'Haquna Jar File',       		   
-        		   'Main-Class': 'haquna.HaqunaMain'
+        attributes 'Main-Class': 'haquna.HaqunaMain'
     }
+    
+    from {
+    	configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  	}
   
 }
 
