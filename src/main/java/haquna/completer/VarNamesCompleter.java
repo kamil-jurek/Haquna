@@ -1,58 +1,29 @@
 package haquna.completer;
 
-import static jline.internal.Preconditions.checkNotNull;
-
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import haquna.Haquna;
-import jline.console.completer.Completer;
+import haquna.HaqunaMain;
 
-public class VarNamesCompleter implements Completer {
-	
-	private final SortedSet<String> strings = new TreeSet<String>();
-	
-	public VarNamesCompleter() {
-		addVarNames();
-	}
-	
+public class VarNamesCompleter extends CompleterAbstract {
+
 	@Override
-	public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-		addVarNames();
-		
-		// buffer could be null
-        checkNotNull(candidates);
-        if (buffer == null) {
-            candidates.addAll(strings);
-        }
-        else {
-            for (String match : strings.tailSet(buffer)) {
-                if (!match.startsWith(buffer)) {
-                    break;
-                }
+	protected void setupStringCandidates() {
+		stringCandidates.clear();
 
-                candidates.add(match);
-            }
-        }
+		HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
+		HaqunaMain.log(1, "TEST", "buffor: ", buff);
 
-        return candidates.isEmpty() ? -1 : 0;
-    }
-	
-	private void addVarNames() {
-		strings.clear();
-		
-    	strings.addAll(Haquna.modelMap.keySet());
-        strings.addAll(Haquna.tableMap.keySet());
-        strings.addAll(Haquna.attrMap.keySet());
-        strings.addAll(Haquna.typeMap.keySet());
-        strings.addAll(Haquna.ruleMap.keySet());
-        strings.addAll(Haquna.callbackMap.keySet());
-        strings.addAll(Haquna.wmMap.keySet());
-        strings.addAll(Haquna.tableBuilderMap.keySet());
-        strings.addAll(Haquna.attrBuilderMap.keySet());
-        strings.addAll(Haquna.typeBuilderMap.keySet());
-        strings.addAll(Haquna.ruleBuilderMap.keySet());
-    }
+        stringCandidates.addAll(Haquna.modelMap.keySet());
+	    stringCandidates.addAll(Haquna.tableMap.keySet());
+	    stringCandidates.addAll(Haquna.attrMap.keySet());
+	    stringCandidates.addAll(Haquna.typeMap.keySet());
+	    stringCandidates.addAll(Haquna.ruleMap.keySet());
+	    stringCandidates.addAll(Haquna.callbackMap.keySet());
+	    stringCandidates.addAll(Haquna.wmMap.keySet());
+	    stringCandidates.addAll(Haquna.tableBuilderMap.keySet());
+	    stringCandidates.addAll(Haquna.attrBuilderMap.keySet());
+	    stringCandidates.addAll(Haquna.typeBuilderMap.keySet());
+	    stringCandidates.addAll(Haquna.ruleBuilderMap.keySet());
+	    		
+	}
 
 }

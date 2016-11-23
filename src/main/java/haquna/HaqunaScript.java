@@ -38,7 +38,9 @@ public class HaqunaScript {
 
 		if(scriptCmds != null) {
 			for(String cmd : scriptCmds) {
-				haquna.executeCmd(cmd);
+				if(!haquna.executeCmd(cmd)) {
+					break;
+				}
 			}
 		}
 	}

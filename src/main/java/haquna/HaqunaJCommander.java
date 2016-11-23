@@ -29,22 +29,34 @@ public class HaqunaJCommander {
 
         @Parameter(
                 names = {"--inference"},
-                description = "inference mode",
+                description = "ddi|gdi|foi #optional, default = ddi",
                 required = true
         )
         private String inference = "ddi";
 
         @Parameter(
-                names = {"--state"},
-                description = "Initial values of attributes - comma separated"
+                names = {"--initial-state"},
+                description = "initial-state [att=val,att=val] #optional - comma separated"
         )
         private String attributes = null;
 
         @Parameter(
-                names = {"--conflict_strategy"},
-                description = "conflict strategy"
+                names = {"--conflict-resolution"},
+                description = "conflict-resolution  all|last|first] # optional, default first"
         )
-        private String conflictStrategy = "all";
+        private String conflictStrategy = "first";
+
+        @Parameter(
+                names = {"--uncertainty"},
+                description = "uncertainty on|off # optional, default on"
+        )
+        private String uncertainty = "on";
+
+        @Parameter(
+                names = {"--tokens"},
+                description = "tokens on|off # optional, default off"
+        )
+        private String tokens = "on";
 
         @Parameter(
                 names = {"--help"},
@@ -71,13 +83,13 @@ public class HaqunaJCommander {
         ArrayList<String> cmds = new ArrayList<String>();
 
         if(jcc.help) {
-            jcomm.usage();
             HaqunaMain.startConsole = false;
+            jcomm.usage();
 
         } else if(jcc.scriptPath != null) {
+            HaqunaMain.startConsole = true;
             HaqunaScript hs = new HaqunaScript(jcc.scriptPath);
             hs.executeScriptCmds(haquna);
-            HaqunaMain.startConsole = true;
 
         } else {
                 String cmd;
@@ -87,6 +99,7 @@ public class HaqunaJCommander {
                 cmd ="Wm = new WorkingMemory(Mod)";
                 cmds.add(cmd);
 
+                HaqunaMain.startConsole = false;
                 if(jcc.attributes != null) {
                     String attrs = jcc.attributes;
                     attrs = attrs.replace("[", "");
@@ -108,8 +121,15 @@ public class HaqunaJCommander {
                 tabs = tabs.replace("]", "']");
                 tabs = tabs.replace(",", "','");
 
+                String token = jcc.tokens.equals("off") ? "false" : "true";
+                String uncertainty = jcc.uncertainty.equals("off") ? "false" : "true";
 
-                cmd = "Mod.run(Wm, mode=" + jcc.inference + ", " + "conflict_strategy=" + jcc.conflictStrategy+ ", " + tabs + ")";
+                cmd = "Mod.run(Wm, " +
+                        "mode=" + jcc.inference + ", " +
+                        "conflict_strategy=" + jcc.conflictStrategy+ ", " +
+                        "token=" + token + ", " +
+                        "uncertainty=" + uncertainty + ", " +
+                        tabs + ")";
                 cmds.add(cmd);
 
                 cmd = "Wm.showCurrentState()";
@@ -117,9 +137,11 @@ public class HaqunaJCommander {
 
 
                 for(String c : cmds) {
-                    haquna.executeCmd(c);
+                    if(!haquna.executeCmd(c)) {
+                        break;
+                    }
                 }
-                HaqunaMain.startConsole = false;
+
             }
 
     }

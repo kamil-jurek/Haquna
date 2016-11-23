@@ -1,7 +1,6 @@
 package haquna;
 
 import haquna.command.Command;
-import haquna.command.io.XsaveCmd;
 import org.junit.Test;
 
 import haquna.command.CommandFactory;

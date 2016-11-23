@@ -1,15 +1,9 @@
 package haquna;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.internal.Lists;
 
 import haquna.utils.MyLogger;
 
@@ -32,8 +26,13 @@ public class HaqunaMain {
 		}
 	}
 	
-	public static void log(String sourceClass, String sourceMethod, String msg) {
-		HaqunaMain.LOGGER.info(sourceClass + "\t" + sourceMethod + "\t" + msg);
+	public static void log(int logLevel, String sourceClass, String sourceMethod, String msg) {
+		
+		if(logLevel == 0) {
+			HaqunaMain.LOGGER.info(sourceClass + "\t" + sourceMethod + "\t" + msg);
+		} else {
+			HaqunaMain.LOGGER.info(sourceClass + "\t" + sourceMethod + "\t<b>" + msg + "</b>");
+		}
 	}
 	
 	private static void checkScripts(Haquna h, String[] args) {
@@ -45,10 +44,14 @@ public class HaqunaMain {
 	}
 
 	private static void checkCommandline(Haquna h, String[] args) {
-		if(args != null && (Arrays.asList(args).contains("--model") ||
-							Arrays.asList(args).contains("--console") ||
-							Arrays.asList(args).contains("--help"))) {
-			HaqunaJCommander.commandline(args, h);
+		try {
+			if (args != null && (Arrays.asList(args).contains("--model") ||
+					Arrays.asList(args).contains("--console") ||
+					Arrays.asList(args).contains("--help"))) {
+				HaqunaJCommander.commandline(args, h);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
     }
 

@@ -2,14 +2,19 @@ package haquna.completer;
 
 import java.util.List;
 
-import jline.console.completer.Completer;
+import haquna.HaqunaMain;
 
-public class UniversalCompleter implements Completer{
+public class UniversalCompleter extends CompleterAbstract{
 
 	@Override
 	public int complete(String buffer, int cursor, List<CharSequence> candidates) {
-		// TODO Auto-generated method stub
-		return 0;
+
+        return 0;
+	}
+
+	@Override
+	protected void setupStringCandidates() {
+		HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
 	}
 
 }

@@ -76,31 +76,11 @@ public class HaqunaCompleter implements Completer {
         else {
             completer = completers.get(argIndex);
         }
-       
-       /* int h = 0;       
-        if(completers.size() > 2) {
-        	h = 1;
-        }*/
-        
+
         if(completer instanceof CompleterAbstract) {
-        	((CompleterAbstract) completer).setContext(list.getArguments(), argIndex);
+        	((CompleterAbstract) completer).setContext(list.getArguments(), argIndex, buffer);
         }
-        /*if(completer instanceof FunctionNameCompleter) {
-        	
-        	((FunctionNameCompleter) completer).setVarName(list.getArguments()[argIndex-1]);
-        }
-        
-        if(completer instanceof RunCompleter) {
-        	((RunCompleter) completer).setPrevArg(list.getArguments()[argIndex-1]);
-        }
-        
-        if(completer instanceof ParameterCompleter) {
-        	((ParameterCompleter) completer).setVarName(list.getArguments()[argIndex-2]);
-        	((ParameterCompleter) completer).setFunctionName(list.getArguments()[argIndex-1]);
-        }*/
-        
-        
-        
+
         // ensure that all the previous completers are successful before allowing this completer to pass (only if strict).
         for (int i = 0; isStrict() && (i < argIndex); i++) {
             Completer sub = completers.get(i >= completers.size() ? (completers.size() - 1) : i);

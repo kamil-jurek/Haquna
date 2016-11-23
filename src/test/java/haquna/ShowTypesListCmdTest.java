@@ -8,7 +8,6 @@ import java.io.PrintStream;
 
 import org.junit.Test;
 
-import haquna.command.CommandFactory;
 import haquna.command.show.ShowTypesListCmd;
 import haquna.utils.HaqunaUtils;
 

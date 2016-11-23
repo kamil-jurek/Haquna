@@ -10,7 +10,7 @@ public class HaqunaDelimiter extends HaqunaCompleter.AbstractArgumentDelimiter {
 		this.delimiters = new LinkedList<Character>();
 		this.delimiters.addAll(Arrays.asList(delims));
 		
-		this.delimiters.add(' ');
+		//this.delimiters.add(' ');
 		
 	}
 	

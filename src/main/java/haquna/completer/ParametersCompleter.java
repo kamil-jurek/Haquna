@@ -1,6 +1,7 @@
 package haquna.completer;
 
 import haquna.Haquna;
+import haquna.HaqunaMain;
 import heart.State;
 import heart.StateElement;
 import heart.WorkingMemory;
@@ -15,6 +16,8 @@ public class ParametersCompleter extends CompleterAbstract {
 	@Override
 	protected void setupStringCandidates() {
 		stringCandidates.clear();
+		HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
+
 		String varName = arguments[argPos-2];
 		String functionName = arguments[argPos-1];
 		

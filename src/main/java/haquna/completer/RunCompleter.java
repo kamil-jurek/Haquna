@@ -1,96 +1,69 @@
 package haquna.completer;
 
-import static jline.internal.Preconditions.checkNotNull;
-
+import java.util.Arrays;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import haquna.Haquna;
-import jline.console.completer.Completer;
+import haquna.HaqunaMain;
+import heart.xtt.Table;
 
-public class RunCompleter implements Completer{
+public class RunCompleter extends CompleterAbstract {
 
-	private final SortedSet<String> strings = new TreeSet<String>();
-	
-	private String prevArg;
-	
-	public RunCompleter() {
-		
-	}
-	
 	@Override
-	public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-		addRuns();
-		// buffer could be null
-        checkNotNull(candidates);
-        if (buffer == null) {
-            candidates.addAll(strings);
-        }
-        else {
-            for (String match : strings.tailSet(buffer)) {
-                if (!match.startsWith(buffer)) {
-                    break;
-                }
-
-                candidates.add(match);
-            }
-        }
-
-        return candidates.isEmpty() ? -1 : 0;
-    }
-	
-	private void addRuns() {
-		strings.clear();
+	protected void setupStringCandidates() {
+		stringCandidates.clear();
 				
-		for(String k : Haquna.wmMap.keySet()) {
-			strings.add(k);
+        HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
+        HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "arguments = " + Arrays.toString(arguments));
+		if(argPos == 2) {
+			stringCandidates.addAll(Haquna.wmMap.keySet());
 		}
-		
-		if(prevArg.equals("run")) {
-			for(String k : Haquna.modelMap.keySet()) {
-				strings.add(k);
+
+		if(argPos > 2) {
+			String prevArg = arguments[argPos - 1];
+			if (prevArg.equals("mode")) {
+				stringCandidates.add("gdi");
+				stringCandidates.add("foi");
+				stringCandidates.add("ddi");
+			} else if (prevArg.equals("token")) {
+				stringCandidates.add("true");
+				stringCandidates.add("false");
+			} else if (prevArg.equals("uncertainty")) {
+				stringCandidates.add("true");
+				stringCandidates.add("false");
+			} else if (prevArg.equals("conflict_strategy")) {
+				stringCandidates.add("first");
+				stringCandidates.add("last");
+				stringCandidates.add("all");
+			}
+
+			/*else if(Arrays.asList(arguments).contains("[")) {
+				Haquna.log(this.getClass().getName(), "setupStringCandidates()", "modelName = " + arguments[0]);
+				for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
+					if(!Arrays.asList(arguments).contains(t.getName())) {
+						Haquna.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
+						stringCandidates.add(t.getName());
+					}
+				}
+			}*/
+
+			else {
+				List<String> args = Arrays.asList(arguments);
+				if (!args.contains("mode")) stringCandidates.add("mode");
+				if (!args.contains("token")) stringCandidates.add("token");
+				if (!args.contains("unceratinty")) stringCandidates.add("uncertainty");
+				if (!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
+				//if(!args.contains("[")) stringCandidates.add("[");
+
+				for (Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
+					if (!Arrays.asList(arguments).contains(t.getName())) {
+						HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
+						stringCandidates.add(t.getName());
+					}
+				}
 			}
 		}
 		
-		if(prevArg.matches(Haquna.varName)) {
-			for(String k : Haquna.wmMap.keySet()) {
-				strings.add(k);
-				//modelName = prevArg;	
-			}			
-		}
-		
-		if(prevArg.equals("mode")){
-			strings.add("gdi");
-			strings.add("foi");
-			strings.add("ddi");
-		}
-		
-		else if(prevArg.equals("token")){
-			strings.add("true");
-			strings.add("false");
-		}
-		
-		else if(prevArg.equals("uncertainty")){
-			strings.add("true");
-			strings.add("false");
-		}
-		
-		else if(prevArg.equals("conflict_strategy")){
-			strings.add("first");
-			strings.add("last");
-			strings.add("all");
-		}
-		
-		else {
-			strings.add("mode");
-			strings.add("token");
-			strings.add("uncertainty");
-			strings.add("conflict_stratrgy");
-		}
-    }
-	
-	public void setPrevArg(String varName) {
-		this.prevArg = varName;		
 	}
+
 }

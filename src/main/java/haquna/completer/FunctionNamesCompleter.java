@@ -1,13 +1,16 @@
 package haquna.completer;
 
 import haquna.Haquna;
+import haquna.HaqunaMain;
 
-public class FunctionNamesCompleter2 extends CompleterAbstract{
+public class FunctionNamesCompleter extends CompleterAbstract{
 
 	@Override
 	protected void setupStringCandidates() {
 		stringCandidates.clear();
-		
+
+		HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
+
 		if(argPos < 1) {
 			return;
 		}
