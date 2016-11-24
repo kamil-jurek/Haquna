@@ -17,20 +17,19 @@ public class HaqunaJCommander {
                 names = {"--model"},
                 description = "path to the HMR file",
                 required = true
+
         )
         private String modelPath;
 
         @Parameter(
                 names = {"--tables"},
-                description = " Order of tables used in the inference - comma separated",
-                required = true
+                description = " Order of tables used in the inference - comma separated"
         )
-        private String tables = "[]";
+        private String tables = " ";
 
         @Parameter(
                 names = {"--inference"},
-                description = "ddi|gdi|foi #optional, default = ddi",
-                required = true
+                description = "ddi|gdi|foi #optional, default = ddi"
         )
         private String inference = "ddi";
 
@@ -80,7 +79,7 @@ public class HaqunaJCommander {
         JCommanderConfiguration jcc = new HaqunaJCommander.JCommanderConfiguration();
         JCommander jcomm = new JCommander(jcc, args);
 
-        ArrayList<String> cmds = new ArrayList<String>();
+        ArrayList<String> cmds = new ArrayList<>();
 
         if(jcc.help) {
             HaqunaMain.startConsole = false;

@@ -36,31 +36,22 @@ public class RunCompleter extends CompleterAbstract {
 				stringCandidates.add("last");
 				stringCandidates.add("all");
 			}
-
-			/*else if(Arrays.asList(arguments).contains("[")) {
-				Haquna.log(this.getClass().getName(), "setupStringCandidates()", "modelName = " + arguments[0]);
-				for(Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
-					if(!Arrays.asList(arguments).contains(t.getName())) {
-						Haquna.log(this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
-						stringCandidates.add(t.getName());
-					}
-				}
-			}*/
-
 			else {
-				List<String> args = Arrays.asList(arguments);
-				if (!args.contains("mode")) stringCandidates.add("mode");
-				if (!args.contains("token")) stringCandidates.add("token");
-				if (!args.contains("unceratinty")) stringCandidates.add("uncertainty");
-				if (!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
-				//if(!args.contains("[")) stringCandidates.add("[");
-
-				for (Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
-					if (!Arrays.asList(arguments).contains(t.getName())) {
-						HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "adding table name = " + t.getName());
-						stringCandidates.add(t.getName());
+				if(buff.contains("[")) {
+					for (Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
+						if (!Arrays.asList(arguments).contains(t.getName())) {
+							stringCandidates.add(t.getName());
+						}
 					}
+				} else {
+					List<String> args = Arrays.asList(arguments);
+					if (!args.contains("mode")) stringCandidates.add("mode");
+					if (!args.contains("token")) stringCandidates.add("token");
+					if (!args.contains("uncertainty")) stringCandidates.add("uncertainty");
+					if (!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
 				}
+
+
 			}
 		}
 		
