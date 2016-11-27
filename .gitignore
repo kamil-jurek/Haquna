@@ -4,6 +4,7 @@ bin/
 .project
 matata.sh
 test*
+build/*
 
 *.class
 
