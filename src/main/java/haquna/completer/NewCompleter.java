@@ -13,7 +13,7 @@ public class NewCompleter extends CompleterAbstract {
 
         String varName = arguments[argPos-1];
 
-        if(argPos == 1 && !Haquna.isVarUsed(varName)) {
+        if(argPos == 1 && !Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '=') {
             stringCandidates.add("new");
         }
 

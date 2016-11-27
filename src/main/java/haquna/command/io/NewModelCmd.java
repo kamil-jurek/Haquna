@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import haquna.Haquna;
 import haquna.HaqunaException;
@@ -94,8 +96,9 @@ public class NewModelCmd implements Command {
 			this.path = "test.hmr";
 		
 		} catch (MalformedURLException e) {
-					
-			if(!this.modelPath.contains("/home/")) {
+
+			Path p = Paths.get(modelPath);
+			if(!p.isAbsolute()) {
 				this.modelPath = System.getProperty("user.dir") + "/" + this.modelPath;
 			}
 			
@@ -105,10 +108,11 @@ public class NewModelCmd implements Command {
 	}
 	
 	private XTTModel parseHMR() throws HaqunaException {
-		XTTModel model = null;
-		SourceFile hmr = new SourceFile(path);
-		HMRParser parser = new HMRParser();
-	   	try {			    
+		try {
+			XTTModel model = null;
+			SourceFile hmr = new SourceFile(path);
+			HMRParser parser = new HMRParser();
+
 		    parser.parse(hmr);
 		    model = parser.getModel();
 	   	

@@ -16,10 +16,10 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 		}
 		
 		String varName = arguments[argPos-1];
-		
-		if(argPos == 1 && Haquna.isVarUsed(varName)) {
-			
-			
+
+		HaqunaMain.log(1, "FunctionsNameCompleter", "getLastDelimiter", "delim: " +CompleterMenager.getLastDelimiter(arguments,buff,argPos));
+		if(argPos == 1 && Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.') {
+
 			if(Haquna.tableMap.containsKey(varName)) {
 				stringCandidates.add("showRulesList()");
 				stringCandidates.add("show()");
@@ -50,10 +50,9 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 				stringCandidates.add("showAttributesList()");
 				stringCandidates.add("showTypesList()");			;
 				stringCandidates.add("xsave");
-				//stringCandidates.add("run");
 			}
 			
-		} else if(argPos == 2 && Haquna.isVarUsed(varName)){
+		} else if(argPos == 2 && Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.'){
 			if(Haquna.tableMap.containsKey(varName)) {
 				stringCandidates.add("getRuleByName");
 				stringCandidates.add("getRuleById");
@@ -75,7 +74,7 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 				stringCandidates.add("remove");
 				//stringCandidates.add("run");
 			}				
-		} else if(argPos == 2 && arguments[argPos-2].matches(Haquna.varName)) {
+		} else if(argPos == 2 && arguments[argPos-2].matches(Haquna.varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '=') {
 			if(varName.equals("new")){
 				stringCandidates.add("WorkingMemory");
 				stringCandidates.add("Type");

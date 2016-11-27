@@ -58,7 +58,7 @@ abstract public class RunAbstactCmd implements Command {
 			break;
 		  }
 		  case "last": {
-			confBuilder.setCsr(new ConflictSetFirstWin());
+			confBuilder.setCsr(new ConflictSetFireAll());
 			break;
 		  }
 		  case "all": {

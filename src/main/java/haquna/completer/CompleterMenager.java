@@ -2,6 +2,7 @@ package haquna.completer;
 
 import java.util.LinkedList;
 
+import haquna.HaqunaMain;
 import jline.console.ConsoleReader;
 import jline.console.completer.AggregateCompleter;
 import jline.console.completer.CandidateListCompletionHandler;
@@ -74,7 +75,7 @@ public class CompleterMenager {
 
         completers = new LinkedList<Completer>();
         completers.add(new ModelNamesCompleter());
-        completers.add(new StringsCompleter("run"));
+        completers.add(new RunCompleter());
         for(int i = 0; i < 15; i++) {
             completers.add(new RunCompleter());
         }
@@ -83,7 +84,7 @@ public class CompleterMenager {
         completers = new LinkedList<Completer>();
         completers.add(new UniversalCompleter());
         completers.add(new ModelNamesCompleter());
-        completers.add(new StringsCompleter("run"));
+        completers.add(new RunCompleter2());
         for(int i = 0; i < 15; i++) {
             completers.add(new RunCompleter2());
         }
@@ -116,4 +117,41 @@ public class CompleterMenager {
         reader.setCompletionHandler(handler);
         reader.addCompleter(aggComp);
 	}
+
+	public static char getLastDelimiter(String[] arguments, String buff, int argPos) {
+        /*int index = 0;
+        for(int i = 0; i < argPos; i++) {
+            index += arguments[i].length();
+            if(buff.charAt(index) == ' ' ||
+                    (buff.length() < index+1 && buff.charAt(index+1) == '=') ||
+                    (buff.length() < index+1 && buff.charAt(index+1) == '.')) {
+                index++;
+            }
+        }
+        return buff.charAt(index);*/
+        int last = 0;
+        if(buff.lastIndexOf(".") != -1) {
+            last = buff.lastIndexOf(".");
+        }
+
+        if(buff.lastIndexOf("=") != -1) {
+           if(buff.lastIndexOf("=") > last) {
+               last = buff.lastIndexOf("=");
+           }
+        }
+
+        if(buff.lastIndexOf("'") != -1) {
+            if(buff.lastIndexOf("'") > last) {
+                last = buff.lastIndexOf("'");
+            }
+        }
+
+        if(buff.lastIndexOf("(") != -1) {
+            if(buff.lastIndexOf("(") > last) {
+                last = buff.lastIndexOf("(");
+            }
+        }
+
+        return buff.charAt(last);
+    }
 }

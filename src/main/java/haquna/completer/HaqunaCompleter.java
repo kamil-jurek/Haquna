@@ -1,5 +1,6 @@
 package haquna.completer;
 
+import haquna.HaqunaMain;
 import jline.console.completer.Completer;
 import jline.internal.Log;
 
@@ -62,6 +63,9 @@ public class HaqunaCompleter implements Completer {
         int argpos = list.getArgumentPosition();
         int argIndex = list.getCursorArgumentIndex();
 
+        HaqunaMain.log(2, this.getClass().getName(), "buff: ", buffer);
+        HaqunaMain.log(2, this.getClass().getName(), "argpos: ", argpos + " ");
+
         if (argIndex < 0) {
             return -1;
         }
@@ -79,6 +83,11 @@ public class HaqunaCompleter implements Completer {
 
         if(completer instanceof CompleterAbstract) {
         	((CompleterAbstract) completer).setContext(list.getArguments(), argIndex, buffer);
+        }
+
+        HaqunaMain.log(0, this.getClass().getName(), "buffor: ", buffer);
+        for(String s : list.getArguments()) {
+            HaqunaMain.log(0, this.getClass().getName(), "attribute: ", s);
         }
 
         // ensure that all the previous completers are successful before allowing this completer to pass (only if strict).
@@ -210,6 +219,7 @@ public class HaqunaCompleter implements Completer {
                     if (isDelimiter(buffer, i)) {
                         if (arg.length() > 0) {
                             args.add(arg.toString());
+
                             arg.setLength(0); // reset the arg
                         }
                     } else if (!isEscapeChar(buffer, i)) {

@@ -47,12 +47,12 @@ public class RemoveCmd implements Command {
 			
 		} catch (HaqunaException | ModelBuildingException e) {
 			HaqunaUtils.printRed(e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 			
 			return false;
 		}

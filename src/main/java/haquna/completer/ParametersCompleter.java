@@ -22,16 +22,12 @@ public class ParametersCompleter extends CompleterAbstract {
 		String functionName = arguments[argPos-1];
 		
 		if(varName.equals("new")) {
-			if(functionName.equals("WorkingMemory")) {
+			if(functionName.equals("WorkingMemory") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '(') {
 				stringCandidates.addAll(Haquna.modelMap.keySet());
 			}
 		}
-						
-		/*if(functionName.equals("Type")) {
-			stringCandidates.addAll(Haquna.modelMap.keySet());
-		}*/
-		
-		if(Haquna.tableMap.containsKey(varName)) {
+
+		if(Haquna.tableMap.containsKey(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 			Table table = Haquna.tableMap.get(varName);
 			
 			if(functionName.contains("getRuleByName")) {
@@ -41,7 +37,7 @@ public class ParametersCompleter extends CompleterAbstract {
 			}						
 		}     					
 				
-		if(Haquna.wmMap.containsKey(varName)){
+		if(Haquna.wmMap.containsKey(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\''){
 			WorkingMemory wm = Haquna.wmMap.get(varName);
 			
 			if(functionName.contains("showValueOf")) {
@@ -51,15 +47,15 @@ public class ParametersCompleter extends CompleterAbstract {
 				}				
 			}
 			
-			if(functionName.contains("setValueOf")) {
+			if(functionName.contains("setValueOf")){
 				State current = wm.getCurrentState();
 				for(StateElement se : current) {
-					stringCandidates.add(se.getAttributeName());					
+					stringCandidates.add(se.getAttributeName());
 				}				
 			}
 		}			
 		
-		if(Haquna.modelMap.containsKey(varName)){
+		if(Haquna.modelMap.containsKey(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\''){
 			XTTModel model = Haquna.modelMap.get(varName);
 			
 			if(functionName.contains("getTableByName")) {

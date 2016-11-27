@@ -42,13 +42,12 @@ public class XsaveCmd implements Command {
 			
 		} catch (HaqunaException e) {
 			HaqunaUtils.printRed(e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		
 		} catch (Exception e) {
 			HaqunaUtils.printRed(e.getMessage());
-			e.printStackTrace();
-			
+			//e.printStackTrace();
 			return false;
 		}			
 	}		

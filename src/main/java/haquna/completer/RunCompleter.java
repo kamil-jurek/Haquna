@@ -19,6 +19,10 @@ public class RunCompleter extends CompleterAbstract {
 			stringCandidates.addAll(Haquna.wmMap.keySet());
 		}
 
+		if(argPos == 1 && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.') {
+			stringCandidates.add("run");
+		}
+
 		if(argPos > 2) {
 			String prevArg = arguments[argPos - 1];
 			if (prevArg.equals("mode")) {
@@ -37,7 +41,7 @@ public class RunCompleter extends CompleterAbstract {
 				stringCandidates.add("all");
 			}
 			else {
-				if(buff.contains("[")) {
+				if(buff.contains("[") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 					for (Table t : Haquna.modelMap.get(arguments[0]).getTables()) {
 						if (!Arrays.asList(arguments).contains(t.getName())) {
 							stringCandidates.add(t.getName());

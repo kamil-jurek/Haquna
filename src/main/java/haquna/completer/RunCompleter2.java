@@ -15,6 +15,10 @@ public class RunCompleter2 extends CompleterAbstract {
         HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
         HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "arguments = " + Arrays.toString(arguments));
 
+        if(argPos == 2 && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.') {
+            stringCandidates.add("run");
+        }
+
         if(argPos > 2) {
             String prevArg = arguments[argPos - 1];
             if (prevArg.equals("mode")) {
