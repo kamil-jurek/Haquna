@@ -9,7 +9,7 @@ import heart.xtt.Type;
 
 public class GetTypeCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getType[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + Haquna.varName + "[.]getType[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;

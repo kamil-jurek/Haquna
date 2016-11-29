@@ -64,7 +64,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=$APP_HOME/lib/haquna.jar:$APP_HOME/lib/jline-2.14.2.jar:$APP_HOME/lib/jcommander-1.35.jar:$APP_HOME/lib/heartdroid-1.0_213.jar
+CLASSPATH=$APP_HOME/lib/haquna.jar:$APP_HOME/lib/jline-2.14.2.jar:$APP_HOME/lib/jcommander-1.35.jar:$APP_HOME/lib/heartdroid-1.0_216.jar
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
@@ -161,4 +161,4 @@ function splitJvmOpts() {
 eval splitJvmOpts $DEFAULT_JVM_OPTS $JAVA_OPTS $HAQUNA_OPTS
 
 
-exec "$JAVACMD" "${JVM_OPTS[@]}" -classpath "$CLASSPATH" haquna.Haquna "$@"
+exec "$JAVACMD" "${JVM_OPTS[@]}" -classpath "$CLASSPATH" haquna.HaqunaMain "$@"

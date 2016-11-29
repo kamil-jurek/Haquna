@@ -8,7 +8,7 @@ import heart.xtt.Attribute;
 
 public class GetCallbackCmd implements Command {		
 	
-	public static final String pattern = "^[A-Z].*=(\\s*)[A-Z].*[.]getCallback[(][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)=(\\s*)" + Haquna.varName + "[.]getCallback[(][)](\\s*)";
 	
 	private String commandStr;
 	private String varName;

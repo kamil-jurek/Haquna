@@ -55,22 +55,22 @@ public class ParametersCompleter extends CompleterAbstract {
 			}
 		}			
 		
-		if(Haquna.modelMap.containsKey(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\''){
+		if(Haquna.modelMap.containsKey(varName)){
 			XTTModel model = Haquna.modelMap.get(varName);
 			
-			if(functionName.contains("getTableByName")) {
+			if(functionName.contains("getTableByName") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 				for(Table t : model.getTables()) {
 					stringCandidates.add(t.getName());
 				}				
 			}
 			
-			if(functionName.contains("getTypeByName")) {
+			if(functionName.contains("getTypeByName") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 				for(Type t : model.getTypes()) {
 					stringCandidates.add(t.getName());
 				}	
 			}
 			
-			if(functionName.contains("getAttributeByName")) {
+			if(functionName.contains("getAttributeByName") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 				for(Attribute a : model.getAttributes()) {
 					stringCandidates.add(a.getName());
 				}				
@@ -103,7 +103,7 @@ public class ParametersCompleter extends CompleterAbstract {
 				}
 			}
 			
-			if(functionName.contains("remove")) {
+			if(functionName.contains("remove") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\'') {
 				for(Attribute a : model.getAttributes()) {
 					stringCandidates.add(a.getName());
 				}

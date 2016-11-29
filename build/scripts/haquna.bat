@@ -69,10 +69,10 @@ set CMD_LINE_ARGS=%$
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\haquna.jar;%APP_HOME%\lib\jline-2.14.2.jar;%APP_HOME%\lib\jcommander-1.35.jar;%APP_HOME%\lib\heartdroid-1.0_213.jar
+set CLASSPATH=%APP_HOME%\lib\haquna.jar;%APP_HOME%\lib\jline-2.14.2.jar;%APP_HOME%\lib\jcommander-1.35.jar;%APP_HOME%\lib\heartdroid-1.0_216.jar
 
 @rem Execute haquna
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %HAQUNA_OPTS%  -classpath "%CLASSPATH%" haquna.Haquna %CMD_LINE_ARGS%
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %HAQUNA_OPTS%  -classpath "%CLASSPATH%" haquna.HaqunaMain %CMD_LINE_ARGS%
 
 :end
 @rem End local scope for the variables with windows NT shell

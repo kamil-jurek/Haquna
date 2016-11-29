@@ -41,7 +41,7 @@ public class AddCmdTest {
 		TestUtils.createAndExecCmd("M3.showTablesList()");
 		
 		TestUtils.createAndExecCmd("M4 = M3.add(Rul)");
-		//TestUtils.createAndExecCmd("M4.show()");
+		TestUtils.createAndExecCmd("M4.show()");
 		
 		assertEquals(Haquna.modelMap.containsKey("M4"), true);
 		System.out.println("=======================================");			
