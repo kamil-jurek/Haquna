@@ -62,7 +62,15 @@ public class NewModelCmd implements Command {
 			//e.printStackTrace();
 			
 			return false;
-		}	
+
+		} finally {
+			File f = new File("umlHMRFile.hmr");
+			if (f.exists()) {
+				f.delete();
+			}
+	}
+
+
 	}		
 	
 	public boolean matches(String commandStr) {
@@ -116,18 +124,12 @@ public class NewModelCmd implements Command {
 		
 		    parser.parse(hmr);
 		    model = parser.getModel();
-		    
-		    //Files.delete(new Path("umlHMRFile.hmr"));
+
 		    return model;
 	   	} catch(ParsingSyntaxException | ModelBuildingException e) {
-	   		//Files.delete("umlHMRFile.hmr");
-	   		throw new HaqunaException("ParsingSynatxException parsing '" + path + "'");	   		
-	   	} finally {
-	   		File f = new File("umlHMRFile.hmr");
-	   		if (!f.delete()) {
-	   		    System.out.println("Unable to delete file: " + f.getAbsolutePath());
-	   		}
-	   	}
+			throw new HaqunaException("ParsingSynatxException parsing '" + path + "'");
+
+		}
 	}
 	
 	private void closeQuietly(FileOutputStream out) {
