@@ -5,18 +5,18 @@ import haquna.HaqunaScript;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 
-public class XloadCmd implements Command {
+public class LoadCmd implements Command {
 
-    public static final String pattern = "^(\\s*)" + "xload[(]['](.*)['][)](\\s*)";
+    public static final String pattern = "^(\\s*)" + "load[(]['](.*)['][)](\\s*)";
 
     private String commandStr;
     private String scriptPath;
 
-    public XloadCmd() {
+    public LoadCmd() {
 
     }
 
-    public XloadCmd(String _commandStr) {
+    public LoadCmd(String _commandStr) {
         this.commandStr = _commandStr.replace(" ", "");
 
         String[] commandParts = this.commandStr.split("'");
@@ -44,7 +44,7 @@ public class XloadCmd implements Command {
     }
 
     public Command getNewCommand(String cmdStr) {
-        return new XloadCmd(cmdStr);
+        return new LoadCmd(cmdStr);
     }
 
     public String getCommandStr() {

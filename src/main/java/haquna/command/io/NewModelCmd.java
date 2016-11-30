@@ -1,5 +1,6 @@
 package haquna.command.io;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -89,11 +90,11 @@ public class NewModelCmd implements Command {
 		try {
 			website = new URL(modelPath);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-			FileOutputStream fos = new FileOutputStream("test.hmr");
+			FileOutputStream fos = new FileOutputStream("umlHMRFile.hmr");
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);			
-			fos.close();
+			closeQuietly(fos);
 			
-			this.path = "test.hmr";
+			this.path = "umlHMRFile.hmr";
 		
 		} catch (MalformedURLException e) {
 
@@ -112,14 +113,25 @@ public class NewModelCmd implements Command {
 			XTTModel model = null;
 			SourceFile hmr = new SourceFile(path);
 			HMRParser parser = new HMRParser();
-
+		
 		    parser.parse(hmr);
 		    model = parser.getModel();
-	   	
+		    
+		    //Files.delete(new Path("umlHMRFile.hmr"));
 		    return model;
 	   	} catch(ParsingSyntaxException | ModelBuildingException e) {
-	   		throw new HaqunaException("ParsingSynatxException parsing '" + path + "'");
+	   		//Files.delete("umlHMRFile.hmr");
+	   		throw new HaqunaException("ParsingSynatxException parsing '" + path + "'");	   		
+	   	} finally {
+	   		File f = new File("umlHMRFile.hmr");
+	   		if (!f.delete()) {
+	   		    System.out.println("Unable to delete file: " + f.getAbsolutePath());
+	   		}
 	   	}
+	}
+	
+	private void closeQuietly(FileOutputStream out) {
+	    try { out.flush(); out.close(); } catch(Exception e) {} 
 	}
 	
 }

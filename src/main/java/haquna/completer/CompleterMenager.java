@@ -25,7 +25,7 @@ public class CompleterMenager {
 
         // xload('script.hqn')
         completers = new LinkedList<Completer>();
-        completers.add(new StringsCompleter("xload"));
+        completers.add(new StringsCompleter("load"));
         completers.add(new FileNameCompleter());
         HaqunaCompleter argComp9 = new HaqunaCompleter(new HaqunaDelimiter('\'', ',', '=', '.', '(', '[', ']'), completers);
 

@@ -52,10 +52,10 @@ public class HaqunaJCommander {
         private String uncertainty = "on";
 
         @Parameter(
-                names = {"--tokens"},
+                names = {"--tokens"}, 
                 description = "tokens on|off # optional, default off"
         )
-        private String tokens = "on";
+        private String tokens = "off";
 
         @Parameter(
                 names = {"--help"},

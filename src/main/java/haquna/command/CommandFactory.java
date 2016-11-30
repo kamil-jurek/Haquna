@@ -19,7 +19,7 @@ import haquna.command.get.GetTypeByIdCmd;
 import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
 import haquna.command.io.NewModelCmd;
-import haquna.command.io.XloadCmd;
+import haquna.command.io.LoadCmd;
 import haquna.command.io.XsaveCmd;
 import haquna.command.run.DetermineValuesCmd;
 //import haquna.command.run.RunCmd;
@@ -48,7 +48,7 @@ public class CommandFactory {
 			// IO methods
 			add(new NewModelCmd());
 			add(new XsaveCmd());
-			add(new XloadCmd());
+			add(new LoadCmd());
 			
 			// Common methods
 			add(new ShowCmd());

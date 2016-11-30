@@ -21,7 +21,10 @@ public class HaqunaScript {
 		    BufferedReader br = new BufferedReader(isr);
 		) {
 		    while ((line = br.readLine()) != null) {
-		    	scriptCommands.add(line);
+		    	if(!line.isEmpty() && !line.matches("[%].*")) {
+		    		scriptCommands.add(line);
+		    	}
+		    	
 		    }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
