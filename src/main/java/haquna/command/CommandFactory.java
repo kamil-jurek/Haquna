@@ -20,7 +20,7 @@ import haquna.command.get.GetTypeByNameCmd;
 import haquna.command.get.GetTypeCmd;
 import haquna.command.io.NewModelCmd;
 import haquna.command.io.LoadCmd;
-import haquna.command.io.XsaveCmd;
+import haquna.command.io.SaveCmd;
 import haquna.command.run.DetermineValuesCmd;
 //import haquna.command.run.RunCmd;
 import haquna.command.run.RunWithWmCmd;
@@ -47,7 +47,7 @@ public class CommandFactory {
 		{	
 			// IO methods
 			add(new NewModelCmd());
-			add(new XsaveCmd());
+			add(new SaveCmd());
 			add(new LoadCmd());
 			
 			// Common methods

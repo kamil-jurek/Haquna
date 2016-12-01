@@ -17,7 +17,6 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 		
 		String varName = arguments[argPos-1];
 
-		HaqunaMain.log(1, "FunctionsNameCompleter", "getLastDelimiter", "delim: " +CompleterMenager.getLastDelimiter(arguments,buff,argPos));
 		if(argPos == 1 && Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.') {
 
 			if(Haquna.tableMap.containsKey(varName)) {
@@ -49,7 +48,7 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 				stringCandidates.add("showTablesList()");
 				stringCandidates.add("showAttributesList()");
 				stringCandidates.add("showTypesList()");			;
-				stringCandidates.add("xsave");
+				stringCandidates.add("save");
 			}
 			
 		} else if(argPos == 2 && Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.'){

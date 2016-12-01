@@ -33,10 +33,7 @@ public class NewRuleCmd implements Command {
 		
 		if(!hmrCode.substring(hmrCode.length()-1).equals(".")) {
 			hmrCode += ".";
-		}
-		
-		System.out.println("'" + varName + "'");
-		System.out.println("HMR Code: " + hmrCode);
+		}		
 	}
 	
 	@Override

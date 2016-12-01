@@ -8,7 +8,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import haquna.command.io.XsaveCmd;
+import haquna.command.io.SaveCmd;
 import haquna.utils.HaqunaUtils;
 
 public class XsaveCmdTest {
@@ -22,7 +22,7 @@ public class XsaveCmdTest {
 	public void testXsaveCmd() {
 		setup();
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("Model.xsave('test");
+		stringBuilder.append("Model.save('test");
 		stringBuilder.append(new Date().getHours());
 		stringBuilder.append(new Date().getMinutes());
 		stringBuilder.append(new Date().getSeconds());
@@ -40,7 +40,7 @@ public class XsaveCmdTest {
 	public void testXsaveCmdN() {
 		setup();
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("Mod.xsave('test");
+		stringBuilder.append("Mod.save('test");
 		stringBuilder.append(new Date().getHours());
 		stringBuilder.append(new Date().getMinutes());
 		stringBuilder.append(new Date().getSeconds());
@@ -51,7 +51,7 @@ public class XsaveCmdTest {
 		System.setOut(new PrintStream(outContent));
 						
 		String cmdStr = stringBuilder.toString();
-		XsaveCmd xc = (XsaveCmd) TestUtils.createCmd(cmdStr);
+		SaveCmd xc = (SaveCmd) TestUtils.createCmd(cmdStr);
 		xc.execute();
 		String expectedOutput = TestUtils.getErrorStringFormat("No '" + xc.getModelName() + "' XTTModel object in memory");
 		

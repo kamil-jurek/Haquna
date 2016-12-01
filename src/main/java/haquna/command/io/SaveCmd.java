@@ -7,19 +7,19 @@ import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.xtt.XTTModel;
 
-public class XsaveCmd implements Command {		
+public class SaveCmd implements Command {		
 	
-	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]"  + "(\\s*)" + "xsave[(]['](.*)['][)](\\s*)";
+	public static final String pattern = "^" + Haquna.varName + "(\\s*)" + "[.]"  + "(\\s*)" + "save[(]['](.*)['][)](\\s*)";
 	
 	private String commandStr;
 	private String modelName;
 	private String modelPath;
 	
-	public XsaveCmd() {
+	public SaveCmd() {
 		
 	}
 	
- 	public XsaveCmd(String _commandStr) {
+ 	public SaveCmd(String _commandStr) {
 		this.commandStr = _commandStr.replace(" ", "");
 		
 		String[] commandParts = this.commandStr.split(".xsave|'");		
@@ -57,7 +57,7 @@ public class XsaveCmd implements Command {
 	}
 	
 	public Command getNewCommand(String cmdStr) {
-		return new XsaveCmd(cmdStr);
+		return new SaveCmd(cmdStr);
 	}
 	
 	public String getCommandStr() {

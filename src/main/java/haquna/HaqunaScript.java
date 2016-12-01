@@ -42,6 +42,7 @@ public class HaqunaScript {
 		if(scriptCmds != null) {
 			for(String cmd : scriptCmds) {
 				if(!haquna.executeCmd(cmd)) {
+					haquna.executeCmd("clearMemory()");
 					break;
 				}
 			}
