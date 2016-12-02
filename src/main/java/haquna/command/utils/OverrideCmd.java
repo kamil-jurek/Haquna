@@ -3,7 +3,6 @@ package haquna.command.utils;
 import haquna.Haquna;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
-import heart.Callback;
 import heart.WorkingMemory;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
