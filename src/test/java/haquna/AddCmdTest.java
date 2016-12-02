@@ -113,4 +113,18 @@ public class AddCmdTest {
 		assertEquals(Haquna.modelMap.containsKey("M7"), true);
 		System.out.println("=======================================");
 	}
+	
+	@Test
+	public void testAddCmd6() {		
+		setup();				
+		
+		TestUtils.createAndExecCmd("M = M0.add(TypObj)");
+		TestUtils.createAndExecCmd("M = M.add(TypObj_today)");
+		TestUtils.createAndExecCmd("M.showTypesList()");
+		TestUtils.createAndExecCmd("M = new Type('xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]]')");
+		TestUtils.createAndExecCmd("printVars()");
+		
+		assertEquals(Haquna.modelMap.containsKey("M"), true);
+		System.out.println("=======================================");			
+	}
 }

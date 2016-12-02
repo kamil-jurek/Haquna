@@ -50,7 +50,7 @@ public class GetAttributeByIdCmdTest {
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
-	@Test
+	/*@Test
 	public void testGetAttributeByIdCmdNoVar() {
 		setup();
 		
@@ -67,5 +67,5 @@ public class GetAttributeByIdCmdTest {
 		
 		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
+	}*/
 }

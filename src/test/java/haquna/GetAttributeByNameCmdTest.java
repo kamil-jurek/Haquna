@@ -60,7 +60,7 @@ public class GetAttributeByNameCmdTest {
 		assertEquals(outContent.toString(), expectedOutput);
 	}
 
-	@Test
+	/*@Test
 	public void testGetAttributeByNameCmdNoVar() {
 		setup();
 
@@ -76,5 +76,5 @@ public class GetAttributeByNameCmdTest {
 
 		assertEquals(Haquna.attrMap.containsKey("Att"), true);
 		assertEquals(outContent.toString(), expectedOutput);
-	}
+	}*/
 }

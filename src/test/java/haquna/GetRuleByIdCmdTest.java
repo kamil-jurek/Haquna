@@ -51,7 +51,7 @@ public class GetRuleByIdCmdTest {
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
-	@Test
+	/*@Test
 	public void testGetRuleByIdCmdNoVar() {
 		setup();
 		
@@ -67,5 +67,5 @@ public class GetRuleByIdCmdTest {
 		
 		assertEquals(Haquna.ruleMap.containsKey("Tab"), false);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
+	}*/
 }

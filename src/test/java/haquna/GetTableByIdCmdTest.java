@@ -50,7 +50,7 @@ public class GetTableByIdCmdTest {
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
-	@Test
+	/*@Test
 	public void testGetTableByIdCmdNoVar() {
 		setup();
 		
@@ -66,5 +66,5 @@ public class GetTableByIdCmdTest {
 		
 		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
+	}*/
 }

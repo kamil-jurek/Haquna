@@ -64,7 +64,7 @@ public static CommandFactory cp = new CommandFactory();
 		assertEquals(outContent.toString(), expectedOutput);				
 	}
 	
-	@Test
+	/*@Test
 	public void testGetTableByNameCmdNoVar() {
 		setup();
 		
@@ -80,5 +80,5 @@ public static CommandFactory cp = new CommandFactory();
 		
 		assertEquals(Haquna.tableMap.containsKey("Tab"), true);
 		assertEquals(outContent.toString(), expectedOutput);				
-	}
+	}*/
 }

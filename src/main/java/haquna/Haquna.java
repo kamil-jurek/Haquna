@@ -116,6 +116,48 @@ public class Haquna {
 		}
 	}
 	
+	public static void clearIfVarIsUsed(String varName) {
+		if(modelMap.containsKey(varName)) {
+			modelMap.remove(varName);
+		}
+		
+		if(tableMap.containsKey(varName)){
+			tableMap.remove(varName);
+		}
+		
+		if(attrMap.containsKey(varName)) {
+			attrMap.remove(varName);
+		}
+		
+		if(typeMap.containsKey(varName)) {
+			typeMap.remove(varName);
+		}
+		
+		if(ruleMap.containsKey(varName)) {
+			ruleMap.remove(varName);
+		}
+		
+		if(callbackMap.containsKey(varName)) {
+			callbackMap.remove(varName);
+		}
+		
+		if(wmMap.containsKey(varName)) {
+			tableBuilderMap.remove(varName);
+		}		
+		
+		if(attrBuilderMap.containsKey(varName)) {
+			attrBuilderMap.remove(varName);
+		}
+		
+		if(typeBuilderMap.containsKey(varName)) {
+			typeBuilderMap.remove(varName);
+		}
+		
+		if(ruleBuilderMap.containsKey(varName)) {
+			ruleBuilderMap.remove(varName)	;		
+		}
+	}
+	
 	private void printRed(String line) {
 		out.println("\u001B[31m======>" + line + "\u001B[0m");
 	}

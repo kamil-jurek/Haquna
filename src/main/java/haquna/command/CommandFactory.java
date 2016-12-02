@@ -35,6 +35,7 @@ import haquna.command.show.ShowTypesListCmd;
 import haquna.command.show.ShowValueOfCmd;
 import haquna.command.utils.ClearMemoryCmd;
 import haquna.command.utils.LsCmd;
+import haquna.command.utils.OverrideCmd;
 import haquna.command.utils.PrintVarsCmd;
 import haquna.command.utils.PwdCmd;
 import haquna.command.wm.NewWorkingMemoryCmd;
@@ -100,6 +101,7 @@ public class CommandFactory {
 			add(new PwdCmd());
 			add(new LsCmd());
 			add(new ClearMemoryCmd());
+			add(new OverrideCmd());
 			
 		}
 	};

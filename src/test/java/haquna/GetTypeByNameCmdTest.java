@@ -65,7 +65,7 @@ public class GetTypeByNameCmdTest {
 		assertEquals(outContent.toString(), expectedOutput);
 	}
 	
-	@Test
+	/*@Test
 	public void testGetTypeByNameCmdNoVar() {
 		setup();
 		
@@ -79,5 +79,5 @@ public class GetTypeByNameCmdTest {
 		String expectedOutput = getErrorStringFormat("Variable name '" + sal.getVarName() + "' already in use");
 		
 		assertEquals(outContent.toString(), expectedOutput);
-	}
+	}*/
 }
