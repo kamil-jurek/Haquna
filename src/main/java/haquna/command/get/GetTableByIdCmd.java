@@ -77,6 +77,7 @@ public class GetTableByIdCmd implements Command {
 		LinkedList<Table> tables = model.getTables();
 		for(Table table : tables){
 			if(table.getId() != null && table.getId().equals(tableId)){
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.tableMap.put(varName, table);
 				return;
 			}	     

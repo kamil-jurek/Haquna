@@ -1,9 +1,10 @@
 package haquna.command.utils;
 
 import haquna.Haquna;
-import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
+import heart.Callback;
+import heart.WorkingMemory;
 import heart.xtt.Attribute;
 import heart.xtt.Rule;
 import heart.xtt.Table;
@@ -33,12 +34,12 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 	public boolean execute() {				
 		try {		
 			if(firstVarName.equals(secondVarName)) {
-				return true;
+				return false;
 			}
-			
+						
 			if(Haquna.modelMap.containsKey(secondVarName)) {
 				XTTModel model = Haquna.modelMap.get(secondVarName);
-				HaqunaUtils.checkVarName(firstVarName);
+				Haquna.clearIfVarIsUsed(firstVarName);
 				Haquna.modelMap.put(firstVarName, model);
 				
 				return true;
@@ -46,7 +47,7 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 			
 			if(Haquna.tableMap.containsKey(secondVarName)){
 				Table tab = Haquna.tableMap.get(secondVarName);
-				HaqunaUtils.checkVarName(firstVarName);
+				Haquna.clearIfVarIsUsed(firstVarName);
 				Haquna.tableMap.put(firstVarName, tab);
 				
 				return true;
@@ -54,7 +55,7 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 			
 			if(Haquna.attrMap.containsKey(secondVarName)) {
 				Attribute attr = Haquna.attrMap.get(secondVarName);
-				HaqunaUtils.checkVarName(firstVarName);
+				Haquna.clearIfVarIsUsed(firstVarName);
 				Haquna.attrMap.put(firstVarName, attr);
 				
 				return true;
@@ -62,7 +63,7 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 			
 			if(Haquna.typeMap.containsKey(secondVarName)) {
 				Type type = Haquna.typeMap.get(secondVarName);
-				HaqunaUtils.checkVarName(firstVarName);
+				Haquna.clearIfVarIsUsed(firstVarName);
 				Haquna.typeMap.put(firstVarName, type);
 				
 				return true;
@@ -70,21 +71,25 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 			
 			if(Haquna.ruleMap.containsKey(secondVarName)) {
 				Rule rule = Haquna.ruleMap.get(secondVarName);
-				HaqunaUtils.checkVarName(secondVarName);
+				Haquna.clearIfVarIsUsed(firstVarName);
 				Haquna.ruleMap.put(firstVarName, rule);
 				
 				return true;
 			}
 			
-			/*if(callbackMap.containsKey(varName)) {
-				callbackMap.remove(varName);
+			if(Haquna.callbackMap.containsKey(secondVarName)) {
+				String c = Haquna.callbackMap.get(secondVarName);
+				Haquna.clearIfVarIsUsed(secondVarName);
+				Haquna.callbackMap.put(firstVarName, c);
 			}
 			
-			if(wmMap.containsKey(varName)) {
-				tableBuilderMap.remove(varName);
+			if(Haquna.wmMap.containsKey(secondVarName)) {
+				WorkingMemory wm = Haquna.wmMap.get(secondVarName);
+				Haquna.clearIfVarIsUsed(secondVarName);
+				Haquna.wmMap.put(firstVarName, wm);
 			}		
 			
-			if(attrBuilderMap.containsKey(varName)) {
+			/*if(attrBuilderMap.containsKey(varName)) {
 				attrBuilderMap.remove(varName);
 			}
 			
@@ -95,11 +100,6 @@ public static final String pattern = "^" + Haquna.varName +"(\\s*)[=](\\s*)" + H
 			if(ruleBuilderMap.containsKey(varName)) {
 				ruleBuilderMap.remove(varName)	;		
 			}*/
-			
-			return true;
-		
-		} catch (HaqunaException e) {
-			HaqunaUtils.printRed(e.getMessage());
 			
 			return false;
 		

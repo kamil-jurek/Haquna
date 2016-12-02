@@ -44,6 +44,7 @@ public class NewTypeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Type.Builder typeBuilder = parser.getTypeBuilder();
 			
+	        Haquna.clearIfVarIsUsed(varName);
 	        Haquna.typeBuilderMap.put(varName, typeBuilder);
 			
 			return true;

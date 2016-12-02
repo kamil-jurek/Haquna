@@ -65,6 +65,7 @@ public class GetRuleByNameCmd implements Command {
 		LinkedList<Rule> rules = table.getRules();		
 		for(Rule rule : rules) {
 			if(rule.getName().equals(ruleName)) {
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.ruleMap.put(varName, rule);
 				return;
 			}

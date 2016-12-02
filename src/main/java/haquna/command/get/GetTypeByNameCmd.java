@@ -81,6 +81,7 @@ public class GetTypeByNameCmd implements Command {
 		LinkedList<Type> types = model.getTypes();		
 		for(Type type : types){
 			if(type.getName().equals(typeName)){
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.typeMap.put(varName, type);
 				return;
 			}	     

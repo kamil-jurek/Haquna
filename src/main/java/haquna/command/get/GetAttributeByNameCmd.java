@@ -81,6 +81,8 @@ public class GetAttributeByNameCmd implements Command {
 		LinkedList<Attribute> attributes = model.getAttributes();		
 		for(Attribute att : attributes){					
 			if(att.getName().equals(attributeName)){
+				
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.attrMap.put(varName, att);
 				return;
 			}	     

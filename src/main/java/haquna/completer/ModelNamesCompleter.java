@@ -1,7 +1,6 @@
 package haquna.completer;
 
 import haquna.Haquna;
-import haquna.HaqunaMain;
 
 public class ModelNamesCompleter extends CompleterAbstract {
 

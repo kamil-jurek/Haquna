@@ -2,7 +2,6 @@ package haquna.completer;
 
 import java.util.LinkedList;
 
-import haquna.HaqunaMain;
 import jline.console.ConsoleReader;
 import jline.console.completer.AggregateCompleter;
 import jline.console.completer.CandidateListCompletionHandler;

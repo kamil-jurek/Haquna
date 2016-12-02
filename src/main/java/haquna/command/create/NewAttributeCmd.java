@@ -44,6 +44,7 @@ public class NewAttributeCmd implements Command {
 	        parser.parse(hmr_code);
 	        Attribute.Builder attrBuilder = parser.getAttributeBuilder();
 			
+	        Haquna.clearIfVarIsUsed(varName);
 	        Haquna.attrBuilderMap.put(varName, attrBuilder);
 			
 			return true;

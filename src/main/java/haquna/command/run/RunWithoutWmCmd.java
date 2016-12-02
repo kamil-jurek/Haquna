@@ -78,6 +78,7 @@ public class RunWithoutWmCmd extends RunAbstactCmd {
 	    	  }
 			}
 						  
+			Haquna.clearIfVarIsUsed(varName);
 		    Haquna.wmMap.put(varName, wm);
 		    
 			return true;

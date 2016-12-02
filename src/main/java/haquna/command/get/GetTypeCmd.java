@@ -34,6 +34,7 @@ public class GetTypeCmd implements Command {
 			Attribute attr = HaqunaUtils.getAttribute(attribiuteName);
 			Type type = attr.getType();
 			
+			Haquna.clearIfVarIsUsed(varName);
 			Haquna.typeMap.put(varName, type);
 
 			return true;

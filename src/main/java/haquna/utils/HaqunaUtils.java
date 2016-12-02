@@ -47,7 +47,7 @@ public class HaqunaUtils {
 	public static void checkVarName(String varName) throws HaqunaException {
 		if(Haquna.isVarUsed(varName)) {
 			//Haquna.clearIfVarIsUsed(varName);
-			System.out.println("Overriting variable name '" + varName + "'");
+			System.out.println("Overriding variable name '" + varName + "'");
 			//throw new HaqunaException("Variable name '" + varName + "' already in use");
 		}
 	}

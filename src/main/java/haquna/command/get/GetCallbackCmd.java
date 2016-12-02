@@ -34,6 +34,7 @@ public class GetCallbackCmd implements Command {
 			
 			String callback = attr.getCallback();
 			
+			Haquna.clearIfVarIsUsed(varName);
 			Haquna.callbackMap.put(varName, callback);
 			
 			return true;

@@ -77,6 +77,7 @@ public class GetTypeByIdCmd implements Command {
 		LinkedList<Type> types = model.getTypes();		
 		for(Type type : types){
 			if(type.getId() != null && type.getId().equals(typeId)){
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.typeMap.put(varName, type);
 				return;
 			}	     

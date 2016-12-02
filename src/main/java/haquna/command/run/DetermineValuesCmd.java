@@ -56,6 +56,7 @@ public class DetermineValuesCmd implements Command {
 	    	new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(attrNames));
 	    			    								  
 		    if(wmName == null) {
+		    	Haquna.clearIfVarIsUsed(varName);
 		    	Haquna.wmMap.put(varName, wm);
 		    }
 		    

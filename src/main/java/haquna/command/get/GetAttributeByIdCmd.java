@@ -77,6 +77,8 @@ public class GetAttributeByIdCmd implements Command {
 		LinkedList<Attribute> attribiutes = model.getAttributes();			
 		for(Attribute att : attribiutes) {
 			if(att.getId() != null && att.getId().equals(attribiuteId)){
+				
+				Haquna.clearIfVarIsUsed(varName);
 				Haquna.attrMap.put(varName, att);
 				return;
 			}	     

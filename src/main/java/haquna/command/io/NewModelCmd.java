@@ -47,7 +47,8 @@ public class NewModelCmd implements Command {
 			HaqunaUtils.checkVarName(varName);
 			
 			XTTModel model = parseHMR();
-						
+			
+			Haquna.clearIfVarIsUsed(varName);
 			Haquna.modelMap.put(varName, model);
 				
 			return true;
