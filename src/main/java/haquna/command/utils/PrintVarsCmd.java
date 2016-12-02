@@ -59,7 +59,7 @@ public class PrintVarsCmd implements Command {
 		
 		System.out.println("=== RULES BUILDERS ===");
 		for(String var : Haquna.ruleBuilderMap.keySet()) {
-			System.out.println("\t" + var + " = " + Haquna.ruleBuilderMap.get(var));
+			System.out.println("\t" + var + " = " + Haquna.ruleBuilderMap.get(var).getRuleId().getName());
 		}
 		
 		System.out.println("=== WORKING MEMORY ===");

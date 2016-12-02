@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import heart.alsvfd.Formulae;
+import heart.alsvfd.Formulae.Builder;
 import heart.xtt.Attribute;
 import heart.xtt.Decision;
 import heart.xtt.Rule;
@@ -226,6 +227,177 @@ public class XttModelUtils {
 		}
 		
 		HMRCode += ("      " + "].\n");
+		return HMRCode; 	
+    }
+	
+	public static String typeBuilderToHMR(Type.Builder type) {
+		String HMRCode = "";
+		
+		HMRCode += "xtype [";
+		
+		if(type.getId() != null) {
+			HMRCode += ("id: " + type.getId() + ",\n");
+		}
+		
+		if(type.getName() != null) {
+			HMRCode += ("" + "name: " + type.getName() + ",\n");
+		}
+		
+		if(type.getBase() != null) {
+			HMRCode += ("       " + "base: " + type.getBase() + ",\n");
+		}
+		
+		if(type.getLength() != null) {
+			HMRCode += ("       " + "length: " + type.getLength() + ",\n");
+		}
+		
+		if(type.getPrecision() != null) {
+			HMRCode += ("       " + "precision: " + type.getPrecision() + ",\n");
+		}
+		
+		if(type.getOrdered() != null) {
+			HMRCode += ("       " + "ordered: " + type.getOrdered() + ",\n");
+		}
+		
+		if(type.getDomain() != null) {
+			
+			int sVal;
+			int eVal;
+			String domain = type.getDomain().toString();
+			domain = domain.replace(" ", "");
+			if(domain.contains(";")) {
+				domain = domain.replace("[<", "");
+				domain = domain.replace(">]", "");
+				domain = domain.replace(" ", "");
+				String s = domain.split(";")[0];
+				String e = domain.split(";")[1];
+				sVal = new BigDecimal(s).intValue();
+				eVal = new BigDecimal(e).intValue();
+				
+				HMRCode += ("       " + "domain: [" + sVal + " to " + eVal + "],\n");
+				
+			} else {
+			
+				domain = domain.replace(";", "to");
+				domain = domain.replace("<", "");
+				domain = domain.replace(">", "");
+				HMRCode += ("       " + "domain: " + domain + ",\n");
+			}
+		}
+				
+		if(HMRCode.lastIndexOf(",") == HMRCode.length()-2) {
+			StringBuilder b = new StringBuilder(HMRCode);
+			b.replace(HMRCode.lastIndexOf(","), HMRCode.lastIndexOf(",") + 1, "");
+			HMRCode = b.toString();
+		}
+		
+		HMRCode += ("      " + "].\n");
+		return HMRCode; 	
+    }
+	
+	public static String attributeBuilderToHMR(Attribute.Builder attr) {
+		String HMRCode = "";
+		
+		HMRCode += "xattr [";
+		
+		if(attr.getId() != null) {
+			HMRCode += ("id: " + attr.getId() + ",\n");
+		}
+		
+		if(attr.getName() != null) {
+			HMRCode += ("" + "name: " +  getNameToPrint(attr.getName()) + ",\n");
+		}
+		
+		if(attr.getAbbreviation()!= null) {
+			HMRCode += ("       " + "abbrev: " + getNameToPrint(attr.getAbbreviation()) + ",\n");
+		}
+		
+		if(attr.getXTTClass() != null) {
+			HMRCode += ("       " + "class: " + attr.getXTTClass() + ",\n");
+		}
+		
+		if(attr.getTypeName() != null) {
+			HMRCode += ("       " + "type: " + attr.getTypeName() + ",\n");
+		}
+		
+		if(attr.getComm() != null) {
+			HMRCode += ("       " + "comm: " + attr.getComm() + ",\n");
+		}
+						
+		if(attr.getDescription() != null) {
+			HMRCode += ("       " + "desc: " + getNameToPrint(attr.getDescription()) + ",\n");
+		}
+		
+		if(HMRCode.lastIndexOf(",") == HMRCode.length()-2) {
+			StringBuilder b = new StringBuilder(HMRCode);
+			b.replace(HMRCode.lastIndexOf(","), HMRCode.lastIndexOf(",") + 1, "");
+			HMRCode = b.toString();
+		}
+		
+		HMRCode += ("      " + "].\n");
+		return HMRCode; 	
+    }
+	
+	public static String tableBuilderToHMR(Table.Builder table) {
+		String HMRCode = "";
+		HMRCode += "xschm ";
+		HMRCode += ("'" + table.getName() + "': [");
+
+		for(String attr : table.getConditionalAttributesNames()) {			
+			HMRCode += (getNameToPrint(attr));
+			
+			if(attr != table.getConditionalAttributesNames().getLast()) {
+				HMRCode += ",";
+			}
+		}
+		HMRCode += ("] ==> [");
+		for(String attr : table.getDecisiveAttributesNames()) {
+			HMRCode += (getNameToPrint(attr));
+			
+			if(attr != table.getDecisiveAttributesNames().getLast()) {
+				HMRCode += ",";
+			}
+		}
+		HMRCode += ("].\n");
+				
+		return HMRCode; 	
+    }
+	
+	public static String ruleBuilderToHMR(Rule.Builder rule) {
+		String HMRCode = "";
+		
+		HMRCode += "xrule ";
+		String name = rule.getRuleId().getName();
+		int number = rule.getRuleId().orderNumber;
+		HMRCode += ("'" + name.split("/")[0] + "'/" + number + ":\n");
+		HMRCode += ("      [" );
+		
+		for(Builder f : rule.getIncompleteConditions()) {
+			
+			if(f != rule.getIncompleteConditions().getFirst()) {
+				HMRCode += "       ";
+			}
+			String rhs = f.getRHS().toString();
+			rhs = rhs.replace(";", "to");
+			rhs = rhs.replace("<", "");
+			rhs = rhs.replace(">", "");
+			HMRCode += (f.getLHS().toString() + " " + f.getOp().toString().toLowerCase() + " " + rhs);
+			
+			if(f != rule.getIncompleteConditions().getLast()) {
+				HMRCode += ",\n";
+			}
+		}
+		HMRCode += ("]\n");
+		HMRCode += "    ==>\n      [";
+		for(Decision.Builder d : rule.getIncompleteDecisions()) {
+			HMRCode += ("'" + d.getAttributeName() + "'" + " set " + d.getIncompleteDecision());
+			
+			if(d != rule.getIncompleteDecisions().getLast()) {
+				HMRCode += ",\n";
+			}
+		}
+		HMRCode += ("].\n");
+		
 		return HMRCode; 	
     }
 	

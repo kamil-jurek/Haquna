@@ -51,6 +51,22 @@ public class FunctionNamesCompleter extends CompleterAbstract{
 				stringCandidates.add("save");
 			}
 			
+			if(Haquna.typeBuilderMap.containsKey(varName)){
+				stringCandidates.add("show()");
+			}
+			
+			if(Haquna.attrBuilderMap.containsKey(varName)){
+				stringCandidates.add("show()");
+			}
+			
+			if(Haquna.tableBuilderMap.containsKey(varName)){
+				stringCandidates.add("show()");
+			}
+			
+			if(Haquna.ruleBuilderMap.containsKey(varName)){
+				stringCandidates.add("show()");
+			}
+			
 		} else if(argPos == 2 && Haquna.isVarUsed(varName) && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.'){
 			if(Haquna.tableMap.containsKey(varName)) {
 				stringCandidates.add("getRuleByName");

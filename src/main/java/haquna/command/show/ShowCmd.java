@@ -52,6 +52,22 @@ public class ShowCmd implements Command {
 			XTTModel model = Haquna.modelMap.get(varName);
 			System.out.println(XttModelUtils.getHMR(model));
 		
+		} else if(Haquna.typeBuilderMap.containsKey(varName)){
+			Type.Builder typeB = Haquna.typeBuilderMap.get(varName);
+			System.out.println(XttModelUtils.typeBuilderToHMR(typeB));
+		
+		} else if(Haquna.attrBuilderMap.containsKey(varName)){
+			Attribute.Builder attrB = Haquna.attrBuilderMap.get(varName);
+			System.out.println(XttModelUtils.attributeBuilderToHMR(attrB));
+		
+		} else if(Haquna.tableBuilderMap.containsKey(varName)){
+			Table.Builder tabB = Haquna.tableBuilderMap.get(varName);
+			System.out.println(XttModelUtils.tableBuilderToHMR(tabB));
+		
+		} else if(Haquna.ruleBuilderMap.containsKey(varName)){
+			Rule.Builder typeB = Haquna.ruleBuilderMap.get(varName);
+			System.out.println(XttModelUtils.ruleBuilderToHMR(typeB));
+			
 		} else {
 			System.out.println("No such object in memory");
 		}
