@@ -124,7 +124,8 @@ public class AddCmdTest {
 		TestUtils.createAndExecCmd("M = new Type('xtype [name: weather_type,base: symbolic,desc: 'Wheater type',domain: [sunny,rainy,cloudy]]')");
 		TestUtils.createAndExecCmd("printVars()");
 		
-		assertEquals(Haquna.typeMap.containsKey("M"), true);
+		assertEquals(Haquna.typeBuilderMap.containsKey("M"), true);
+        assertEquals(Haquna.modelMap.containsKey("M"), false);
 		System.out.println("=======================================");			
 	}
 }
