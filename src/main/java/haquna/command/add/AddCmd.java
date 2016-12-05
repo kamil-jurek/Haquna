@@ -98,7 +98,7 @@ public class AddCmd implements Command {
 	private void addType() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
 	         
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 		
 		Type.Builder typeBuilder = Haquna.typeBuilderMap.get(itemToAddName);
         builder.addIncompleteType(typeBuilder);
@@ -110,7 +110,7 @@ public class AddCmd implements Command {
 	
 	private void addTypeNoBuilder() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
         Type type = Haquna.typeMap.get(itemToAddName);
         
@@ -138,7 +138,7 @@ public class AddCmd implements Command {
 	private void addAttribute() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
 		
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 		Attribute.Builder attrBuilder = Haquna.attrBuilderMap.get(itemToAddName);
        
 		builder.addIncompleteAttribute(attrBuilder);
@@ -149,7 +149,7 @@ public class AddCmd implements Command {
 	
 	private void addAttributeNoBuilder() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
         Attribute attr = Haquna.attrMap.get(itemToAddName);
         
@@ -178,7 +178,7 @@ public class AddCmd implements Command {
 	private void addTable() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
 
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
 		Table.Builder tableBuilder = Haquna.tableBuilderMap.get(itemToAddName);
         
@@ -190,7 +190,7 @@ public class AddCmd implements Command {
 	
 	private void addTableNoBuilder() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
         Table table = Haquna.tableMap.get(itemToAddName);
         
@@ -215,7 +215,7 @@ public class AddCmd implements Command {
 	
 	private void addRule() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
 		Rule.Builder ruleBuilder = Haquna.ruleBuilderMap.get(itemToAddName);
 		
@@ -227,7 +227,7 @@ public class AddCmd implements Command {
 	
 	private void addRuleNoBuilder() throws ModelBuildingException {
 		XTTModel model = Haquna.modelMap.get(modelName);
-		XTTModel.Builder builder = model.getBuilderCopy();
+		XTTModel.Builder builder = model.getBuilder();
 
         Rule rule = Haquna.ruleMap.get(itemToAddName);
         
