@@ -11,7 +11,7 @@ Wm.setValueOf('activity','walking#0.5')
 Wm.setValueOf('day','mon/1')
 
 %running inference
-Mod.run(Wm, mode=gdi, ['Threats'])
+Mod.run(Wm, inference=gdi, tables=['Threats'])
 
 %showing working memory state after inference
 Wm.showCurrentState()

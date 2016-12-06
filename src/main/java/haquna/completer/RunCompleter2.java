@@ -1,7 +1,6 @@
 package haquna.completer;
 
 import haquna.Haquna;
-import haquna.HaqunaMain;
 import heart.xtt.Table;
 
 import java.util.Arrays;
@@ -11,27 +10,24 @@ public class RunCompleter2 extends CompleterAbstract {
     @Override
     protected void setupStringCandidates() {
         stringCandidates.clear();
-
-        HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "argPos = " + argPos);
-        HaqunaMain.log(0, this.getClass().getName(), "setupStringCandidates()", "arguments = " + Arrays.toString(arguments));
-
+      
         if(argPos == 2 && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '.') {
             stringCandidates.add("run");
         }
 
         if(argPos > 2) {
             String prevArg = arguments[argPos - 1];
-            if (prevArg.equals("mode")) {
+            if (prevArg.equals("inference")) {
                 stringCandidates.add("gdi");
                 stringCandidates.add("foi");
                 stringCandidates.add("ddi");
-            } else if (prevArg.equals("token")) {
-                stringCandidates.add("true");
-                stringCandidates.add("false");
+            } else if (prevArg.equals("tokens")) {
+                stringCandidates.add("on");
+                stringCandidates.add("off");
             } else if (prevArg.equals("uncertainty")) {
-                stringCandidates.add("true");
-                stringCandidates.add("false");
-            } else if (prevArg.equals("conflict_strategy")) {
+                stringCandidates.add("on");
+                stringCandidates.add("off");
+            } else if (prevArg.equals("conflict_resolution")) {
                 stringCandidates.add("first");
                 stringCandidates.add("last");
                 stringCandidates.add("all");
@@ -45,10 +41,11 @@ public class RunCompleter2 extends CompleterAbstract {
                     }
                 } else {
                     List<String> args = Arrays.asList(arguments);
-                    if (!args.contains("mode")) stringCandidates.add("mode");
-                    if (!args.contains("token")) stringCandidates.add("token");
+                    if (!args.contains("inference")) stringCandidates.add("inference");
+                    if (!args.contains("tokens")) stringCandidates.add("tokens");
                     if (!args.contains("uncertainty")) stringCandidates.add("uncertainty");
-                    if (!args.contains("conflict_strategy")) stringCandidates.add("conflict_strategy");
+                    if (!args.contains("conflict_resolution")) stringCandidates.add("conflict_resolution");
+                    if (!args.contains("tables")) stringCandidates.add("tables");
                 }
 
 

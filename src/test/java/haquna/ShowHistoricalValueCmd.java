@@ -38,7 +38,7 @@ public class ShowHistoricalValueCmd {
 	}	
 	
 	@Test
-	public void testAddCmd1() {		
+	public void showHostoricalValTest() {
 		setup();				
 		
 		TestUtils.createAndExecCmd("Wm.showHistoricalValueOf('hour','5')");

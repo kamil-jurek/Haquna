@@ -15,8 +15,11 @@ import heart.xtt.XTTModel;
 public class RunWithWmCmd extends RunAbstactCmd {		
 	public static final String pattern = "^" + Haquna.varName + "[.]run[(](\\s*)"  +
 											   Haquna.varName + "(\\s*)[,]?(\\s*)" +    // WorkingMemory
-											   "(((mode=((ddi)|(gdi)|(foi)))|(token=((true)|(false)))|(uncertainty=((true)|(false)))|(conflict_strategy=((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
-											   "([\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
+											   "(((inference(\\s*)=(\\s*)((ddi)|(gdi)|(foi)))|"
+											   + "(tokens(\\s*)=(\\s*)((on)|(off)))|"
+											   + "(uncertainty(\\s*)=(\\s*)((on)|(off)))|"
+											   + "(conflict_resolution(\\s*)=(\\s*)((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
+											   "(tables(\\s*)=(\\s*)[\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
 											   "[)](\\s*)";
 		
 	private String commandStr;
@@ -54,24 +57,24 @@ public class RunWithWmCmd extends RunAbstactCmd {
 			setupUncertainty();
 			setupConflictStrategy();
 									
-			switch(mode) {
+			switch(inference) {
 	    	  case "foi": {
 	    		Configuration cs = confBuilder.build();
-	    		new FixedOrderInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    		new FixedOrderInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tables));
 	    			    		
 	    		break;			    		
 	    	  }
 	    	 
 	    	  case "ddi": {
 	    		Configuration cs = confBuilder.build();
-	    		new DataDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    		new DataDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tables));
 	    			    		
 	    		break;			    		
 	    	  }
 	    	
 	    	  case "gdi": {
 	    		Configuration cs = confBuilder.build();
-	    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tableNames));
+	    		new GoalDrivenInference(wm, model, cs).start(new InferenceAlgorithm.TableParameters(tables));
 	    			    		
 	    		break;
 	    	  }

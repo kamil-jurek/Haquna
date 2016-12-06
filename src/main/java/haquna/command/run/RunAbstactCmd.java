@@ -11,11 +11,11 @@ import heart.uncertainty.ProbabilityEvaluator;
 
 abstract public class RunAbstactCmd implements Command {					
 	
-	protected String[] tableNames = new String[]{};	
-	protected String mode = "ddi";
-	protected String token = "false";
-	protected String uncertanity = "false";
-	protected String conflictStrategy = "first";		
+	protected String[] tables = new String[]{};	
+	protected String inference = "ddi";
+	protected String tokens = "off";
+	protected String uncertanity = "off";
+	protected String conflict_resolution = "first";		
 	protected Configuration.Builder confBuilder;
 	
 	@Override
@@ -26,12 +26,12 @@ abstract public class RunAbstactCmd implements Command {
 	abstract public Command getNewCommand(String cmdStr);
 	
 	protected void setupToken() {
-		switch(token) {
-		  case "true": {
+		switch(tokens) {
+		  case "on": {
 			confBuilder.setTokenPassingEnabled(true);
 			break;
 		  }
-		  case "false": {
+		  case "off": {
 			confBuilder.setTokenPassingEnabled(false);
 			break;
 		  }
@@ -40,11 +40,11 @@ abstract public class RunAbstactCmd implements Command {
 	
 	protected void setupUncertainty() {
 		switch(uncertanity) {
-		  case "true": {
+		  case "on": {
 			confBuilder.setUte(new ProbabilityEvaluator());
 			break;
 		  }
-		  case "false": {
+		  case "off": {
 			confBuilder.setUte(null);
 			break;
 		  }
@@ -52,7 +52,7 @@ abstract public class RunAbstactCmd implements Command {
 	}
 	
 	protected void setupConflictStrategy() {
-		switch(conflictStrategy) {
+		switch(conflict_resolution) {
 		  case "first": {
 			confBuilder.setCsr(new ConflictSetFirstWin());
 			break;
@@ -68,7 +68,7 @@ abstract public class RunAbstactCmd implements Command {
 		}
 	}
 	
-	protected void setupTableNames(String[] commandParts){
+	/*protected void setupTableNames(String[] commandParts){
 		int tabBegin = 0;
 		int tabEnd = 0;
 		
@@ -102,15 +102,55 @@ abstract public class RunAbstactCmd implements Command {
 			tableNames = new String[]{};
 			System.out.println("Tables names were not initialized");
 		}
+	}*/
+	
+	protected void setupTableNames(String[] commandParts){
+		for(int i = 0; i < commandParts.length-1; i++) {
+			if(commandParts[i].equals("tables")) {
+				int tabBegin = 0;
+				int tabEnd = 0;
+				
+				String commandParts2[] = commandParts;			
+				List<String> list = new ArrayList<String>();
+			    
+				for(String s : commandParts2) {
+			       if(s != null && s.length() > 0) {
+			          list.add(s);
+			       }
+			    }
+			    commandParts2 = list.toArray(new String[list.size()]);
+				
+				for(int j = 0; j < commandParts2.length; j++) {
+					if(commandParts2[j].equals("[")) {
+						tabBegin = j;
+					}
+					
+					if(commandParts2[j].equals("]")) {
+						tabEnd = j;
+					}
+				}
+				try {			
+					tables = new String[tabEnd - (tabBegin+1)];
+					for(int j = tabBegin+1; j < tabEnd; j++) {
+						tables[j-(tabBegin+1)] = commandParts2[j];
+						
+					}
+				} catch(Exception e) {
+					tables = new String[]{};
+					System.out.println("Tables names were not initialized");
+				}
+			}
+		}
 	}
 	
 	protected void setupNotMandatoryArgs(String[] commandParts) throws Exception{				
 		for(int i = 0; i < commandParts.length-1; i++) {
 			String nextArgument = commandParts[i+1];
+			
 			switch(commandParts[i]) {
-			case "mode" : {
+			case "inference" : {
 				if(nextArgument.matches("gdi|foi|ddi")) {					
-					this.mode = nextArgument;
+					this.inference = nextArgument;
 				
 				} else {
 					throw new Exception("Incorrect mode arg.");
@@ -118,9 +158,9 @@ abstract public class RunAbstactCmd implements Command {
 				break;
 			}
 			
-			case "token": {
-				if(nextArgument.matches("true|false")) {
-					this.token = nextArgument;
+			case "tokens": {
+				if(nextArgument.matches("on|off")) {
+					this.tokens = nextArgument;
 				
 				}else {
 					throw new Exception("Incorrect token arg.");
@@ -130,7 +170,7 @@ abstract public class RunAbstactCmd implements Command {
 			}
 			
 			case "uncertanity": {
-				if(nextArgument.matches("true|false")) {
+				if(nextArgument.matches("on|off")) {
 					this.uncertanity = nextArgument;
 				
 				} else {
@@ -140,9 +180,9 @@ abstract public class RunAbstactCmd implements Command {
 				break;
 			}
 			
-			case "conflict_strategy": {
+			case "conflict_resolution": {
 				if(nextArgument.matches("first|last|all")) {
-					this.conflictStrategy = commandParts[i+1];
+					this.conflict_resolution= commandParts[i+1];
 				
 				} else {
 					throw new Exception("Incorrect conflict_strategy arg");
