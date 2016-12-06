@@ -18,8 +18,8 @@ public class RunWithoutWmCmd extends RunAbstactCmd {
 											   "(((inference(\\s*)=(\\s*)((ddi)|(gdi)|(foi)))|"
 											   + "(tokens(\\s*)=(\\s*)((on)|(off)))|"
 											   + "(uncertainty(\\s*)=(\\s*)((on)|(off)))|"
-											   + "(conflict_resolution(\\s*)=(\\s*)((first)|(last)|(all))))(\\s*)[,]?(\\s*))*" +
-											   "(tables(\\s*)=(\\s*)[\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?" + // tables names
+											   + "(conflict_resolution(\\s*)=(\\s*)((first)|(last)|(all))|"
+											   + "(tables(\\s*)=(\\s*)[\\[]([']" + Haquna.varName + "['](\\s*)[,]?(\\s*))+[\\]])?))(\\s*)[,]?(\\s*))*" +
 											   "[)](\\s*)";
 		
 	private String commandStr;

@@ -33,7 +33,8 @@ public class RunCompleter2 extends CompleterAbstract {
                 stringCandidates.add("all");
             }
             else {
-                if(buff.contains("[")) {
+                if(buff.contains("[") && CompleterMenager.getLastDelimiter(arguments,buff,argPos) == '\''
+						&& !buff.contains("]")){
                     for (Table t : Haquna.modelMap.get(arguments[1]).getTables()) {
                         if (!Arrays.asList(arguments).contains(t.getName())) {
                             stringCandidates.add(t.getName());

@@ -25,7 +25,7 @@ public class HaqunaJCommander {
                 names = {"--tables"},
                 description = " Order of tables used in the inference - comma separated"
         )
-        private String tables = " ";
+        private String tables = null;
 
         @Parameter(
                 names = {"--inference"},
@@ -115,19 +115,19 @@ public class HaqunaJCommander {
                     }
                 }
 
-                String tabs = jcc.tables;
+                String tabs = jcc.tables != null ? ("tables="+jcc.tables) : "";
                 tabs = tabs.replace("[", "['");
                 tabs = tabs.replace("]", "']");
                 tabs = tabs.replace(",", "','");
 
-                String token = jcc.tokens.equals("off") ? "false" : "true";
-                String uncertainty = jcc.uncertainty.equals("off") ? "false" : "true";
+                //String token = jcc.tokens.equals("off") ? "false" : "true";
+                //String uncertainty = jcc.uncertainty.equals("off") ? "false" : "true";
 
                 cmd = "Mod.run(Wm, " +
-                        "mode=" + jcc.inference + ", " +
-                        "conflict_strategy=" + jcc.conflictStrategy+ ", " +
-                        "token=" + token + ", " +
-                        "uncertainty=" + uncertainty + ", " +
+                        "inference=" + jcc.inference + ", " +
+                        "conflict_resolution=" + jcc.conflictStrategy+ ", " +
+                        "tokens=" + jcc.tokens + ", " +
+                        "uncertainty=" + jcc.uncertainty + ", " +
                         tabs + ")";
                 cmds.add(cmd);
 
