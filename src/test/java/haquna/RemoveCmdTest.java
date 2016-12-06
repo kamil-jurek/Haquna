@@ -87,7 +87,7 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedType() {		
 		setup();				
 		
-		TestUtils.createAndExecCmd("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
+		TestUtils.createAndExecCmd("PoiModel = new Model('poi-recommender.hmr')");
 		TestUtils.createAndExecCmd("DayType = Model.getTypeByName('day_type')");
 		
 		TestUtils.createAndExecCmd("NewPoiModel = PoiModel.add(DayType)");
@@ -103,7 +103,7 @@ public class RemoveCmdTest {
 	public void testRemoveNewAddedAttr() {		
 		setup();				
 		
-		TestUtils.createAndExecCmd("PoiModel = new Model('/home/kamil/Pulpit/poi-recommender.hmr')");
+		TestUtils.createAndExecCmd("PoiModel = new Model('poi-recommender.hmr')");
 		TestUtils.createAndExecCmd("DayType = Model.getTypeByName('day_type')");
 		TestUtils.createAndExecCmd("Attr = Model.getAttributeByName('day')");
 		
