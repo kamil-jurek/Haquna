@@ -4,10 +4,12 @@ apply plugin: 'application'
 mainClassName = 'haquna.HaqunaMain'
 
 sourceCompatibility = 1.7
+version = '1.0.5'
 
 jar{
 	manifest {
-        attributes 'Main-Class': 'haquna.HaqunaMain'
+        attributes 'Main-Class': 'haquna.HaqunaMain',
+				"Implementation-Version": version
     }
     
     from {

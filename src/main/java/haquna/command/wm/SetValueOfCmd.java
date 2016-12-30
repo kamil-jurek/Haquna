@@ -1,11 +1,14 @@
 package haquna.command.wm;
 
+import java.util.LinkedList;
+
 import haquna.Haquna;
 import haquna.HaqunaException;
 import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.alsvfd.Null;
+import heart.alsvfd.SetValue;
 import heart.alsvfd.SimpleNumeric;
 import heart.alsvfd.SimpleSymbolic;
 import heart.alsvfd.Value;
@@ -81,24 +84,49 @@ public class SetValueOfCmd implements Command {
 	}
 	
 	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException {
+		//String attributeValue2 = attributeValue.replaceAll("[\\]|\\[]", "");
+		float cf = (float) getCertanityFactor(attributeValue);
 		String[] attrValParts = attributeValue.split("#");
 		
-		if(attrValParts.length == 2) {
+		if(attributeValue.matches(".*[\\[].*[\\]].*")) {
+			LinkedList<Value> values = new LinkedList<Value>();
+			
+			for(String s : attributeValue.split("[,|\\[|\\]|\\s|#]")) {
+				if(!s.matches("\\s*") && !s.matches("-?\\d+(\\.\\d+)?")) {
+					values.add(getParsedAttrValue(s));
+				}			
+			}
+			
+			Value v = new SetValue(values);
+			v.setCertaintyFactor(cf);
+			
+			wm.setAttributeValue(attributeName, v);
+			wm.recordLog();	
+			
+		} else {
 			Value v = getParsedAttrValue(attrValParts[0]);
+			v.setCertaintyFactor(cf);
+			
+			wm.setAttributeValue(attributeName, v);
+			wm.recordLog();		
+		
+		
+		/*if(attrValParts.length == 2) {
+			Value v = getParsedAttrValue(attributeValue.split("#")[0]);
 			v.setCertaintyFactor(Float.parseFloat(attrValParts[1]));
 			
 			wm.setAttributeValue(attributeName, v);
 			wm.recordLog();	
 			
 		} else if(attrValParts.length == 1) {
-			Value v = getParsedAttrValue(attrValParts[0]);
+			Value v = getParsedAttrValue(attributeValue.split("#")[0]);
 			v.setCertaintyFactor(1);
 			
 			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();	
+			wm.recordLog();	*/
 						
-		} else {
-			throw new HaqunaException("Attribute value format inncorrect");
+		/*} else {
+			throw new HaqunaException("Attribute value format inncorrect");*/
 		}
 		
 	}
@@ -113,12 +141,23 @@ public class SetValueOfCmd implements Command {
 			
 		} else if(attrValueStr.contains("/")){
 			String[] splited = attrValueStr.split("[/]");
-			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));
-		
+			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));		
+						
 		} else {
 			attVal = new SimpleSymbolic(attrValueStr);				
 		
-		}
+		} 
+				
 		return attVal;
+	}
+	
+	private double getCertanityFactor(String attrValStr) {
+		if(attrValStr.contains("#")) {
+			String[] splitted = attrValStr.split("[#|\\]]");
+			return Double.parseDouble(splitted[1]);
+									
+		} else {
+			return 1.0;
+		}
 	}
 }

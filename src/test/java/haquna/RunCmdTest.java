@@ -60,7 +60,7 @@ public class RunCmdTest {
 		assertEquals(Haquna.wmMap.get("Wm").getAttributeValue("today").toString(), "workday");
 	}
 	
-	@Test
+	/*@Test
 	public void testRunCmd3() {
 		setup();	
 			
@@ -69,7 +69,7 @@ public class RunCmdTest {
 		
 		assertEquals(Haquna.wmMap.get("Wm3").getAttributeValue("daytime"), new Null());
 			
-	}
+	}*/
 	
 	@Test
 	public void testRunCmd41() {

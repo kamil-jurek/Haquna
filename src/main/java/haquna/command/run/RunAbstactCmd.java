@@ -5,16 +5,14 @@ import java.util.List;
 
 import haquna.command.Command;
 import heart.Configuration;
-import heart.uncertainty.ConflictSetFireAll;
-import heart.uncertainty.ConflictSetFirstWin;
-import heart.uncertainty.ProbabilityEvaluator;
+import heart.uncertainty.*;
 
 abstract public class RunAbstactCmd implements Command {					
 	
 	protected String[] tables = new String[]{};	
 	protected String inference = "ddi";
 	protected String tokens = "off";
-	protected String uncertanity = "off";
+	protected String uncertainty = "on";
 	protected String conflict_resolution = "first";		
 	protected Configuration.Builder confBuilder;
 	
@@ -39,13 +37,13 @@ abstract public class RunAbstactCmd implements Command {
 	}
 	
 	protected void setupUncertainty() {
-		switch(uncertanity) {
+		switch(uncertainty) {
 		  case "on": {
-			confBuilder.setUte(new ProbabilityEvaluator());
+			confBuilder.setUte(new CertaintyFactorsEvaluator());
 			break;
 		  }
 		  case "off": {
-			confBuilder.setUte(null);
+			confBuilder.setUte(new ALSVEvaluator());
 			break;
 		  }
 		}
@@ -58,7 +56,7 @@ abstract public class RunAbstactCmd implements Command {
 			break;
 		  }
 		  case "last": {
-			confBuilder.setCsr(new ConflictSetFireAll());
+			confBuilder.setCsr(new ConflictSetLastWin());
 			break;
 		  }
 		  case "all": {
@@ -169,12 +167,12 @@ abstract public class RunAbstactCmd implements Command {
 				break;
 			}
 			
-			case "uncertanity": {
+			case "uncertainty": {
 				if(nextArgument.matches("on|off")) {
-					this.uncertanity = nextArgument;
+					this.uncertainty = nextArgument;
 				
 				} else {
-					throw new Exception("Incorrect uncertanity arg.");
+					throw new Exception("Incorrect uncertainty arg.");
 				}
 				
 				break;

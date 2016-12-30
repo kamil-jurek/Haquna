@@ -16,6 +16,12 @@ public class SetValueOfCmdTest {
 		TestUtils.createAndExecCmd("Wm.setValueOf('activity','walking')");
 		TestUtils.createAndExecCmd("Wm.setValueOf('day','mon/1')");
 	}
+	
+	public static void setup2() {
+		HaqunaUtils.clearMemory();
+		TestUtils.createAndExecCmd("Model = new Model('poi-recommender.hmr')");
+		TestUtils.createAndExecCmd("Wm = new WorkingMemory(Model)");		
+	}
 		
 	@Test
 	public void testRunCmd1() {		
@@ -33,6 +39,61 @@ public class SetValueOfCmdTest {
 		setup();				
 		
 		TestUtils.createAndExecCmd("Wm.setValueOf('hour','20.4')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+			
+	}
+	
+	@Test
+	public void testRunCmd3() {		
+		setup2();				
+		
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','eating')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+			
+	}
+	
+	@Test
+	public void testRunCmd4() {		
+		setup2();				
+		
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','eating#0.2')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+			
+	}
+	
+	@Test
+	public void testRunCmd5() {		
+		setup2();				
+		
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','[eating,sport]')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+			
+	}
+	
+	@Test
+	public void testRunCmd6() {		
+		setup2();				
+		
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','[eating#0.2]')");
+		TestUtils.createAndExecCmd("Wm.showCurrentState()");
+		
+		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
+			
+	}
+	
+	@Test
+	public void testRunCmd7() {		
+		setup2();				
+		
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','[eating,sport#0.2]')");
 		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
 		assertEquals(Haquna.wmMap.containsKey("Wm"), true);

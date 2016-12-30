@@ -19,7 +19,7 @@ import jline.console.ConsoleReader;
 public class Haquna {
 	public static final String varName = "[a-zA-Z_$]([a-zA-Z_$0-9])*";
 	public static final String attrNamePattern = "[a-z|_]+";
-	public static final String attrValuePattern = "[a-z|A-Z|0-9|_|.]+[/]?[0-9]*";
+	public static final String attrValuePattern = "[a-z|A-Z|0-9|_|.\\]\\[]+[/]?[0-9]*";
 			
 	public static Map<String, XTTModel> modelMap = new HashMap<String, XTTModel>();
 	public static Map<String, Table> tableMap = new HashMap<String, Table>();
