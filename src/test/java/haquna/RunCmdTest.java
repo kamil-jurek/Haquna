@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import haquna.utils.HaqunaUtils;
-import heart.alsvfd.Null;
-
 
 public class RunCmdTest {
 	public static void setup() {

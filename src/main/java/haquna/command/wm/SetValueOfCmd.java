@@ -30,14 +30,8 @@ public class SetValueOfCmd implements Command {
 		
 	}
 	
-	public SetValueOfCmd(String _commandStr) {
-		this.commandStr = _commandStr.replace(" ", "");
-		
-		this.commandStr = this.commandStr.replaceFirst("\\.", "@");
-		String[] commandParts = this.commandStr.split("['|@]");				
-		this.wmName = commandParts[0];
-		this.attributeName = commandParts[2];
-		this.attributeValue = commandParts[4];	
+	public SetValueOfCmd(String commandStr) {
+		setupCmdElems(commandStr);
 	}
 	
 	public boolean execute() {
@@ -57,6 +51,17 @@ public class SetValueOfCmd implements Command {
 			
 			return false;
 		}
+	}
+	
+	private void setupCmdElems(String commandStr) {
+		this.commandStr = commandStr.replace(" ", "");
+	
+		this.commandStr = this.commandStr.replaceFirst("\\.", "@");
+		String[] commandParts = this.commandStr.split("['|@]");				
+		
+		this.wmName = commandParts[0];
+		this.attributeName = commandParts[2];
+		this.attributeValue = commandParts[4];	
 	}
 	
 	public boolean matches(String commandStr) {
@@ -84,53 +89,34 @@ public class SetValueOfCmd implements Command {
 	}
 	
 	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException {
-		//String attributeValue2 = attributeValue.replaceAll("[\\]|\\[]", "");
-		float cf = (float) getCertanityFactor(attributeValue);
-		String[] attrValParts = attributeValue.split("#");
-		
-		if(attributeValue.matches(".*[\\[].*[\\]].*")) {
+			
+		if(attributeValue.matches("[\\[].*[\\]]")) {
 			LinkedList<Value> values = new LinkedList<Value>();
 			
-			for(String s : attributeValue.split("[,|\\[|\\]|\\s|#]")) {
-				if(!s.matches("\\s*") && !s.matches("-?\\d+(\\.\\d+)?")) {
+			for(String s : attributeValue.split("[,|\\[|\\]|\\s]")) {
+				if(!s.matches("\\s*")) {
 					values.add(getParsedAttrValue(s));
 				}			
 			}
 			
 			Value v = new SetValue(values);
-			v.setCertaintyFactor(cf);
 			
 			wm.setAttributeValue(attributeName, v);
 			wm.recordLog();	
 			
 		} else {
-			Value v = getParsedAttrValue(attrValParts[0]);
-			v.setCertaintyFactor(cf);
+			Value v = getParsedAttrValue(attributeValue);
 			
 			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();		
-		
-		
-		/*if(attrValParts.length == 2) {
-			Value v = getParsedAttrValue(attributeValue.split("#")[0]);
-			v.setCertaintyFactor(Float.parseFloat(attrValParts[1]));
-			
-			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();	
-			
-		} else if(attrValParts.length == 1) {
-			Value v = getParsedAttrValue(attributeValue.split("#")[0]);
-			v.setCertaintyFactor(1);
-			
-			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();	*/
-						
-		/*} else {
-			throw new HaqunaException("Attribute value format inncorrect");*/
+			wm.recordLog();						
 		}
 		
 	}
-	private Value getParsedAttrValue(String attrValueStr ) {
+	
+	private Value getParsedAttrValue(String attrValueWithCfStr ) {		
+		float cf = (float) getCertanityFactor(attrValueWithCfStr);
+		String attrValueStr = attrValueWithCfStr.split("#")[0];
+		
 		Value attVal;	
 		if(attrValueStr == null) {
 			attVal = new Null();
@@ -144,17 +130,19 @@ public class SetValueOfCmd implements Command {
 			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));		
 						
 		} else {
-			attVal = new SimpleSymbolic(attrValueStr);				
-		
+			attVal = new SimpleSymbolic(attrValueStr);						
 		} 
-				
+		
+		attVal.setCertaintyFactor(cf);
+		
 		return attVal;
 	}
 	
 	private double getCertanityFactor(String attrValStr) {
 		if(attrValStr.contains("#")) {
-			String[] splitted = attrValStr.split("[#|\\]]");
-			return Double.parseDouble(splitted[1]);
+			String[] splitted = attrValStr.split("#");
+			double cf = Double.parseDouble(splitted[1]);
+			return (cf >= 0 && cf <= 1) ? cf : 1.0;
 									
 		} else {
 			return 1.0;

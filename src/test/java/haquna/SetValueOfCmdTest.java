@@ -93,7 +93,7 @@ public class SetValueOfCmdTest {
 	public void testRunCmd7() {		
 		setup2();				
 		
-		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','[eating,sport#0.2]')");
+		TestUtils.createAndExecCmd("Wm.setValueOf('user_profile','[eating#0.5, sport#0.2,culture]]')");
 		TestUtils.createAndExecCmd("Wm.showCurrentState()");
 		
 		assertEquals(Haquna.wmMap.containsKey("Wm"), true);
