@@ -56,13 +56,13 @@ public class SetValueOfCmd implements Command {
 	}
 	
 	private void setupCmdElems(String commandStr) {
-		this.commandStr = commandStr.replace(" ", "");
+		this.commandStr = commandStr;
 	
 		this.commandStr = this.commandStr.replaceFirst("\\.", "@");
 		String[] commandParts = this.commandStr.split("['|@]");				
-		
-		this.wmName = commandParts[0];
-		this.attributeName = commandParts[2];
+
+		this.wmName = commandParts[0].replace(" ", "");
+		this.attributeName = commandParts[2].replace(" ", "");
 		this.attributeValue = commandParts[4];	
 	}
 	
@@ -92,33 +92,24 @@ public class SetValueOfCmd implements Command {
 	
 	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException, RangeFormatException {
 			
-		if(attributeValue.matches("[\\[].*[\\]]")) {
+		if(attributeValue.matches("[\\[].*[\\]](#\\d+(\\.\\d+)?)?")) {
 			LinkedList<Value> values = new LinkedList<Value>();
-			String attributeValueStr = attributeValue.substring(1, attributeValue.length()-1);
+			String attributeValueStr;
+			float cf = (float) 1.0;
 			
-			for(String s : attributeValueStr.split("[,|\\s]")) {
-				if(!s.matches("\\s*")) {
-					values.add(getParsedAttrValue(s));
-				}			
+			if(attributeValue.matches("[\\[].*[\\]](#\\d+(\\.\\d+)?)")) {
+				String [] splited = attributeValue.split("#");
+				cf = Float.parseFloat(splited[splited.length-1]);				
+				int cfPartLen = splited[splited.length-1].length()+2;				
+				attributeValueStr = attributeValue.substring(1, attributeValue.length()-cfPartLen);
+			
+			} else {
+				attributeValueStr = attributeValue.substring(1, attributeValue.length()-1);
 			}
-			
-			Value v = new SetValue(values);
-			
-			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();	
-		
-		} else if(attributeValue.matches("[\\[].*[\\]]#.*")) {
-			LinkedList<Value> values = new LinkedList<Value>();
-			String [] splited = attributeValue.split("#");
-			float cf = Float.parseFloat(splited[splited.length-1]);
-			
-			int l = splited[splited.length-1].length()+2;
-			
-			String attributeValueStr = attributeValue.substring(1, attributeValue.length()-l);
-			
-			for(String s : attributeValueStr.split("[,|\\s]")) {
+						
+			for(String s : attributeValueStr.split("[,]")) {
 				if(!s.matches("\\s*")) {
-					values.add(getParsedAttrValue(s));
+					values.add(getParsedAttrValue(s.trim()));
 				}			
 			}
 			
@@ -126,7 +117,8 @@ public class SetValueOfCmd implements Command {
 			v.setCertaintyFactor(cf);
 			
 			wm.setAttributeValue(attributeName, v);
-			wm.recordLog();		
+			wm.recordLog();	
+		
 		} else {
 			Value v = getParsedAttrValue(attributeValue);
 			
@@ -145,21 +137,25 @@ public class SetValueOfCmd implements Command {
 		if(attrValueStr == null) {
 			attVal = new Null();
 					
-		} else if(attrValueStr.matches("-?\\d+(\\.\\d+)?")) {
+		} else if(isSimpleNumeric(attrValueStr)) {
 			double d = Double.parseDouble(attrValueStr);
 			attVal = new SimpleNumeric(d);
 		
-		} else if(attrValueStr.matches("[\\[].*to.*[\\]]")) {		
-			String fromStr = attrValueStr.split("(to)|\\[|\\]")[1];
-			String toStr = attrValueStr.split("(to)|\\[|\\]")[2];
-			System.out.println("fromStr " + fromStr);
-			System.out.println("toStr " + toStr);
+		} else if(isRange(attrValueStr)) {		
+			String fromStr;
+			String toStr;
+			
+			if(attrValueStr.charAt(0) == '[' || attrValueStr.charAt(attrValueStr.length()-1) == ']') {
+				fromStr = attrValueStr.split("( to )|\\[|\\]")[1].replace(" ", "");
+				toStr = attrValueStr.split("( to )|\\[|\\]")[2].replace(" ", "");
+			} else {
+				fromStr = attrValueStr.split("( to )|\\[|\\]")[0].replace(" ", "");
+				toStr = attrValueStr.split("( to )|\\[|\\]")[1].replace(" ", "");
+			}
 			
 			try {
 				SimpleNumeric from =  (SimpleNumeric) getParsedAttrValue(fromStr);
 				SimpleNumeric to =  (SimpleNumeric) getParsedAttrValue(toStr);
-				System.out.println("fromStr " + from.getValue());
-				System.out.println("toStr " + to.getValue());
 				
 				attVal = new Range(from, true, to, true);
 			
@@ -169,33 +165,13 @@ public class SetValueOfCmd implements Command {
 				
 				attVal = new Range(from, true, to, true);
 			}
-		} else if (attrValueStr.matches(".*to.*")) {					
-			String fromStr = attrValueStr.split("(to)|\\[|\\]")[0];
-			String toStr = attrValueStr.split("(to)|\\[|\\]")[1];
-			System.out.println("fromStr " + fromStr);
-			System.out.println("toStr " + toStr);
 			
-			try {
-				SimpleNumeric from =  (SimpleNumeric) getParsedAttrValue(fromStr);
-				SimpleNumeric to =  (SimpleNumeric) getParsedAttrValue(toStr);
-				System.out.println("fromStr " + from.getValue());
-				System.out.println("toStr " + to.getValue());
-				
-				attVal = new Range(from, true, to, true);
-			
-			} catch (ClassCastException e) {
-				SimpleSymbolic from =  (SimpleSymbolic) getParsedAttrValue(fromStr);
-				SimpleSymbolic to =  (SimpleSymbolic) getParsedAttrValue(toStr);
-				
-				attVal = new Range(from, true, to, true);
-			}				
-			
-		} else if(attrValueStr.contains("/")){
+		} else if( isOrderedSymbolic(attrValueStr)){
 			String[] splited = attrValueStr.split("[/]");
-			attVal = new SimpleSymbolic(splited[0], Integer.parseInt(splited[1]));		
+			attVal = new SimpleSymbolic(splited[0].replace(" ", ""), Integer.parseInt(splited[1]));		
 						
 		} else {
-			attVal = new SimpleSymbolic(attrValueStr);						
+			attVal = new SimpleSymbolic(attrValueStr.replace(" ", ""));						
 		} 
 		
 		attVal.setCertaintyFactor(cf);
@@ -212,5 +188,17 @@ public class SetValueOfCmd implements Command {
 		} else {
 			return 1.0;
 		}
+	}
+	
+	private boolean isSimpleNumeric(String attrValueStr) {
+		return attrValueStr.matches("-?\\d+(\\.\\d+)?") ? true : false;
+	}
+	
+	private boolean isRange(String attrValueStr) {
+		 return attrValueStr.matches("[\\[]?.*( to ).*[\\]]?") ? true :false;
+	}
+	
+	private boolean isOrderedSymbolic(String attrValueStr) {
+		return attrValueStr.matches(".*[/].*") ? true : false;
 	}
 }

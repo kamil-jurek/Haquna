@@ -157,4 +157,5 @@ public class SetValueOfCmdTest {
 		assertEquals(0.4, Haquna.wmMap.get("Wm").getAttributeValue("day").getCertaintyFactor(), 0.001);
 			
 	}
+
 }
