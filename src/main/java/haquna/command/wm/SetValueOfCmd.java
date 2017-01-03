@@ -8,12 +8,14 @@ import haquna.command.Command;
 import haquna.utils.HaqunaUtils;
 import heart.WorkingMemory;
 import heart.alsvfd.Null;
+import heart.alsvfd.Range;
 import heart.alsvfd.SetValue;
 import heart.alsvfd.SimpleNumeric;
 import heart.alsvfd.SimpleSymbolic;
 import heart.alsvfd.Value;
 import heart.exceptions.AttributeNotRegisteredException;
 import heart.exceptions.NotInTheDomainException;
+import heart.exceptions.RangeFormatException;
 
 public class SetValueOfCmd implements Command {
 	
@@ -88,12 +90,13 @@ public class SetValueOfCmd implements Command {
 		this.wmName = varName;
 	}
 	
-	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException {
+	private void setValue(WorkingMemory wm) throws AttributeNotRegisteredException, NotInTheDomainException, HaqunaException, RangeFormatException {
 			
 		if(attributeValue.matches("[\\[].*[\\]]")) {
 			LinkedList<Value> values = new LinkedList<Value>();
+			String attributeValueStr = attributeValue.substring(1, attributeValue.length()-1);
 			
-			for(String s : attributeValue.split("[,|\\[|\\]|\\s]")) {
+			for(String s : attributeValueStr.split("[,|\\s]")) {
 				if(!s.matches("\\s*")) {
 					values.add(getParsedAttrValue(s));
 				}			
@@ -103,7 +106,27 @@ public class SetValueOfCmd implements Command {
 			
 			wm.setAttributeValue(attributeName, v);
 			wm.recordLog();	
+		
+		} else if(attributeValue.matches("[\\[].*[\\]]#.*")) {
+			LinkedList<Value> values = new LinkedList<Value>();
+			String [] splited = attributeValue.split("#");
+			float cf = Float.parseFloat(splited[splited.length-1]);
 			
+			int l = splited[splited.length-1].length()+2;
+			
+			String attributeValueStr = attributeValue.substring(1, attributeValue.length()-l);
+			
+			for(String s : attributeValueStr.split("[,|\\s]")) {
+				if(!s.matches("\\s*")) {
+					values.add(getParsedAttrValue(s));
+				}			
+			}
+			
+			Value v = new SetValue(values);
+			v.setCertaintyFactor(cf);
+			
+			wm.setAttributeValue(attributeName, v);
+			wm.recordLog();		
 		} else {
 			Value v = getParsedAttrValue(attributeValue);
 			
@@ -113,17 +136,59 @@ public class SetValueOfCmd implements Command {
 		
 	}
 	
-	private Value getParsedAttrValue(String attrValueWithCfStr ) {		
+	private Value getParsedAttrValue(String attrValueWithCfStr ) throws RangeFormatException {		
 		float cf = (float) getCertanityFactor(attrValueWithCfStr);
 		String attrValueStr = attrValueWithCfStr.split("#")[0];
 		
 		Value attVal;	
+		
 		if(attrValueStr == null) {
 			attVal = new Null();
 					
 		} else if(attrValueStr.matches("-?\\d+(\\.\\d+)?")) {
 			double d = Double.parseDouble(attrValueStr);
 			attVal = new SimpleNumeric(d);
+		
+		} else if(attrValueStr.matches("[\\[].*to.*[\\]]")) {		
+			String fromStr = attrValueStr.split("(to)|\\[|\\]")[1];
+			String toStr = attrValueStr.split("(to)|\\[|\\]")[2];
+			System.out.println("fromStr " + fromStr);
+			System.out.println("toStr " + toStr);
+			
+			try {
+				SimpleNumeric from =  (SimpleNumeric) getParsedAttrValue(fromStr);
+				SimpleNumeric to =  (SimpleNumeric) getParsedAttrValue(toStr);
+				System.out.println("fromStr " + from.getValue());
+				System.out.println("toStr " + to.getValue());
+				
+				attVal = new Range(from, true, to, true);
+			
+			} catch (ClassCastException e) {
+				SimpleSymbolic from =  (SimpleSymbolic) getParsedAttrValue(fromStr);
+				SimpleSymbolic to =  (SimpleSymbolic) getParsedAttrValue(toStr);
+				
+				attVal = new Range(from, true, to, true);
+			}
+		} else if (attrValueStr.matches(".*to.*")) {					
+			String fromStr = attrValueStr.split("(to)|\\[|\\]")[0];
+			String toStr = attrValueStr.split("(to)|\\[|\\]")[1];
+			System.out.println("fromStr " + fromStr);
+			System.out.println("toStr " + toStr);
+			
+			try {
+				SimpleNumeric from =  (SimpleNumeric) getParsedAttrValue(fromStr);
+				SimpleNumeric to =  (SimpleNumeric) getParsedAttrValue(toStr);
+				System.out.println("fromStr " + from.getValue());
+				System.out.println("toStr " + to.getValue());
+				
+				attVal = new Range(from, true, to, true);
+			
+			} catch (ClassCastException e) {
+				SimpleSymbolic from =  (SimpleSymbolic) getParsedAttrValue(fromStr);
+				SimpleSymbolic to =  (SimpleSymbolic) getParsedAttrValue(toStr);
+				
+				attVal = new Range(from, true, to, true);
+			}				
 			
 		} else if(attrValueStr.contains("/")){
 			String[] splited = attrValueStr.split("[/]");
